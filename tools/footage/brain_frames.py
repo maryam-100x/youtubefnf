@@ -14,6 +14,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import brain_lib as B  # noqa: E402
 
+HW = [] if sys.platform == "darwin" else ["-hwaccel", "cuda"]   # no CUDA on a Mac: straight to the CPU decode, no failed launch per frame
+
 GW, GH = 1280, 720
 
 
@@ -66,7 +68,7 @@ def run(key, threads):
         f, p = job
         base = [B.FFMPEG, "-v", "error", "-y", "-ss", f"{B.seek_time(f, fps):.4f}"]
         tail = ["-i", str(path), "-frames:v", "1", "-vf", f"scale={GW}:-2:flags=bicubic", "-q:v", "3", str(p)]   # the picture keeps its shape
-        subprocess.run(base + ["-hwaccel", "cuda"] + tail, check=False)   # the GPU decodes when it can
+        subprocess.run(base + HW + tail, check=False)   # the GPU decodes when it can
         if not p.exists():
             subprocess.run(base + tail, check=False)
         return p.exists()
@@ -92,7 +94,7 @@ def run(key, threads):
         base = [B.FFMPEG, "-v", "error", "-y", "-ss", f"{B.seek_time(f0, fps):.4f}", "-t", f"{(f1 - f0 + 1.5) / fps:.4f}"]
         tail = ["-i", str(path), "-frames:v", str(len(want)), "-vf", f"select='{sel}',scale={GW}:-2:flags=bicubic", "-fps_mode", "passthrough",
                 "-q:v", "3", str(tmp)]
-        subprocess.run(base + ["-hwaccel", "cuda"] + tail, check=False)
+        subprocess.run(base + HW + tail, check=False)
         made = sorted(out.glob(f"_run_{f0}_*.jpg"))
         if len(made) != len(want):   # the GPU path failed or the count is off: the software path
             for m in made:

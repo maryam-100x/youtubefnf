@@ -35,7 +35,9 @@ Give this folder its own git identity, so the chats' commits work the same on ev
 
 ### Step 1: look at the computer
 Check, without asking: the OS and version, CPU (x64 or ARM), RAM, the graphics card (NVIDIA or not) and free space on each drive. No
-need to look for programs: the studio brings its own. A long video needs about 100-200 GB free while it is made: the media root
+need to look for programs: the studio brings its own. **A Mac needs Apple silicon (M1 or newer) and macOS 14 or newer** (`sw_vers
+-productVersion`, `uname -m` = arm64): the studio's Python packages exist ready-made only for those. An older macOS: the creator updates
+it first (System Settings, General, Software Update) and you wait; an Intel Mac can't run the studio: say so plainly, in one line. A long video needs about 100-200 GB free while it is made: the media root
 (MEDIA) goes on the drive with the most room, in a **new folder** (one that doesn't exist yet, or is empty), a short path without
 spaces: `D:/Studio` or `C:/Studio` (macOS `~/Studio`); if that one is taken, `Studio2`, and so on. Then tell the creator in two lines
 what you found and where the studio will live.
@@ -49,10 +51,9 @@ what you found and where the studio will live.
      then its SHA-256 (`certutil -hashfile <MEDIA>/tmp/downloads/uv.zip SHA256`) must be
      `a2a8820d5eea32f08ef467ef3b7f66883a9b076d5737a2fc2fbb5f458d1bb50f` (ARM: `c2426c0c8e28b53d8c440e47a18d96ad4db51e159866c0e81435b196d7f0081c`),
      then `mkdir` the folder `<MEDIA>/apps/uv` and `C:/Windows/System32/tar.exe -xf <MEDIA>/tmp/downloads/uv.zip -C <MEDIA>/apps/uv`.
-   - macOS (Apple silicon; an Intel Mac takes `uv-x86_64-apple-darwin.tar.gz`):
+   - macOS (Apple silicon):
      `curl -L --fail --create-dirs -o <MEDIA>/tmp/downloads/uv.tar.gz https://github.com/astral-sh/uv/releases/download/0.13.6/uv-aarch64-apple-darwin.tar.gz`,
-     then `shasum -a 256` of it must be `60fbd5c8a1ed681845eea28d9d622fcde03c51e91a43465b64a1e17db1ed3472` (Intel:
-     `63ba17fdda55ad1a230d4b37fc6017ffa10c23688c83818bd3bfdf914c652a02`), then
+     then `shasum -a 256` of it must be `60fbd5c8a1ed681845eea28d9d622fcde03c51e91a43465b64a1e17db1ed3472`, then
      `mkdir -p <MEDIA>/apps/uv && tar -xzf <MEDIA>/tmp/downloads/uv.tar.gz -C <MEDIA>/apps/uv --strip-components 1`.
    A hash that doesn't match: delete the file, download it once more; a second mismatch stops the setup (tell the creator).
 3. **The pipeline's Python** into `MEDIA/apps/python`, then its environment (still empty) in the clone, with `<UV>` =
@@ -122,8 +123,14 @@ and until a fresh chat has them, run those programs through `PIPE tools/common/p
    - **Their own, as an instant clone (recommended):** 1-3 minutes of clean speech, ready in minutes. It is the kind of clone the
      studio's own videos were made with, at the level they show. Guide the recording in plain steps: a quiet room, a phone or a
      microphone close to the mouth, the same distance throughout, reading anything in their normal telling-a-friend voice, no music.
-     They upload it in ElevenLabs as an instant voice clone (where that is in today's ElevenLabs, you look up and tell them) and
-     tell you the voice's name when it is ready.
+     They put the file into `MEDIA/voice/sample/` (you make the folder and open it for them). Then the **mic check**:
+     `EDIT tools/voice/rebuild_sample.py <the file> --check`. A full-band mic: they upload that file in ElevenLabs as an instant voice
+     clone (where that is in today's ElevenLabs, you look up and tell them). A narrow mic (a headset, a laptop or Bluetooth mic: an
+     instant clone copies the mic too, so its voice would sound muffled whatever comes after): rebuild the sample first,
+     `EDIT tools/voice/rebuild_sample.py <the file>` (a few minutes; it writes `<name>_rebuilt.wav` beside it), and they upload both
+     files as two instant clones, "<name>" and "<name> rebuilt". They tell you the names when the clones are ready; with two, the
+     test in item 5 voices the same sentences with both and they pick by ear (the rebuilt one usually wins), and only the pick goes
+     into `config/tts.toml`. Nothing is ever processed on the voice afterwards: the clone itself sounds right.
    - **A professional clone** only if they ask for one, now or later: 30 minutes or more of recording and some hours of training,
      closer still to their voice; the same guide, longer.
    - **A stock voice:** pick 4-5 American English narrator voices from the Voice Library that fit `creator/PROFILE.md`'s mood (if the
@@ -133,7 +140,8 @@ and until a fresh chat has them, run those programs through `PIPE tools/common/p
    themselves (you create the empty file and open its folder for them; you never see, print or type the key).
 4. Write `config/tts.toml` from `config/tts.example.toml` with the voice id (from the ElevenLabs API: list the voices and match the
    name) and the settings the template gives for long form and `[tts.short]`.
-5. Test: a three-sentence take through `dj tts`, the accent check and the voice guard's first calibration (`standard/VOICE_LOCK.md`);
+5. Test: a three-sentence take through `dj tts` (with two clones: the same three sentences from each, sent as two files named A and B,
+   and the pick goes into `config/tts.toml`), the accent check and the voice guard's first calibration (`standard/VOICE_LOCK.md`);
    send it. When the creator likes it, save it as their first approved take in `MEDIA/voice/guard/approved/` (the guard's reference grows
    from their approved takes).
 

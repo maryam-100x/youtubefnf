@@ -7,7 +7,7 @@ A heavy job = a model load or a render: autopick, ASR/alignment/accent checks, f
 the gate/render/stills/finish/score steps of pipe.py, Remotion renders and stills, eye packets, cut-outs and depth passes. Everything
 else passes, and so does any job while memory is under the line. What is read:
   Windows  the commit (GlobalMemoryStatusEx: the page file total and what's left of it = Task Manager's "Committed" against its limit)
-  macOS    memory used (vm_stat: app memory + wired + compressed, as Activity Monitor counts it) against the RAM (sysctl hw.memsize)
+  macOS    the OS's own memory-pressure level (sysctl kern.memorystatus_vm_pressure_level): a heavy job waits at warning or critical
   Linux    MemTotal - MemAvailable against MemTotal (/proc/meminfo)
 Anything that cannot be read passes: the hook never blocks work it cannot judge.
 
@@ -123,6 +123,20 @@ def main():
     if not hit:
         return 0
     why, line = hit
+    if platform.system() == "Darwin":
+        # macOS compresses and swaps on its own: "used" sits high on a 16 GB Mac at rest, so the OS's own pressure level decides
+        # (1 normal, 2 warning, 4 critical); a heavy job starts only at normal
+        try:
+            lvl = subprocess.run(["sysctl", "-n", "kern.memorystatus_vm_pressure_level"], capture_output=True, text=True,
+                                 timeout=5).stdout.strip()
+        except Exception:
+            return 0
+        if lvl in ("2", "4"):
+            print(f"Refused by commit_guard.py: {why} would start while macOS reports "
+                  f"{'warning' if lvl == '2' else 'critical'} memory pressure. Wait for a running heavy job to finish and try again "
+                  f"(re-check in a minute or two); run one model-loading job at a time.", file=sys.stderr)
+            return 2
+        return 0
     try:
         c = commit_used()
     except Exception:

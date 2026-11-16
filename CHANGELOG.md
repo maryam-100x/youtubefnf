@@ -5,6 +5,14 @@ brings, what to set up (in order, each command with its environment, PIPE, EDIT,
 it) and what to read; a file renamed or removed is named with what replaced it. This file is the studio's: a creator's chat never
 writes in it (their own history goes to `log/`).*
 
+## v1.2 (2026-11-16)
+- **Brings:** the voice from a weak mic: a clone sample from a headset or a laptop mic is rebuilt as if from a good mic before it is
+  cloned (`tools/voice/rebuild_sample.py`, a speech restoration model; the creator picks between the two clones by ear). The Mac:
+  the setup checks for Apple silicon and macOS 14 or newer (the Python packages exist ready-made only for those), the memory checks
+  read macOS's own memory pressure, the voice scripts run on macOS's bash, renders link the media instead of copying it.
+- **Set up:** nothing to install (EDIT has every package the rebuild needs; its model downloads into MEDIA/models/hf the first time).
+- **Read:** `SETUP.md` step 9 (the mic check), step 1 on a Mac.
+
 ## v1.1 (2026-11-16)
 - **Brings:** a chat that waits on the creator says so once: their step goes on the task list as "You: ..." and the keep-working hook
   lets the turn end there (before, it pushed the chat to write the same message again). No unasked warnings or side notes. The voice:
