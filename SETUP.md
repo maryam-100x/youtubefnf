@@ -18,9 +18,11 @@ the computer already has (another Python, Node or ffmpeg, a global setting, anot
 something like it is there. The one exception is Git, which the clone needs: one that is there is used as it is; a missing one is
 installed (`winget install --id Git.Git -e` on Windows; on a Mac `xcode-select --install`, whose window the creator clicks).
 
-**Before step 1:** the creator asked for the studio in a new folder `studio` inside the folder this chat runs in (README): it is
-cloned there (if a `studio` folder with something in it is there already, into `studio-2`, and so on; say which in a line), and every
-command below runs from that clone's root. Never ask them to make a folder, install Git or
+**Before step 1:** the studio is cloned into a new folder `studio` in the creator's user folder (`C:/Users/<name>/studio`, Mac
+`~/studio`; if that path has a space or a non-English letter, `C:/studio`; if a `studio` with something in it is there already,
+`studio-2`, and so on; say which in a line), or the folder they named. Never into the folder this chat runs in: the app may have made
+it for this chat alone (it is deleted with the chat, and its long path breaks Chrome on Windows), and never into a folder OneDrive or
+iCloud syncs. Every command below runs from that clone's root. Never ask them to make a folder, install Git or
 run a command: that is yours. Then name the clone's source `studio`: `git remote rename origin studio` (new
 versions of the studio come from it, `UPDATE.md`; a remote of the creator's own, if they ever want one, is then free to be `origin`).
 Give this folder its own git identity, so the chats' commits work the same on every computer: `git config user.name "Studio"` and

@@ -7,11 +7,11 @@ video. Long-form documentary-style videos and Shorts, for any niche.
 ## Start
 1. Install the **Claude desktop app** (https://claude.ai/download) and sign in. You need a paid Claude plan (Max is recommended: a
    video is a lot of work).
-2. Open the app's **Code** tab and send this message (if it asks you to choose a folder first, any folder is fine, for example
-   Documents: the chat makes its own studio folder inside it):
+2. Open the app's **Code** tab and send this message (if it asks you to choose a folder first, any folder is fine: the chat makes
+   the studio's own folder in your user folder):
 
-   **Set up the video studio from https://github.com/maryam-100x/youtubefnf in a new folder called studio here. You have my OK to
-   download and install everything the setup and our videos need.**
+   **Set up the video studio from https://github.com/maryam-100x/youtubefnf. You have my OK to download and install everything the
+   setup and our videos need.**
 
 That's all. The chat installs everything, sets the studio up with you one step at a time and tells you whenever it needs you (an
 account, a sign-in, a click). The last sentence lets it install everything without asking you each time. The studio keeps its own
@@ -35,8 +35,10 @@ is only what needs a human.
    Claude desktop app and paste the link there.
 2. If their message has no OK for downloads and installs, ask once, in one line, for one go covering everything the setup and the
    videos download and install; never ask again per item.
-3. Clone the repo into a new folder `studio` inside the folder this chat runs in (or the folder they named; if a `studio` with
-   something in it is there, `studio-2`): `git clone https://github.com/maryam-100x/youtubefnf studio`. Install Git first if it is
+3. Clone the repo into a new folder `studio` in the creator's user folder (`C:/Users/<name>/studio`, Mac `~/studio`; if that path
+   has a space or a non-English letter, `C:/studio`; if a `studio` with something in it is there, `studio-2`), or the folder they
+   named. Never into the folder this chat runs in: the app may have made it for this chat alone (deleted with the chat, and its long
+   path breaks Chrome on Windows). `git clone https://github.com/maryam-100x/youtubefnf <that folder>`. Install Git first if it is
    missing (`winget install --id Git.Git -e` on Windows, `xcode-select --install` on a Mac). Install nothing else yourself: the
    studio brings its own copies of every program and never uses or changes the computer's own.
 4. Read the clone's `CLAUDE.md`, then follow its `SETUP.md` from the first step. One step at a time: say what happens, do it, check it
