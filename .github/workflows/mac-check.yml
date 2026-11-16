@@ -111,15 +111,18 @@ jobs:
           set -uo pipefail
           exec > >(tee "$LOGS/outside.log") 2>&1
           bad=0
+          : > "$LOGS/new.txt"
           for d in "$HOME/.cache" "$HOME/.local/bin" "$HOME/.npm" "$HOME/Library/Caches" "$HOME/.config" "$HOME/Library/Application Support"; do
             f="$LOGS/before_$(echo "$d" | tr '/ ' '__').txt"
             [ -e "$d" ] || continue
             find "$d" -maxdepth 2 2>/dev/null | sort > "$f.after"
-            new=$(comm -13 "$f" "$f.after" 2>/dev/null || cat "$f.after")
-            if [ -n "$new" ]; then echo "NEW under $d:"; echo "$new" | head -20; bad=1; fi
+            [ -e "$f" ] || : > "$f"
+            new=$(comm -13 "$f" "$f.after")
+            if [ -n "$new" ]; then echo "NEW under $d:"; echo "$new" | head -20; echo "$new" | head -20 >> "$LOGS/new.txt"; bad=1; fi
           done
           du -sh "$HOME/Studio" "$GITHUB_WORKSPACE" 2>/dev/null
-          [ $bad = 0 ] || echo "::warning title=outside::the studio wrote outside its folders (see the list above)"
+          # the list goes into the warning itself: the run's log needs an admin's sign-in to read, the annotations don't
+          [ $bad = 0 ] || echo "::warning title=outside::$(sed "s|$HOME|~|" "$LOGS/new.txt" | head -30 | awk '{printf "%s%%0A", $0}')"
 
       - name: Report a failure
         if: failure()
