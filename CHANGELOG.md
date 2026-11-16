@@ -5,6 +5,13 @@ brings, what to set up (in order, each command with its environment, PIPE, EDIT,
 it) and what to read; a file renamed or removed is named with what replaced it. This file is the studio's: a creator's chat never
 writes in it (their own history goes to `log/`).*
 
+## v1.8 (2026-11-16)
+- **Brings:** one line in `CLAUDE.md`, talking to the creator: a question that doesn't hang on the running work (a render, a
+  check) is asked in the message that ends the turn, not held back until the work is done; the work's result follows in one
+  line, only if it changes something for them.
+- **Set up:** nothing.
+- **Read:** `CLAUDE.md`, "Talking to the creator".
+
 ## v1.7 (2026-11-16)
 - **Brings:** three fixes to the look's pieces and one to how the chat talks. Tracked text is centred to the pixel: CSS tracking adds
   its space after the last letter too, which pushed the date, the turn card, the number, the stamp and the button labels a few
