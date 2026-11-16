@@ -5,6 +5,13 @@ brings, what to set up (in order, each command with its environment, PIPE, EDIT,
 it) and what to read; a file renamed or removed is named with what replaced it. This file is the studio's: a creator's chat never
 writes in it (their own history goes to `log/`).*
 
+## v1.3 (2026-11-16)
+- **Brings:** renders on any computer: the frames rendered at once are capped at the computer's CPU cores (before, a computer with
+  fewer than 6 cores could not render at all). The chat's lines while it works are plain words, never the work's own (merge, commit,
+  hook). The ElevenLabs API key: the direct link to the key page.
+- **Set up:** nothing to install.
+- **Read:** `CLAUDE.md` ("Talking to the creator"), `SETUP.md` step 9 item 3.
+
 ## v1.2 (2026-11-16)
 - **Brings:** the voice from a weak mic: a clone sample from a headset or a laptop mic is rebuilt as if from a good mic before it is
   cloned (`tools/voice/rebuild_sample.py`, a speech restoration model; the creator picks between the two clones by ear). The Mac:

@@ -401,7 +401,7 @@ def render_cmd(v, comp, out, frames, concurrency, port=None, scale=None, mkv=Tru
     # bundle: a ready bundle folder (lean_bundle) as the entry point: the CLI renders from it without bundling or copying
     src = [bundle] if bundle else [os.environ.get("QA_ENTRY") or "src/index.ts"]
     pub = [] if bundle else [f"--public-dir={v.pub.as_posix()}"]
-    cmd = [NPX, "remotion", "render", *src, comp, str(out), *pub, "--muted", "--timeout=120000", f"--concurrency={concurrency}"]
+    cmd = [NPX, "remotion", "render", *src, comp, str(out), *pub, "--muted", "--timeout=120000", f"--concurrency={cap_conc(concurrency)}"]
     if frames:
         cmd.append(f"--frames={frames[0]}-{frames[1]}")
     if mkv:   # a long video's chunk: lossless-joinable, the finish encodes once
@@ -518,6 +518,14 @@ RENDER_DEFAULTS = {"crf": 14, "preset": "veryfast", "imageFormat": "jpeg", "jpeg
 STEP_DOWN = [None, 4, 2]   # a part that failed renders again at the video's concurrency, then 4, then 2 (rule: a failed part never restarts the run)
 
 
+def cap_conc(c):
+    """A render concurrency this computer can run: Remotion refuses one over the CPU cores (a 4-core laptop and a video set to 6)."""
+    if not c:
+        return c
+    cores = (os.process_cpu_count() if hasattr(os, "process_cpu_count") else None) or os.cpu_count() or 1
+    return max(1, min(int(c), cores))
+
+
 def comp_info(v, bundle, settings):
     """the composition's own length, fps and size, read from the bundle (render_parts.mjs info): the frame count comes from here"""
     jf = v.pipe_dir / "comp_info.job.json"
@@ -599,7 +607,7 @@ def render_parts(v, a, bundle, settings, parts, conc, pdir, t_start, status):
     n_run = 0
     while pending:
         i0 = pending[0][0]
-        c = STEP_DOWN[min(tries[i0], len(STEP_DOWN) - 1)] or conc
+        c = cap_conc(STEP_DOWN[min(tries[i0], len(STEP_DOWN) - 1)] or conc)
         batch = pending if c == conc else pending[:1]   # a part retried at a lower concurrency goes alone, the rest at the video's
         job = {"serveUrl": bundle, "comp": v.comp, "concurrency": c, **settings,
                "parts": [{"i": i, "f0": f0, "f1": f1, "file": str(pdir / f"part_{i:03d}.mkv")} for i, f0, f1 in batch]}
@@ -658,7 +666,7 @@ def render_parts(v, a, bundle, settings, parts, conc, pdir, t_start, status):
 def render_long(v, a):
     step_link(v, a)   # every file the code names linked first (a render dies on a file added after the last link)
     ver = a.version
-    conc = a.concurrency or v.concurrency
+    conc = cap_conc(a.concurrency or v.concurrency)
     settings = render_settings(v, a)
     part_frames = int(v.section("render").get("part_frames", RENDER_DEFAULTS["part_frames"]))
     t_start = time.time()
@@ -799,7 +807,7 @@ def render_short(v, a):
     if frames:
         out = v.render_dir / f"test_v{ver}" / f"frames_{frames[0]}-{frames[1]}.mp4"
         out.parent.mkdir(parents=True, exist_ok=True)
-    conc = a.concurrency or v.section("render").get("concurrency")   # unset: remotion.config's default (6)
+    conc = cap_conc(a.concurrency or v.section("render").get("concurrency"))   # unset: remotion.config's default (6, or the cores)
     cmd = [NPX, "remotion", "render", os.environ.get("QA_ENTRY") or "src/index.ts", v.comp, str(out), f"--public-dir={v.pub.as_posix()}", "--muted"]
     if frames:
         cmd.append(f"--frames={frames[0]}-{frames[1]}")

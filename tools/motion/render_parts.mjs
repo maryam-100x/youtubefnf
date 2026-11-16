@@ -16,8 +16,13 @@
 // every part would render all its frames to disk first and encode after. Remotion removed that check in 4.0.534 ("20-35% longer at
 // 1080p" sequential). "force" applies 4.0.534's decision to this version: encode while rendering.
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import {createRequire} from 'node:module';
+
+// Remotion refuses a concurrency over the computer's CPU cores (os.availableParallelism, the number it checks against): a job asks
+// for its number, this computer gets at most its cores
+const CORES = typeof os.availableParallelism === 'function' ? os.availableParallelism() : os.cpus().length;
 
 // the renderer's CommonJS build (not its ESM bundle), so its own modules are shared objects this script can read and, with
 // parallel: "force", adjust
@@ -51,7 +56,7 @@ try {
         await renderMedia({
           composition, serveUrl: job.serveUrl, inputProps: {}, codec: 'h264-mkv', outputLocation: tmp, frameRange: [p.f0, p.f1],
           crf: job.crf, x264Preset: job.preset, colorSpace: 'bt709', scale: job.scale, muted: true, chromiumOptions,
-          concurrency: job.concurrency, timeoutInMilliseconds: job.timeoutMs || 120000, puppeteerInstance: browser,
+          concurrency: Math.max(1, Math.min(Number(job.concurrency) || CORES, CORES)), timeoutInMilliseconds: job.timeoutMs || 120000, puppeteerInstance: browser,
           imageFormat: job.imageFormat || 'jpeg', ...(job.imageFormat === 'png' ? {} : {jpegQuality: job.jpegQuality || 92}),
           ...(job.cacheBytes ? {offthreadVideoCacheSizeInBytes: job.cacheBytes} : {}),
           ...(job.threads ? {offthreadVideoThreads: job.threads} : {}),
