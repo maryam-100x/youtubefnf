@@ -1027,7 +1027,7 @@ def require_voice_tts(tcfg):
 
 def elevenlabs(tcfg, text, prev, nxt, out, prev_ids=None):
     """POST /v1/text-to-speech/{voice_id}/with-timestamps -> (char alignment, request id). Writes `out` as 48 kHz mono 16-bit WAV
-    (wav_48000 needs a paid plan). prev_ids: the request ids of the sections before (long videos), for continuity; otherwise
+    (wav_48000 works on the Creator plan, tested). prev_ids: the request ids of the sections before (long videos), for continuity; otherwise
     previous/next text. Every call is logged to MEDIA/voice/elevenlabs_usage.csv with the character-cost header."""
     require_voice_tts({**tcfg, "engine": "elevenlabs"})
     key = elevenlabs_key()

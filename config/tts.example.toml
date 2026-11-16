@@ -77,7 +77,7 @@ voice = "<path to a reference wav of the creator's voice>"   # + a .txt next to 
 voice_id = "<your ElevenLabs voice id>"   # the creator's clone or a stock voice (the setup asks which)
 model_id = "eleven_v4"        # the model these settings were tuned on: 1 credit/char, 10,000 chars per request, no style/speed/speaker
                               # boost. No fallback model: the older multilingual model sounds like computer TTS
-output_format = "wav_48000"   # 48 kHz 16-bit WAV, no lossy step (needs a paid plan)
+output_format = "wav_48000"   # 48 kHz 16-bit WAV, no lossy step: works on the Creator plan (tested), Pro not needed
 stitch = true                 # per-beat mode only: previous/next text; continuous mode links sections by request id
 voice_settings = { stability = 0.95, similarity_boost = 0.75 }  # flat and even (the model's only two settings)
 prefix = "[flat, calm, even tone] [American accent] "  # a direction tag at the head of every request; the model doesn't speak it.

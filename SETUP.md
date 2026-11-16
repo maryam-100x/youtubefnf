@@ -115,13 +115,17 @@ first). If it prints other places or nothing, the hook didn't reach this shell: 
 and until a fresh chat has them, run those programs through `PIPE tools/common/paths.py --run` (never the computer's own).
 
 ### Step 9: the voice
-1. The creator needs an **ElevenLabs** account on a paid plan (Creator or higher for a professional voice clone; Starter is enough for
-   an instant clone or a stock voice). They make it themselves at https://elevenlabs.io; you wait.
+1. The creator needs an **ElevenLabs** account on the **Creator** plan: the studio's voice comes as uncompressed 48 kHz WAV
+   (`wav_48000`), tested and working on Creator (Pro is not needed; the cheaper Starter was never tested for it). They make it
+   themselves at https://elevenlabs.io; you wait.
 2. Ask: **their own voice, or a stock voice?**
-   - **Their own (a clone):** an instant clone needs 1-3 minutes of clean speech; a professional clone needs 30 minutes or more and
-     sounds much closer (recommended for a channel). Guide the recording in plain steps: a quiet room, a phone or a microphone close
-     to the mouth, the same distance throughout, reading anything in their normal telling-a-friend voice, no music. They upload it in
-     ElevenLabs (Voices -> Add a new voice) and tell you the voice's name when it is ready.
+   - **Their own, as an instant clone (recommended):** 1-3 minutes of clean speech, ready in minutes. It is the kind of clone the
+     studio's own videos were made with, at the level they show. Guide the recording in plain steps: a quiet room, a phone or a
+     microphone close to the mouth, the same distance throughout, reading anything in their normal telling-a-friend voice, no music.
+     They upload it in ElevenLabs as an instant voice clone (where that is in today's ElevenLabs, you look up and tell them) and
+     tell you the voice's name when it is ready.
+   - **A professional clone** only if they ask for one, now or later: 30 minutes or more of recording and some hours of training,
+     closer still to their voice; the same guide, longer.
    - **A stock voice:** pick 4-5 American English narrator voices from the Voice Library that fit `creator/PROFILE.md`'s mood (if the
      interview hasn't run yet, ask two questions first: calm or punchy, deeper or lighter), render the same two sentences in each
      through the pipeline, send the files, the creator picks one.

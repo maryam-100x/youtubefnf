@@ -96,6 +96,9 @@ uv (`tools/setup/envs.py`, or `uv pip install --python <env python>` in Bash), n
 ## Working in this app
 - **Effort follows the work.** A chat can't set its own effort, so at a change of work ask the creator to switch: talk, planning,
   brainstorming = high; building tools = xhigh; making a video = xhigh.
+- **Waiting on the creator:** when the next step is theirs (an account, a key, a choice, their notes), it goes on the task list as the
+  in-progress step, written "You: <what they do>" (`update_plan`), and the turn ends after the one message that asks for it. The
+  keep-working hook lets that stop pass; the message is never written a second time.
 - **The usage limit never changes how the work is done:** no skipped checks, no rushing. When it runs out, the work waits.
 - **A new chat only when this one got dumber and slower** (a rule forgotten, the same mistake corrected twice), never because of a
   compaction. Before the switch, write `HANDOFF.md`: the creator's words since the last handoff, the open problems, and where the

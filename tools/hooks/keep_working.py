@@ -15,6 +15,9 @@ The stop is blocked only when ALL of these hold (read from the chat's own transc
     every step not "completed"), or a wrap-up recap that still names the chat's own next steps ("Next: ...", "comes after", "still
     needs"), or, in a turn its own job's notification started, it worked and went quiet with no wrap-up at all;
   - the last wrap_up asks the creator nothing (an `ask` = the next step is the creator's: a decision, a go-ahead, notes on a sample);
+  - the next step on the list is not the creator's: a step whose text starts with "You:" (an account, a key, a choice, their notes)
+    and is the in-progress one (or, with none in progress, the first not done) means the chat waits on them, so the stop passes
+    (the app may have no wrap_up: the list is how a chat says "your turn" there);
   - no job the chat launched in the background (Bash run_in_background, an async Agent, a Monitor) is still running (open for at
     most 4 h; a persistent Monitor never counts);
   - it is a desktop chat (headless `claude -p` runs are never touched).
@@ -55,6 +58,7 @@ READ_ONLY = {"Read", "Grep", "Glob", "ToolSearch", "ReadNotifications", "WebSear
 # that is the creator's goes in the wrap-up's ask instead
 NEXT = re.compile(r"\bnext\s*[:\-–—]|\bcomes? (?:after|next)\b|\bstill (?:to do|needs?|left)\b|\bleft to do\b|"
                   r"\bnot (?:done|built|run|started|finished) yet\b", re.I)
+YOURS = re.compile(r"^\s*(?:you|your (?:part|turn)|creator)\s*[:\-–—]", re.I)   # a step that is the creator's to do
 NOTE = re.compile(r"<task-id>([^<]+)</task-id>(.*?)</task-notification>", re.S)
 DONE = re.compile(r"<status>(completed|failed|killed|stopped|cancelled|error)</status>|<event>\[Monitor expired")
 
@@ -203,6 +207,10 @@ def decide(st, now=None):
         return True, "background job(s) running: " + ", ".join(running[:4])
     if not t["planned"] and t["origin"] != "task-notification":
         return True, "not on a task list this turn (the creator's question, a 'wait', or done)"
+    plan = st.get("plan", [])
+    nxt = next((s for s in plan if s["s"] == "in_progress"), None) or next((s for s in plan if s["s"] != "completed"), None)
+    if nxt and YOURS.match(nxt["c"]):
+        return True, "the next step is the creator's: " + nxt["c"]
     left = t["wrap_open"] if t["wrapped"] else [s["c"] for s in st.get("plan", []) if s["s"] != "completed"]
     if left:
         return False, f"your task list for what the creator asked still has {len(left)} step(s) not done ({'; '.join(left[:4])})"
@@ -258,8 +266,10 @@ def hook():
                "reason": (f"keep_working hook (block {n + 1}/{MAX_BLOCKS}): you are ending the turn, but {why}. "
                           "What the creator asked for is finished before you stop, never paused just to report: do the next of those "
                           "steps now and say in one line which. If a step is already done, mark it (update_plan done) and stop; if it "
-                          "was dropped or the creator changed the work, give the list its real steps; if it needs the creator, put that "
-                          "one decision in wrap_up's ask. Never start anything the creator did not ask for to get past this hook.")}
+                          "was dropped or the creator changed the work, give the list its real steps; if the next step is the "
+                          "creator's (an account, a key, a choice, their notes), make it the in-progress step on the list as "
+                          "\"You: <what they do>\" (update_plan) and stop, without writing your message again (they have it). "
+                          "Never start anything the creator did not ask for to get past this hook.")}
     (STATE / f"{sid}.json").write_text(json.dumps(st), encoding="utf-8")
     if out:
         print(json.dumps(out))
