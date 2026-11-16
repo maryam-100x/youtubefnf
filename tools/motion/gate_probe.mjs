@@ -5,10 +5,11 @@
 //               every visible text and picture's box -> <out_dir>/probe.jsonl (one GATE line each, the frame inside the line);
 //               --png keeps each frame's picture (graphics only, the clips hidden) as element-<n>.jpeg for the motion and sync checks
 //     --real    normal frames (the clips in) as pictures: black and empty frames
-// QA_COMP = the composition, QA_PUBLIC = its lean public dir, GATE_CONC = pages at once (6).
+// QA_COMP = the composition, QA_PUBLIC = its lean public dir, GATE_CONC = pages at once (6, at most the CPU cores).
 // The bundle holds a junction to the public dir, not a copy, and is deleted when done (lean_bundle.mjs).
 import path from 'node:path';
 import fs from 'node:fs';
+import os from 'node:os';
 import {leanBundle} from './lean_bundle.mjs';
 import {openBrowser, renderFrames, selectComposition} from '@remotion/renderer';
 import {PUBLIC} from '../common/paths.mjs';
@@ -41,7 +42,8 @@ try {
     await renderFrames({
       composition, serveUrl, chromiumOptions, envVariables: env, puppeteerInstance: browser, scale: Number(scale),
       frameRange: [a, Math.min(b, composition.durationInFrames - 1)], everyNthFrame: nth,
-      concurrency: Number(process.env.GATE_CONC || 6), imageFormat: pics ? 'jpeg' : 'none', ...(pics ? {jpegQuality: 80} : {}),
+      concurrency: Math.max(1, Math.min(Number(process.env.GATE_CONC || 6),
+        typeof os.availableParallelism === 'function' ? os.availableParallelism() : os.cpus().length)), imageFormat: pics ? 'jpeg' : 'none', ...(pics ? {jpegQuality: 80} : {}),
       outputDir: pics ? out : null, inputProps: {}, logLevel: 'error',   // the GATE lines go to probe.jsonl only, not the log too
       onStart: () => {},
       onBrowserLog: (l) => { if (l.text.startsWith('GATE|')) log.write(l.text.slice(5) + '\n'); },

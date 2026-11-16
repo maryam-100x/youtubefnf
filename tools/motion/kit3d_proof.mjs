@@ -2,11 +2,12 @@
 //   bash with_remotion_lock.sh "kit3d proof" node kit3d_proof.mjs <out_dir> [stills|clips|all] [comp,comp...]
 // 1. stills at 2560 x 1440 (--scale 4/3, as pipe.py renders long videos): each demo at its first frame, mid-move and at rest
 // 2. clips: each demo whole, h264 CRF 16 at 1440p, timed: s/frame at concurrency 1 (the true cost of a frame) on its whole length,
-//    then the wall time at the house concurrency (6) for the same frames
+//    then the wall time at the house concurrency (6, or the CPU cores when fewer) for the same frames
 // One bundle (lean: the public dir TMP/pub_kit3d behind a junction, kit3d_assets.py link), one Chrome, GL angle (the GPU, remotion.config.ts).
 // Writes <out>/proof.json and prints a table.
 import path from 'node:path';
 import fs from 'node:fs';
+import os from 'node:os';
 import {openBrowser, renderMedia, renderStill, selectComposition} from '@remotion/renderer';
 import {leanBundle} from './lean_bundle.mjs';
 import {TMP} from '../common/paths.mjs';
@@ -56,10 +57,11 @@ try {
       const file = path.join(out, 'clips', `${id}.mp4`);
       fs.mkdirSync(path.dirname(file), {recursive: true});
       const row = {comp: id, frames: comp.durationInFrames, file};
-      for (const conc of [1, 6]) {
+      const HOUSE = Math.max(1, Math.min(6, typeof os.availableParallelism === 'function' ? os.availableParallelism() : os.cpus().length));
+      for (const conc of [...new Set([1, HOUSE])]) {
         const t0 = Date.now();
         await renderMedia({composition: comp, serveUrl: lean.serveUrl, codec: 'h264', crf: 16, x264Preset: 'slow', colorSpace: 'bt709',
-          outputLocation: conc === 6 ? file : path.join(out, 'clips', `${id}_c1.mp4`), scale: SCALE, chromiumOptions, puppeteerInstance: browser,
+          outputLocation: conc === HOUSE ? file : path.join(out, 'clips', `${id}_c1.mp4`), scale: SCALE, chromiumOptions, puppeteerInstance: browser,
           concurrency: conc, muted: true, timeoutInMilliseconds: 120000, imageFormat: 'jpeg', jpegQuality: 92, overwrite: true});
         const s = (Date.now() - t0) / 1000;
         row[`wall_c${conc}_s`] = Math.round(s * 10) / 10;

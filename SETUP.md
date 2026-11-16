@@ -136,7 +136,8 @@ and until a fresh chat has them, run those programs through `PIPE tools/common/p
    - **A stock voice:** pick 4-5 American English narrator voices from the Voice Library that fit `creator/PROFILE.md`'s mood (if the
      interview hasn't run yet, ask two questions first: calm or punchy, deeper or lighter), render the same two sentences in each
      through the pipeline, send the files, the creator picks one.
-3. **The API key:** the creator makes one in ElevenLabs (Profile -> API keys) and pastes it into the file `MEDIA/secrets/elevenlabs_api_key.txt`
+3. **The API key:** the creator makes one at https://elevenlabs.io/app/api/api-keys (the link ElevenLabs' own quickstart
+   gives; a key with no restrictions on what it may do) and pastes it into the file `MEDIA/secrets/elevenlabs_api_key.txt`
    themselves (you create the empty file and open its folder for them; you never see, print or type the key).
 4. Write `config/tts.toml` from `config/tts.example.toml` with the voice id (from the ElevenLabs API: list the voices and match the
    name) and the settings the template gives for long form and `[tts.short]`.

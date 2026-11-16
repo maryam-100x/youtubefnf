@@ -5,7 +5,9 @@ import {Config} from '@remotion/cli/config';
 
 Config.setVideoImageFormat('jpeg');
 Config.setJpegQuality(92);
-Config.setConcurrency(6);
+// 6 tabs, or the computer's CPU cores when it has fewer (Remotion refuses a concurrency over the core count)
+const cores = typeof os.availableParallelism === 'function' ? os.availableParallelism() : os.cpus().length;
+Config.setConcurrency(Math.max(1, Math.min(6, cores)));
 Config.setOverwriteOutput(true);
 // The GPU (angle) by default: about twice as fast per frame as software GL. On a PC whose graphics driver resets under the load (a
 // streaming or capture app sharing the GPU fails with it), switch to 'swangle' (software GL) for good; tools/pipeline/pipe.py's GPU guard

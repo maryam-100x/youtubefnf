@@ -6,9 +6,12 @@
 // The bundle holds a junction to the public dir and is deleted when done (lean_bundle.mjs). Nothing else on Remotion while it runs.
 import path from 'node:path';
 import fs from 'node:fs';
+import os from 'node:os';
 import {leanBundle} from './lean_bundle.mjs';
 import {renderMedia, selectComposition} from '@remotion/renderer';
 import {PUBLIC} from '../common/paths.mjs';
+
+const CONC = Math.max(1, Math.min(3, typeof os.availableParallelism === 'function' ? os.availableParallelism() : os.cpus().length));
 
 const [, , out, scale, ...ranges] = process.argv;
 fs.mkdirSync(out, {recursive: true});
@@ -23,7 +26,7 @@ try {
     const [a, b] = r.split('-').map(Number);
     const file = path.join(out, `seg_${a}-${b}.mkv`);
     await renderMedia({composition, serveUrl, inputProps, codec: 'h264-mkv', outputLocation: file, frameRange: [a, b], crf: 16, x264Preset: 'slow',
-      colorSpace: 'bt709', scale: Number(scale), muted: true, chromiumOptions, concurrency: 3, timeoutInMilliseconds: 120000});
+      colorSpace: 'bt709', scale: Number(scale), muted: true, chromiumOptions, concurrency: CONC, timeoutInMilliseconds: 120000});
     console.log(`${file}@${(a / composition.fps).toFixed(6)}`);
   }
 } finally {
