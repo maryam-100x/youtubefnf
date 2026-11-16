@@ -209,9 +209,12 @@ the lingo study (`kb/LINGO.md`, `standard/research/LINGO.md`). These are what sc
 browser's YouTube cookies into `MEDIA/secrets/yt_cookies.txt` (guide them; never handle the cookies yourself).
 
 ### Step 13: the Shorts chat
-Start the Shorts chat as `SHORTS_CHAT.md` says, then tell the creator: Shorts ideas go there, long videos come here.
+Start the Shorts chat now, as `SHORTS_CHAT.md` says (never left for later "when you want Shorts"). The creator hears about it once,
+in step 14's brief: one line that it is open, what it is called in their chat list, and that Shorts ideas are settled with you and
+sent there, long videos stay here (when it had to be opened by hand, that message instead carries the prompt to paste).
 
 ### Step 14: ready
-Write STATUS.md: "Setup done. Next: the study, then the first video." Commit. Run the study (STANDARD.md section 2), brief the creator
-in 3 lines, and ask for the first topic. The first long video starts as a 60-second prototype at the finished look, or is built
+Write STATUS.md: "Setup done. Next: the study, then the first video." Commit. Run the study (STANDARD.md section 2) quietly (no
+progress messages: CLAUDE.md, talking to the creator), then one message: the brief in 3 lines, the Shorts chat's line (step 13),
+the effort to switch to for video work if it isn't already, and last, the first topic asked for. The first long video starts as a 60-second prototype at the finished look, or is built
 whole in one go, as `creator/choices.toml` says (`standard/WORKFLOW.md`).

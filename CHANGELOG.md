@@ -5,6 +5,24 @@ brings, what to set up (in order, each command with its environment, PIPE, EDIT,
 it) and what to read; a file renamed or removed is named with what replaced it. This file is the studio's: a creator's chat never
 writes in it (their own history goes to `log/`).*
 
+## v1.9 (2026-11-16)
+- **Brings:** a quiet chat while it works. Long stretches that need nothing from the creator (a study, downloads, checks, a
+  render) show at most one label of a few words per stage, also when the app asks what the chat is doing: no counts, limits,
+  retries or skipped items, no problems it handles itself, a correction said once, a choice not repeated back (`CLAUDE.md`,
+  talking to the creator). The question to answer is the last line of a message. The keep-working hook no longer asks for a
+  line when it moves the chat on. The setup starts the Shorts chat during the setup itself and tells the creator about it once,
+  in the closing message (`SETUP.md` steps 13-14, `SHORTS_CHAT.md`). The effort ask says where the setting is.
+- **Set up:** nothing (the hook reads its new wording at the next stop). A folder whose setup is done and whose Shorts chat was
+  never started: start it now as `SHORTS_CHAT.md` says, and tell the creator in one line.
+- **Read:** `CLAUDE.md`, "Talking to the creator" and "Effort follows the work".
+
+## v1.8 (2026-11-16)
+- **Brings:** one line in `CLAUDE.md`, talking to the creator: a question that doesn't hang on the running work (a render, a
+  check) is asked in the message that ends the turn, not held back until the work is done; the work's result follows in one
+  line, only if it changes something for them.
+- **Set up:** nothing.
+- **Read:** `CLAUDE.md`, "Talking to the creator".
+
 ## v1.7 (2026-11-16)
 - **Brings:** three fixes to the look's pieces and one to how the chat talks. Tracked text is centred to the pixel: CSS tracking adds
   its space after the last letter too, which pushed the date, the turn card, the number, the stamp and the button labels a few

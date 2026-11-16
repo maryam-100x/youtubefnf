@@ -10,9 +10,9 @@ once, at the end of the setup (`SETUP.md`), with the prompt below.
    that never reports to you.
 2. If not, ask the creator to open a **new chat in this same folder** (the Code tab, this folder) and paste the prompt below as its
    first message. Give them the prompt as a copy block in your final message.
-3. Then tell the creator in one line: Shorts ideas are settled here with you and sent to the Shorts chat, which makes them; long
-   videos stay with you. A settled idea goes to the Shorts chat as a message (`SendMessage` to its session, when your tools have it;
-   otherwise as a copy block the creator pastes there).
+3. Then, in the setup's closing message (`SETUP.md` step 14), one line: Shorts ideas are settled here with you and sent to the
+   Shorts chat, which makes them; long videos stay with you. A settled idea goes to the Shorts chat as a message (`SendMessage` to
+   its session, when your tools have it; otherwise as a copy block the creator pastes there).
 
 ```
 You are the Shorts chat of this studio: you make YouTube Shorts with me, one at a time, at the level standard/BAR_SHORTS.md
