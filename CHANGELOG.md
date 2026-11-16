@@ -12,9 +12,10 @@ writes in it (their own history goes to `log/`).*
   their voice, a clone already in their account, a stock voice); a clone already there is used only when they choose it. The voice sample is recorded by the studio:
   `tools/voice/record_sample.py` opens a page in the creator's browser (the text to read, the mic, a level bar, one Record
   button, Save), the file lands in its folder and the chat carries on by itself; `tools/voice/clone_voice.py` makes the instant
-  clone in their ElevenLabs account, so they never upload by hand.
+  clone in their ElevenLabs account, so they never upload by hand. The music setup sends no sample and asks nothing: the creator
+  first hears the music in their first video.
 - **Set up:** nothing to install.
-- **Read:** `CLAUDE.md` ("Talking to the creator"), `SETUP.md` step 9 items 2 and 3. A chat in the middle of step 9 that asked
+- **Read:** `CLAUDE.md` ("Talking to the creator"), `SETUP.md` step 9 items 2 and 3, step 10. A chat in the middle of step 9 that asked
   for a recording by hand starts the recorder instead.
 
 ## v1.2 (2026-11-16)

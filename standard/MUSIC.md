@@ -180,7 +180,9 @@ the test, in order:
 2. `SYNTH tools/music/music.py patches Pads/` -> a list of pad patches (Surge's library found; its first start takes ~35 s)
 3. `SYNTH tools/music/music.py judge --warm` -> `model ok` (downloads the model once)
 4. `SYNTH tools/music/music.py render tools/music/example/film.py --judge` -> four beds, every one **AT THE BAR**, into `MEDIA/tmp/music`
-5. One bed to the creator: the example's opening bed (`MEDIA/tmp/music/bed_O.wav`), so they hear what the chat makes
+5. Nothing goes to the creator: a sample made for no video tells them nothing. They first hear the music in their first video,
+   written for it (under the voice with the prototype, section 3 item 9). Music for a vibe before that only when they
+   ask for it.
 
 On Windows this is tested; on macOS the same parts and steps (the Mac's installer locations are the ones Surge XT documents).
 
