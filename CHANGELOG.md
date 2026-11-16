@@ -5,6 +5,18 @@ brings, what to set up (in order, each command with its environment, PIPE, EDIT,
 it) and what to read; a file renamed or removed is named with what replaced it. This file is the studio's: a creator's chat never
 writes in it (their own history goes to `log/`).*
 
+## v1.5 (2026-11-16)
+- **Brings:** the look's pieces and its board, redesigned and checked at full size in every look. The sign-off is one column on one
+  axis at the frame's safe edge: the question card over a row of two same-height buttons, like and comment (centred low for "bar",
+  right-aligned at the lower right for "corner"); nothing moves when "Like" turns "Liked". The subscribe ask sits on the same edge.
+  The stamp's "underline" and "box" styles read on a bright picture (the words in the look's ink over the coloured bar; a dark plate
+  inside the box). The board: a label on every piece, drawn pictures instead of blurs, a Short shown as two real frames (a caption
+  and a hero word, outlined as the captions are), kit3's number beside the picture of what it counts, an info card as wide as its
+  words. `look_board.py --scale 2` renders every tile as a whole 1920 x 1080 frame, for checking before anything is sent.
+- **Set up:** nothing to install. A chat in step 11's look part renders the boards again and checks them at full size before
+  sending.
+- **Read:** `SETUP.md` step 11, items 1 and 2.
+
 ## v1.4 (2026-11-16)
 - **Brings:** a look of the creator's own. Every graphic (the cards, numbers, stamps, kit3 and kit3d, the sign-off, the subscribe
   ask, the Shorts' flash and captions) now takes its fonts, colours, corners, shadows, pop and the asks' designs and words from one
