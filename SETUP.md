@@ -176,15 +176,18 @@ Then **the look**: how every graphic of theirs looks (the fonts, the colours, th
 subscribe asks, the Shorts captions). It is made with them and is theirs alone: the studio's starting looks are where it starts,
 never a finished look.
 1. `PIPE tools/motion/look_board.py` renders the four starting looks (`tools/motion/looks/`), one picture each, made with the
-   studio's real pieces, into `MEDIA/looks/`. Send the four (`SendUserFile`), one line each (its `about`), and ask which comes
-   closest to what they want for their channel and what they would change. A channel whose look they like is a good answer too.
+   studio's real pieces, into `MEDIA/looks/`. Before anything is sent, look at every tile of every board at full size (`--scale 2`
+   renders each tile as a whole 1920 x 1080 frame): a piece off its alignment, cut off or unreadable is fixed first. Send the four
+   (`SendUserFile`), one line each (its `about`), and ask which comes closest to what they want for their channel and what they would
+   change. A channel whose look they like is a good answer too.
 2. Make theirs from the pick, their words and their niche: copy the pick to `MEDIA/looks/<their channel>.json` and change it.
    Suggest what would make it their own (an accent from their logo or their niche, a display font that suits the niche); they
    decide. What can change: `fonts` (any family on the shelf in `tools/motion/src/fonts.ts`; one that isn't there gets its
    `@remotion/google-fonts` import and its shelf line first), `type`, `colors`, `shape` (the corners, the shadow soft, hard or
    none), `motion.pop`, `stamp` (its tilt; fill, underline or box), the `signoff` and `subscribe` designs (corner or bar) and their
    words in the creator's language, `captions`. `colors.key` is the look's one accent, and `captions.key` is the same colour. Render
-   it, `PIPE tools/motion/look_board.py --file <the file>` (it checks the file first), and send it; one round per change, until they
+   it, `PIPE tools/motion/look_board.py --file <the file>` (it checks the file first; every tile looked at again at full size), and
+   send it; one round per change, until they
    say it's theirs. Every look stays inside the bar's never-list (`standard/LONG_FORM.md`, the AI-template look: borders on cards,
    glows, glass, pills, a second accent): a wish that crosses it gets one plain sentence on what it costs, and the choice is theirs.
 3. Write it in: the file into `tools/motion/src/look.json`, its accent into `tools/motion/src/brand.ts`'s `BRAND` line, the

@@ -8,6 +8,7 @@ key colour); the creator's own look is src/look.json in brand.ts's accent.
     PIPE tools/motion/look_board.py --file x.json     a look in a file (a tweak, before it goes into src/look.json)
     PIPE tools/motion/look_board.py --current         the creator's own look (src/look.json, brand.ts's accent)
     PIPE tools/motion/look_board.py --check x.json    only check a look file (every key a starting look has, the fonts on the shelf)
+    --scale 2                                         any of them at twice the size (every tile a full 1920 x 1080 frame), to check
 
 One bundle and one Chrome for all of them (stills.mjs). Writes MEDIA/looks/<name>.jpg and prints `LOOK <name> <path>` per picture.
 The fonts come from Google Fonts while it renders, so it needs the internet.
@@ -86,7 +87,8 @@ def variants(args):
         f = Path(args[args.index("--file") + 1])
         look = load(f)
         return [{"tag": f.stem, "props": {"look": look, "accent": look["colors"]["key"]}}]
-    names = [a for a in args if not a.startswith("-")] or sorted(p.stem for p in LOOKS.glob("*.json"))
+    named = [a for i, a in enumerate(args) if not a.startswith("-") and (i == 0 or args[i - 1] != "--scale")]
+    names = named or sorted(p.stem for p in LOOKS.glob("*.json"))
     out = []
     for n in names:
         f = LOOKS / f"{n}.json"
@@ -95,6 +97,92 @@ def variants(args):
         look = load(f)
         out.append({"tag": n, "props": {"look": look, "accent": look["colors"]["key"]}})
     return out
+
+
+def _hex(h):
+    return tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
+
+
+def _sky(w, h, stops):
+    """a vertical gradient through (position 0-1, '#RRGGBB') stops, the last colour held to the bottom"""
+    from PIL import Image, ImageDraw
+    stops = [(p, _hex(c)) for p, c in stops] + [(1.0, _hex(stops[-1][1]))]
+    img = Image.new("RGB", (w, h))
+    dr = ImageDraw.Draw(img)
+    for y in range(h):
+        p = y / (h - 1)
+        for (p0, c0), (p1, c1) in zip(stops, stops[1:]):
+            if p0 <= p <= p1:
+                k = (p - p0) / max(p1 - p0, 1e-6)
+                dr.line([(0, y), (w, y)], fill=tuple(round(a + (b - a) * k) for a, b in zip(c0, c1)))
+                break
+    return img
+
+
+def _glow(img, cx, cy, r, colour, core):
+    """a sun: a soft glow of radius r and a disc of radius core"""
+    from PIL import Image, ImageDraw, ImageFilter
+    layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    ImageDraw.Draw(layer).ellipse([cx - r * 0.55, cy - r * 0.55, cx + r * 0.55, cy + r * 0.55], fill=_hex(colour) + (150,))
+    layer = layer.filter(ImageFilter.GaussianBlur(r * 0.35))
+    ImageDraw.Draw(layer).ellipse([cx - core, cy - core, cx + core, cy + core], fill=_hex(colour) + (255,))
+    return Image.alpha_composite(img.convert("RGBA"), layer)
+
+
+def _ridge(img, seed, base, amp, rough, colour):
+    import math
+    import random
+    from PIL import ImageDraw
+    w, h = img.size
+    k = w / 1920
+    rnd = random.Random(seed)
+    p1, p2, p3 = (rnd.random() * 6.28 for _ in range(3))
+    pts = [(x, base * k - amp * k * (0.55 + 0.25 * math.sin(x / (260 * k) + p1) + 0.14 * math.sin(x / (97 * k) + p2)
+                                      + rough * math.sin(x / (31 * k) + p3))) for x in range(0, w + 24, 24)]
+    ImageDraw.Draw(img).polygon([(0, h)] + pts + [(w, h)], fill=_hex(colour))
+
+
+def _city(img, seed, colour, lit, max_h):
+    import random
+    from PIL import ImageDraw
+    w, h = img.size
+    rnd = random.Random(seed)
+    dr = ImageDraw.Draw(img)
+    x = -20
+    while x < w + 20:
+        bw, bh = 70 + rnd.random() * 120, 120 + rnd.random() * max_h
+        top = h - bh
+        dr.rectangle([x, top, x + bw, h], fill=_hex(colour))
+        for wy in range(int(top + 22), h - 20, 34):
+            for wx in range(int(x + 14), int(x + bw - 18), 26):
+                if rnd.random() < lit:
+                    a = 0.55 + rnd.random() * 0.4
+                    dr.rectangle([wx, wy, wx + 11, wy + 15], fill=tuple(round(c * a + b * (1 - a)) for c, b in zip(_hex("#FFD27F"), _hex(colour))))
+        x += bw + 4 + rnd.random() * 10
+
+
+def board_pictures(pub):
+    """The two pictures kit3's number needs as files (src/_look/LookBoard.tsx): board/ground.jpg, a city at dusk behind it, and
+    board/cover.jpg, the thing it counts (a cover: a sunset over the sea). Drawn here, nobody's photo."""
+    from PIL import ImageDraw
+    d = pub / "board"
+    d.mkdir(parents=True, exist_ok=True)
+    g = _sky(1920, 1080, [(0, "#1D2240"), (0.55, "#6E4664"), (0.8, "#E9966B")])
+    g = _glow(g, 1390, 610, 260, "#FFD9A6", 74).convert("RGB")
+    _ridge(g, 7, 760, 260, 0.06, "#4A3A5C")
+    _city(g, 11, "#181626", 0.28, 420)
+    g.save(d / "ground.jpg", quality=92)
+    c = _sky(1000, 1000, [(0, "#24476F"), (0.45, "#6F98C0"), (0.6, "#F0C595")])
+    c = _glow(c, 500, 600, 300, "#FFE0B0", 86).convert("RGB")
+    dr = ImageDraw.Draw(c)
+    sea = _sky(1000, 400, [(0, "#3D6E9E"), (1, "#0C223D")])
+    c.paste(sea, (0, 600))
+    for k in range(7):
+        half = 110 - k * 12
+        a = 0.6 - k * 0.07
+        dr.rectangle([500 - half, 622 + k * 26, 500 + half, 627 + k * 26],
+                     fill=tuple(round(x * a + y * (1 - a)) for x, y in zip(_hex("#FFE0B0"), _hex("#2D5A86"))))
+    c.save(d / "cover.jpg", quality=92)
 
 
 def main(args):
@@ -109,10 +197,12 @@ def main(args):
     TMP.mkdir(parents=True, exist_ok=True)
     work = Path(tempfile.mkdtemp(prefix="look_board_", dir=TMP))
     try:
-        pub = work / "public"   # the board needs no media: an empty public dir keeps the bundle small
+        pub = work / "public"   # the board's own two pictures, nothing else: a small bundle
         pub.mkdir()
+        board_pictures(pub)
+        scale = args[args.index("--scale") + 1] if "--scale" in args else "1"
         env = {**os.environ, "QA_COMP": "LookBoard", "QA_PUBLIC": str(pub), "QA_VARIANTS": json.dumps(vs), "REMOTION_FPS": str(FPS)}
-        r = subprocess.run([NODE, "stills.mjs", str(work / "stills"), "1", str(FRAME)], cwd=MOTION, env=env, capture_output=True,
+        r = subprocess.run([NODE, "stills.mjs", str(work / "stills"), scale, str(FRAME)], cwd=MOTION, env=env, capture_output=True,
                            text=True, encoding="utf-8", errors="replace")
         if r.returncode:
             raise SystemExit("look_board: the render failed:\n" + (r.stderr or r.stdout)[-3000:])

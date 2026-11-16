@@ -74,20 +74,24 @@ export const NumberFrame: React.FC<{value: string; source?: string; at?: number;
 };
 
 // A stamp slammed onto a picture ("OUT OF SERVICE"): scale 1.6 -> 1 in 3 frames at the look's tilt; put a stamp/thud on `at`. Its style
-// is the look's (stamp.style): "fill" (a solid block), "box" (an outlined box), "underline" (a bar under the words). One line always
-// (a stamp wrapped inside a box sized to the frame's edge reads broken).
+// is the look's (stamp.style): "fill" (the words on a solid block of the colour), "box" (the words and an outline in the colour on a
+// dark plate), "underline" (the words in the look's ink over a bar of the colour): each reads on a bright picture as on a dark one.
+// One line always (a stamp wrapped inside a box sized to the frame's edge reads broken).
 export const Stamp: React.FC<{text: string; at?: number; x?: number; y?: number; rot?: number; color?: string; size?: number; blend?: 'normal' | 'multiply'}> = ({text, at = 0, x = 960, y = 540, rot = LOOK.stamp.tilt, color = ALERT, size = 120, blend = 'normal'}) => {
   const t = useCurrentFrame() / FPS;
   if (t < at) return null;
   const k = interpolate(t, [at, at + 3 / FPS], [1.6, 1], {...clamp, easing: EASE.enter});
   const style = LOOK.stamp.style;
   const shade = blend === 'normal' ? '0 2px 12px rgba(0,0,0,0.35)' : undefined;
+  // the two styles with no block behind the words (the colour alone on the picture) get a shadow that follows the letters and lines,
+  // so the stamp reads on a bright picture too
+  const lift = blend === 'normal' ? 'drop-shadow(0 2px 3px rgba(0,0,0,0.55)) drop-shadow(0 0 22px rgba(0,0,0,0.5))' : undefined;
   const look: React.CSSProperties = style === 'fill'
     ? {background: color, color: '#FFFFFF', padding: `${size * 0.08}px ${size * 0.24}px`, borderRadius: Math.min(LOOK.shape.chip, size * 0.12), boxShadow: shade}
     : style === 'underline'
-      ? {color, padding: `0 ${size * 0.04}px ${size * 0.06}px`, borderBottom: `${size * 0.09}px solid ${color}`, textShadow: shade}
+      ? {color: INK, padding: `0 ${size * 0.04}px ${size * 0.06}px`, borderBottom: `${size * 0.09}px solid ${color}`, filter: lift}
       : {color, border: `${size * 0.08}px solid ${color}`, padding: `${size * 0.05}px ${size * 0.2}px`, borderRadius: Math.min(LOOK.shape.chip, size * 0.1),
-        textShadow: shade, boxShadow: shade};
+        background: 'rgba(0,0,0,0.55)', filter: lift};
   return (
     <div style={{position: 'absolute', left: x, top: y, transform: `translate(-50%, -50%) rotate(${rot}deg) scale(${k})`,
       font: `${DW} ${size}px ${DISPLAY}`, letterSpacing: `${Math.max(0.02, LOOK.type.label_tracking)}em`, textTransform: 'uppercase', whiteSpace: 'nowrap',
