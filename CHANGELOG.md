@@ -9,10 +9,13 @@ writes in it (their own history goes to `log/`).*
 - **Brings:** renders on any computer: the frames rendered at once are capped at the computer's CPU cores (before, a computer with
   fewer than 6 cores could not render at all), and a failed part's retries step lower from there. The chat's lines while it works are plain words, never the work's own (merge, commit,
   hook). The ElevenLabs API key: the direct link to the key page. The voice question names all three answers (a new clone of
-  their voice, a clone already in their account, a stock voice); a clone already there is used only when they choose it. A phone recording reaches the computer as the
-  file itself, never as a chat app's voice message.
+  their voice, a clone already in their account, a stock voice); a clone already there is used only when they choose it. The voice sample is recorded by the studio:
+  `tools/voice/record_sample.py` opens a page in the creator's browser (the text to read, the mic, a level bar, one Record
+  button, Save), the file lands in its folder and the chat carries on by itself; `tools/voice/clone_voice.py` makes the instant
+  clone in their ElevenLabs account, so they never upload by hand.
 - **Set up:** nothing to install.
-- **Read:** `CLAUDE.md` ("Talking to the creator"), `SETUP.md` step 9 items 2 and 3.
+- **Read:** `CLAUDE.md` ("Talking to the creator"), `SETUP.md` step 9 items 2 and 3. A chat in the middle of step 9 that asked
+  for a recording by hand starts the recorder instead.
 
 ## v1.2 (2026-11-16)
 - **Brings:** the voice from a weak mic: a clone sample from a headset or a laptop mic is rebuilt as if from a good mic before it is

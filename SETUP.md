@@ -124,18 +124,23 @@ and until a fresh chat has them, run those programs through `PIPE tools/common/p
    already in the account is used only when they choose it: if they do, once the key is in, list the account's cloned voices and
    they pick one by name. Never pick for them, even when their account already holds clones.
    - **A new clone of their own voice, an instant clone (recommended):** 1-3 minutes of clean speech, ready in minutes. It is the kind of clone the
-     studio's own videos were made with, at the level they show. Guide the recording in plain steps: a quiet room, a phone or a
-     microphone close to the mouth, the same distance throughout, reading anything in their normal telling-a-friend voice, no music.
-     They put the file into `MEDIA/voice/sample/` (you make the folder and open it for them). A phone recording goes in the guide
-     with how it gets to the computer: as the file itself (a cable, AirDrop, email, Google Drive or iCloud), never as a voice
-     message in a chat app (WhatsApp, Telegram, Discord squeeze it to phone-call sound). Then the **mic check**:
-     `EDIT tools/voice/rebuild_sample.py <the file> --check`. A full-band mic: they upload that file in ElevenLabs as an instant voice
-     clone (where that is in today's ElevenLabs, you look up and tell them). A narrow mic (a headset, a laptop or Bluetooth mic: an
-     instant clone copies the mic too, so its voice would sound muffled whatever comes after): rebuild the sample first,
-     `EDIT tools/voice/rebuild_sample.py <the file>` (a few minutes; it writes `<name>_rebuilt.wav` beside it), and they upload both
-     files as two instant clones, "<name>" and "<name> rebuilt". They tell you the names when the clones are ready; with two, the
-     test in item 5 voices the same sentences with both and they pick by ear (the rebuilt one usually wins), and only the pick goes
-     into `config/tts.toml`. Nothing is ever processed on the voice afterwards: the clone itself sounds right.
+     studio's own videos were made with, at the level they show. **The studio records it; the creator never handles a file.**
+     Start the recorder in the background: `PIPE tools/voice/record_sample.py` (its own neutral text to read; `--text <file>` for
+     another, plain storytelling that suits them, 2-3 minutes aloud). It opens a page in their browser with the tips, the text, the
+     microphone choice, a level bar and one Record button; the recording is saved into `MEDIA/voice/sample/` when they press Save,
+     and the recorder ends ("SAVED <path>"), which brings you back by itself. Your message is short: the recording page is open in
+     their browser (its address from the recorder's first line, in case it didn't open), they click Allow when the browser asks for
+     the microphone, read, press Save, and you take it from there. Only if they ask to record on their phone instead: the file
+     comes to the computer as the file itself (a cable, AirDrop, email, Google Drive or iCloud), never as a voice message in a chat
+     app (WhatsApp, Telegram, Discord squeeze it to phone-call sound), into `MEDIA/voice/sample/` (you open the folder).
+     Then the **mic check**: `EDIT tools/voice/rebuild_sample.py <the file> --check`. A full-band mic: one clone from that file. A
+     narrow mic (a headset, a laptop or Bluetooth mic: an instant clone copies the mic too, so its voice would sound muffled whatever
+     comes after): rebuild the sample first, `EDIT tools/voice/rebuild_sample.py <the file>` (a few minutes; it writes
+     `<name>_rebuilt.wav` beside it), and two clones, "<name>" and "<name> rebuilt". **You make the clones** once the key is in
+     (item 3): `PIPE tools/voice/clone_voice.py "<name>" <file>`, one call per clone; it prints the voice id and touches nothing
+     else in their account. With two, the test in item 5 voices the same sentences with both and they pick by ear (the rebuilt one
+     usually wins), and only the pick goes into `config/tts.toml`. Nothing is ever processed on the voice afterwards: the clone
+     itself sounds right.
    - **A professional clone** only if they ask for one, now or later: 30 minutes or more of recording and some hours of training,
      closer still to their voice; the same guide, longer.
    - **A stock voice:** pick 4-5 American English narrator voices from the Voice Library that fit `creator/PROFILE.md`'s mood (if the
