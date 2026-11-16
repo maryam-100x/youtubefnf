@@ -184,7 +184,8 @@ the test, in order:
    written for it (under the voice with the prototype, section 3 item 9). Music for a vibe before that only when they
    ask for it.
 
-The same parts and steps on Windows and on a Mac. If macOS asks whether the app may use the Documents
+Tested on Windows and on a fresh Apple-silicon Mac (macOS 14+): the same parts and steps, the four beds AT THE BAR on both. If
+macOS asks whether the app may use the Documents
 folder when music is first made (Surge's user folder lives there), the creator clicks Allow.
 
 ## 9. Known limits
