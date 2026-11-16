@@ -146,7 +146,7 @@ jobs:
             [ -e "$d" ] || continue
             find "$d" -maxdepth 2 2>/dev/null | sort > "$f.after"
             [ -e "$f" ] || : > "$f"
-            new=$(comm -13 "$f" "$f.after" | grep -v -e "/Documents/Surge XT" -e "/Library/Caches/com.apple." || true)   # Surge's user folder (known, MUSIC.md) and macOS's own daemons' caches
+            new=$(comm -13 "$f" "$f.after" | grep -v -e "/Documents/Surge XT" -e "/com.apple." -e "/locationaccessstored" || true)   # Surge's user folder (known, MUSIC.md) and macOS's own services (com.apple.* caches and support folders, location services)
             if [ -n "$new" ]; then echo "NEW under $d:"; echo "$new" | head -20; echo "$new" | head -20 >> "$LOGS/new.txt"; bad=1; fi
           done
           du -sh "$HOME/Studio" "$GITHUB_WORKSPACE" 2>/dev/null
