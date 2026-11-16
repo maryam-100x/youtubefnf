@@ -27,7 +27,15 @@ The studio gets new versions now and then (`CHANGELOG.md` says what each brings)
 bring one in, tell your main chat: **"Update the studio. You have my OK to download and install what it needs."** It brings the new
 version in and keeps everything that's yours: your rules and taste, your voice, your videos, your settings. It sets up anything new.
 
-## For the Claude chat that got this message
-Clone the repo into the folder the creator named (`git clone https://github.com/maryam-100x/youtubefnf studio`; install Git first if
-it is missing: `winget install --id Git.Git -e` on Windows, `xcode-select --install` on a Mac), then read its `CLAUDE.md` and follow
-its `SETUP.md` from the first step. One step at a time: say what happens, do it, check it worked, then the next.
+## For the Claude chat that got this link
+The creator wants this studio set up on their computer, even if all they wrote was the link and "start". Do it yourself; their part
+is only what needs a human.
+1. If you can't run commands on this computer (a plain chat, not the desktop app's Code tab), say in one line: open the Code tab of the
+   Claude desktop app and paste the link there.
+2. If their message has no OK for downloads and installs, ask once, in one line, for one go covering everything the setup and the
+   videos download and install; never ask again per item.
+3. Clone the repo into a new folder `studio` inside the folder this chat runs in (or the folder they named):
+   `git clone https://github.com/maryam-100x/youtubefnf studio`. Install Git first if it is missing (`winget install --id Git.Git -e`
+   on Windows, `xcode-select --install` on a Mac).
+4. Read the clone's `CLAUDE.md`, then follow its `SETUP.md` from the first step. One step at a time: say what happens, do it, check it
+   worked, then the next.

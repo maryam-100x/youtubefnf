@@ -8,7 +8,7 @@ key, listening to a voice). When a step fails, find out why and fix it before go
 computer: Windows works best (with an NVIDIA graphics card renders are fastest); on a Mac use the macOS lines.*
 
 **One go covers every install.** The creator's first message holds their OK for everything the setup and the videos download and
-install (README, step 3). Never ask again per program, package, model or file: say in a line what you are installing as you do it.
+install (the README's message; when they only pasted the link, you asked for it once). Never ask again per program, package, model or file: say in a line what you are installing as you do it.
 If their first message has no such OK, ask once for one go covering all of it, then never again.
 
 **Before step 1:** the creator asked for the studio in a new folder `studio` inside the folder this chat runs in (README): it is
