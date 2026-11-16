@@ -7,8 +7,13 @@ on:
   workflow_dispatch:
 
 jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "a runner picked this up"
+
   setup:
-    runs-on: macos-15
+    runs-on: macos-latest
     timeout-minutes: 180
     env:
       LOGS: ${{ github.workspace }}/../logs
