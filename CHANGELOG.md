@@ -7,7 +7,7 @@ writes in it (their own history goes to `log/`).*
 
 ## v1.3 (2026-11-16)
 - **Brings:** renders on any computer: the frames rendered at once are capped at the computer's CPU cores (before, a computer with
-  fewer than 6 cores could not render at all). The chat's lines while it works are plain words, never the work's own (merge, commit,
+  fewer than 6 cores could not render at all), and a failed part's retries step lower from there. The chat's lines while it works are plain words, never the work's own (merge, commit,
   hook). The ElevenLabs API key: the direct link to the key page.
 - **Set up:** nothing to install.
 - **Read:** `CLAUDE.md` ("Talking to the creator"), `SETUP.md` step 9 item 3.

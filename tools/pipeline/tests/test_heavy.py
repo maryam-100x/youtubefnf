@@ -42,8 +42,21 @@ def test_a_render_runs_alone(tmp_path, monkeypatch):
 def test_another_tools_remotion_and_low_memory_block(tmp_path, monkeypatch):
     procs = setup(tmp_path, monkeypatch, [], {50: heavy.HEADLESS})
     assert heavy.HEADLESS in heavy.blocker("finish", 4, procs)
+    monkeypatch.setattr(heavy, "WINDOWS", True)   # Windows' commit check, on any computer
     procs = setup(tmp_path, monkeypatch, [], {}, commit_gb=10)
     assert "commit" in heavy.blocker("cutout", 20, procs) and heavy.blocker("finish", 4, procs) is None
+
+
+def test_on_a_mac_the_memory_pressure_level_decides(tmp_path, monkeypatch):
+    monkeypatch.setattr(heavy, "WINDOWS", False)
+    procs = setup(tmp_path, monkeypatch, [], {}, commit_gb=1)   # the commit numbers are not read on a Mac
+    level = {"v": "1"}
+    monkeypatch.setattr(heavy, "_sysctl", lambda name: level["v"] if name == "kern.memorystatus_vm_pressure_level" else None)
+    assert heavy.blocker("cutout", 20, procs) is None
+    level["v"] = "2"
+    assert "warning memory pressure" in heavy.blocker("cutout", 20, procs)
+    level["v"] = "4"
+    assert "critical" in heavy.blocker("finish", 4, procs)
 
 
 def test_job_holds_and_drops_its_ticket(tmp_path, monkeypatch):
