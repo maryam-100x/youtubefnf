@@ -160,8 +160,10 @@ and until a fresh chat has them, run those programs through `PIPE tools/common/p
 Ask once: **should the chat make the music in code, or do they want to pick the music themselves?** Say plainly that the chat can make
 good, fitting music for each chapter itself.
 - **Made in code:** `standard/MUSIC.md`, section 8: Surge XT (`PIPE tools/setup/surge.py`: covered by their one go, no new ask),
-  the SYNTH environment (`PIPE tools/setup/envs.py synth`), then its test in order (selftest, the patches, the model, the example's four beds AT THE BAR) and the example's
-  opening bed sent to them, so they hear what you make. The music of each video is then written on its narration's word times.
+  the SYNTH environment (`PIPE tools/setup/envs.py synth`), then its test in order (selftest, the patches, the model, the example's
+  four beds AT THE BAR). The test is yours: nothing is sent and nothing asked, since a sample made for no video tells them nothing.
+  They first hear the music in their first video, written on its narration's word times; music for a vibe before that only when
+  they ask for it.
 - **Their own picks:** they put tracks they have the rights to into `MEDIA/music/` (any folders); the chat analyses them
   (`tools/sound/analyze_tracks.py`) and picks per chapter by the mixing rules in `standard/SOUND_AND_VOICE.md`.
 Both can be mixed: the choice is written in `creator/PROFILE.md` and can change any time.

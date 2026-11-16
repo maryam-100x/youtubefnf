@@ -1,14 +1,15 @@
 """Where things live. Every path comes from tools/common/paths.py (config/paths.toml), with environment variables as overrides.
 
     surge_xt_dir    (paths.toml) the folder the portable Surge XT build was unpacked into (it holds "Surge Synth Team/"), or the
-                    "Surge Synth Team" folder itself. Default MEDIA/apps/surge-xt. The setup unpacks it there on Windows.
+                    "Surge Synth Team" folder itself. Default MEDIA/apps/surge-xt. The setup puts it there (tools/setup/surge.py).
     surge_xt_vst3   (paths.toml) the Surge XT VST3 plugin: the "Surge XT.vst3" bundle, or the module file inside it
     surge_xt_data   (paths.toml) Surge XT's data folder: the one that holds patches_factory/ and patches_3rdparty/
                     (both only when Surge XT is installed somewhere else, e.g. by its macOS installer)
     SURGE_XT_DIR / SURGE_XT_VST3 / SURGE_XT_DATA   the same as environment variables (they win over paths.toml)
 
-Tested layout: the official portable Windows build of Surge XT 1.3.4. The installer locations below (Windows, macOS, Linux) are the
-ones Surge XT documents for its installers; on a Mac the setup installs it with the official installer, which puts it there.
+Tested layout: the official portable Windows build of Surge XT 1.3.4, and on a Mac the same layout copied out of the official .dmg
+(tools/setup/surge.py; Surge finds its library there through SURGE_DATA_HOME, set by musickit.surge). The installer locations below
+are the ones Surge XT documents, for a Surge installed by hand.
 """
 from __future__ import annotations
 

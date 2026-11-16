@@ -12,9 +12,14 @@ writes in it (their own history goes to `log/`).*
   their voice, a clone already in their account, a stock voice); a clone already there is used only when they choose it. The voice sample is recorded by the studio:
   `tools/voice/record_sample.py` opens a page in the creator's browser (the text to read, the mic, a level bar, one Record
   button, Save), the file lands in its folder and the chat carries on by itself; `tools/voice/clone_voice.py` makes the instant
-  clone in their ElevenLabs account, so they never upload by hand.
-- **Set up:** nothing to install.
-- **Read:** `CLAUDE.md` ("Talking to the creator"), `SETUP.md` step 9 items 2 and 3. A chat in the middle of step 9 that asked
+  clone in their ElevenLabs account, so they never upload by hand. The music setup sends no sample and asks nothing: the creator
+  first hears the music in their first video. The music synthesizer stays inside the studio: on Windows its user folder moves
+  from Documents to `SurgeXTUserData/` beside its library; on a Mac it is copied out of the official .dmg (no installer, no admin
+  password, nothing in /Library).
+- **Set up (music made in code only):** `PIPE tools/setup/surge.py --check` (it adds the Windows user folder; on a Mac set up with
+  the old installer, `PIPE tools/setup/surge.py` copies Surge into the studio and the /Library copy can stay or go). On Windows,
+  a `Documents/Surge XT` that holds nothing but Surge's empty folders and its README.txt was made by the studio: delete it.
+- **Read:** `CLAUDE.md` ("Talking to the creator"), `SETUP.md` step 9 items 2 and 3, step 10. A chat in the middle of step 9 that asked
   for a recording by hand starts the recorder instead.
 
 ## v1.2 (2026-11-16)
