@@ -67,6 +67,18 @@ jobs:
           $P tools/common/paths.py --run ffprobe -v error -count_packets -select_streams v:0 -show_entries stream=width,height,nb_read_packets -of csv=p=0 "$OUT" | tee "$LOGS/probe.txt"
           grep -q ",180" "$LOGS/probe.txt"
 
+      - name: Step 11 - the look (the four boards, the display font file)
+        run: |
+          set -euxo pipefail
+          exec > >(tee "$LOGS/step11.log") 2>&1
+          P=tools/.venv/bin/python
+          $P tools/motion/look_board.py | tee "$LOGS/looks.txt"
+          [ "$(grep -c '^LOOK ' "$LOGS/looks.txt")" = 4 ]
+          for f in "$HOME"/Studio/looks/*.jpg; do [ "$(wc -c < "$f")" -gt 100000 ]; done
+          $P tools/motion/look_board.py --check tools/motion/src/look.json
+          $P tools/motion/look_fonts.py
+          $P tools/motion/look_fonts.py --check
+
       - name: Step 6 - the models
         run: |
           set -euxo pipefail
