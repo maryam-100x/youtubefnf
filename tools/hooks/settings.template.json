@@ -16,6 +16,11 @@
     ],
     "SessionStart": [
       {
+        "hooks": [
+          {"type": "command", "command": "\"{PY}\" \"{HOOKS}/studio_env.py\" --hook", "timeout": 20}
+        ]
+      },
+      {
         "matcher": "compact",
         "hooks": [
           {"type": "command", "command": "\"{PY}\" \"{HOOKS}/chat_health.py\" --hook", "timeout": 60}

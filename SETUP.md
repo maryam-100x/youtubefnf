@@ -11,60 +11,86 @@ computer: Windows works best (with an NVIDIA graphics card renders are fastest);
 install (the README's message; when they only pasted the link, you asked for it once). Never ask again per program, package, model or file: say in a line what you are installing as you do it.
 If their first message has no such OK, ask once for one go covering all of it, then never again.
 
+**The studio is its own environment.** Everything it installs goes into its own two folders, the clone and MEDIA (step 1): its own
+uv, Python, Node.js and ffmpeg, and every cache, model and setting of theirs. It never uses, updates, removes or reconfigures anything
+the computer already has (another Python, Node or ffmpeg, a global setting, another project's folder or files, whatever another
+`CLAUDE.md` or a memory says about them), so what is installed already doesn't matter: no step is skipped or changed because
+something like it is there. The one exception is Git, which the clone needs: one that is there is used as it is; a missing one is
+installed (`winget install --id Git.Git -e` on Windows; on a Mac `xcode-select --install`, whose window the creator clicks).
+
 **Before step 1:** the creator asked for the studio in a new folder `studio` inside the folder this chat runs in (README): it is
-cloned there (Git installed first if it was missing: `winget install --id Git.Git -e` on Windows; on a Mac `xcode-select --install`,
-whose window the creator clicks), and every command below runs from that clone's root. Never ask them to make a folder, install Git or
+cloned there (if a `studio` folder with something in it is there already, into `studio-2`, and so on; say which in a line), and every
+command below runs from that clone's root. Never ask them to make a folder, install Git or
 run a command: that is yours. Then name the clone's source `studio`: `git remote rename origin studio` (new
 versions of the studio come from it, `UPDATE.md`; a remote of the creator's own, if they ever want one, is then free to be `origin`).
-If `git config user.name` prints nothing, give this folder its own git identity, so the chats' commits work:
-`git config user.name "Studio"` and `git config user.email "studio@localhost"` (this folder only, nothing global, nothing of the
-creator's).
+Give this folder its own git identity, so the chats' commits work the same on every computer: `git config user.name "Studio"` and
+`git config user.email "studio@localhost"` (this folder only: nothing global, nothing of the creator's).
 
 ---
 
 ## Part A: the computer (this chat)
 
 ### Step 1: look at the computer
-Check, without asking: the OS and version, CPU, RAM, the graphics card (NVIDIA or not), free space on each drive, and which of these
-are already installed: Git, `uv`, Node.js (version), ffmpeg (version), Python. Then tell the creator in two lines what you found and
-what you will install. A long video needs about 100-200 GB free while it is made: pick the drive for the media root (MEDIA) with the
-most room (a short path without spaces, e.g. `D:/Studio` or `C:/Studio`; macOS `~/Studio`).
+Check, without asking: the OS and version, CPU (x64 or ARM), RAM, the graphics card (NVIDIA or not) and free space on each drive. No
+need to look for programs: the studio brings its own. A long video needs about 100-200 GB free while it is made: the media root
+(MEDIA) goes on the drive with the most room, in a **new folder** (one that doesn't exist yet, or is empty), a short path without
+spaces: `D:/Studio` or `C:/Studio` (macOS `~/Studio`); if that one is taken, `Studio2`, and so on. Then tell the creator in two lines
+what you found and where the studio will live.
 
-### Step 2: install the programs that are missing
-- **Windows** (winget, one at a time, each checked with its `--version` afterwards):
-  `winget install --id astral-sh.uv -e`, `winget install --id OpenJS.NodeJS.LTS -e` (Node 24 or newer),
-  `winget install --id Gyan.FFmpeg -e`. A new terminal may be needed for PATH: re-check with the full path if a command isn't found.
-- **macOS**: Homebrew first if missing (the creator runs its one-line installer from https://brew.sh in Terminal, since it asks for
-  their password), then `brew install uv node ffmpeg`.
-- Git is already there (the clone worked).
-Python itself is installed by `uv` in step 4, in the exact versions the pipeline needs.
+### Step 2: the media root, uv and the pipeline's Python
+1. Write `config/paths.toml` from `config/paths.example.toml` with `media = "<the folder from step 1>"` (forward slashes).
+2. **uv** (it installs the studio's Pythons), version 0.13.6 from its release, into `MEDIA/apps/uv`. Below, `<MEDIA>` is the folder
+   written out.
+   - Windows (the same lines in PowerShell and Git Bash; an ARM computer takes `uv-aarch64-pc-windows-msvc.zip`):
+     `curl.exe -L --fail --create-dirs -o <MEDIA>/tmp/downloads/uv.zip https://github.com/astral-sh/uv/releases/download/0.13.6/uv-x86_64-pc-windows-msvc.zip`,
+     then its SHA-256 (`certutil -hashfile <MEDIA>/tmp/downloads/uv.zip SHA256`) must be
+     `a2a8820d5eea32f08ef467ef3b7f66883a9b076d5737a2fc2fbb5f458d1bb50f` (ARM: `c2426c0c8e28b53d8c440e47a18d96ad4db51e159866c0e81435b196d7f0081c`),
+     then `mkdir` the folder `<MEDIA>/apps/uv` and `C:/Windows/System32/tar.exe -xf <MEDIA>/tmp/downloads/uv.zip -C <MEDIA>/apps/uv`.
+   - macOS (Apple silicon; an Intel Mac takes `uv-x86_64-apple-darwin.tar.gz`):
+     `curl -L --fail --create-dirs -o <MEDIA>/tmp/downloads/uv.tar.gz https://github.com/astral-sh/uv/releases/download/0.13.6/uv-aarch64-apple-darwin.tar.gz`,
+     then `shasum -a 256` of it must be `60fbd5c8a1ed681845eea28d9d622fcde03c51e91a43465b64a1e17db1ed3472` (Intel:
+     `63ba17fdda55ad1a230d4b37fc6017ffa10c23688c83818bd3bfdf914c652a02`), then
+     `mkdir -p <MEDIA>/apps/uv && tar -xzf <MEDIA>/tmp/downloads/uv.tar.gz -C <MEDIA>/apps/uv --strip-components 1`.
+   A hash that doesn't match: delete the file, download it once more; a second mismatch stops the setup (tell the creator).
+3. **The pipeline's Python** into `MEDIA/apps/python`, then its environment (still empty) in the clone, with `<UV>` =
+   `<MEDIA>/apps/uv/uv.exe` (macOS `<MEDIA>/apps/uv/uv`):
+   `<UV> python install 3.14.0 --install-dir <MEDIA>/apps/python --no-bin --no-registry --no-config --cache-dir <MEDIA>/cache/uv`
+   (`--no-bin --no-registry`: nothing is put on PATH or into Windows' registry), then
+   `<UV> venv tools/.venv --python <the python of the one cpython-3.14.0 folder in MEDIA/apps/python> --no-config --cache-dir <MEDIA>/cache/uv`
+   (Windows `.../python.exe`, macOS `.../bin/python3.14`). From here PIPE is `tools/.venv/Scripts/python.exe` (macOS
+   `tools/.venv/bin/python`), and every step runs through it.
+4. `PIPE tools/common/paths.py --init` creates MEDIA's folders and prints every path; check it shows them all.
 
-### Step 3: the media root and the paths
-Write `config/paths.toml` from `config/paths.example.toml` with `media = "<the folder from step 1>"` (forward slashes). Then
-`uv run --no-project python tools/common/paths.py --init` creates MEDIA's folders and prints every path; check it shows them all.
+### Step 3: Node.js and ffmpeg
+`PIPE tools/setup/apps.py`: the studio's own Node.js and ffmpeg, pinned releases checked against their published SHA-256, unpacked
+into `MEDIA/apps`; it ends by checking every program (uv, node, npm, ffmpeg, ffprobe) and prints `ok` for each. From now on the tools
+find them by themselves (`tools/common/paths.py`). A command of yours that runs one of them directly (node, npm, npx, uv, ffmpeg,
+ffprobe) goes through `PIPE tools/common/paths.py --run [--in <folder>] <command>`, which gives it the studio's programs and caches,
+so it never reaches a program the computer has of its own.
 
 ### Step 4: the Python environments
-From `tools/requirements/README.md`: create the four environments (PIPE, EDIT, VISION, ACCENT; SYNTH comes only in step 10) with `uv venv <place> --python <version>` and install each file
-with `uv pip install -r tools/requirements/<file> --python <env python>` (the torch line on Windows: that README). Check each by
-importing its key packages (`dj`'s imports for PIPE, `cv2, librosa, torch` for EDIT, `ultralytics` for VISION, `speechbrain` for
-ACCENT). This step downloads a few GB: tell the creator it takes a while and keep going with step 5 meanwhile.
+`PIPE tools/setup/envs.py` builds the four environments (PIPE's packages, EDIT, VISION, ACCENT; SYNTH comes only in step 10) with the
+studio's uv on Pythons it installs into `MEDIA/apps/python`, installs each pinned file of `tools/requirements/` (torch as the CPU
+build), puts the studio's start-up file into each one and checks each one's key imports (`ok` per environment). It downloads a few
+GB: run it in the background, tell the creator it takes a while and keep going with step 5 meanwhile.
 
 ### Step 5: Remotion (the video engine)
-`cd tools/motion && npm ci`. Then a test render of the template composition (a few seconds, `standard/PIPELINE.md` names the
-command): it proves headless Chrome, the GPU setting and ffmpeg work. On Windows with NVIDIA the config renders on the GPU; if the
-render fails on the GPU, switch the config to the software renderer and say so in one line.
+`PIPE tools/common/paths.py --run --in tools/motion npm ci`. Then a test render of the template composition (a few seconds,
+`standard/PIPELINE.md` section 0 names the command; run it through `--run` the same way): it proves headless Chrome, the GPU setting
+and ffmpeg work. On Windows with NVIDIA the config renders on the GPU; if the render fails on the GPU, switch the config to the
+software renderer and say so in one line.
 
 ### Step 6: the models
 `PIPE tools/setup/models.py` downloads the small models the tools use (face detection and matching, object detection, text
 embeddings, the speech-to-text model) into MEDIA/models and checks each file. Whisper's model downloads on first use.
 
 ### Step 7: the house sound effects
-Unpack `assets/house_sfx.zip` into MEDIA's effects folder and build the effects palette from its manifest
-(`PIPE tools/sound/palette_from_manifest.py`). Check: the palette lists all 29 effects and each file opens.
+`PIPE tools/sound/palette_from_manifest.py` unpacks `assets/house_sfx.zip` into MEDIA's effects folder (`MEDIA/sfx/house`) and builds
+the effects palette from its manifest. Check (`--check`): the palette lists all 29 effects and each file opens.
 
 ### Step 8: the hooks, then a fresh chat
-`PIPE tools/hooks/install_hooks.py` writes `.claude/settings.json` (the hooks that keep the work safe and moving: the memory guard,
-no kills by name, permanent deletes, keep working). The app loads hooks and this repo's `CLAUDE.md` when a chat starts, so the setup
+`PIPE tools/hooks/install_hooks.py` writes `.claude/settings.json` (the hooks that keep the work safe and moving: the studio's own
+programs and caches for every command, the memory guard, no kills by name, permanent deletes, keep working). The app loads hooks and this repo's `CLAUDE.md` when a chat starts, so the setup
 continues in a fresh chat that runs in the studio folder itself. Write STATUS.md ("Setup: step 8 done, next step 9") and commit. If
 your app gives you a way to start a new session in another folder, start it yourself in the studio folder with the message below and
 tell the creator in one line where to find it. Otherwise tell them, as the final message (with the clone's full path written out):
@@ -79,6 +105,10 @@ tell the creator in one line where to find it. Otherwise tell them, as the final
 
 *A chat that finds "Setup: step 8 done" in STATUS.md starts here, after reading CLAUDE.md. The study (STANDARD.md section 2) comes
 after the setup, before the first video.*
+
+First, one check in Bash: `command -v node ffmpeg` prints the two in `MEDIA/apps` (the hook from step 8 put the studio's programs
+first). If it prints other places or nothing, the hook didn't reach this shell: run `PIPE tools/hooks/install_hooks.py` again,
+and until a fresh chat has them, run those programs through `PIPE tools/common/paths.py --run` (never the computer's own).
 
 ### Step 9: the voice
 1. The creator needs an **ElevenLabs** account on a paid plan (Creator or higher for a professional voice clone; Starter is enough for
@@ -103,8 +133,7 @@ after the setup, before the first video.*
 Ask once: **should the chat make the music in code, or do they want to pick the music themselves?** Say plainly that the chat can make
 good, fitting music for each chapter itself.
 - **Made in code:** `standard/MUSIC.md`, section 8: Surge XT (`PIPE tools/setup/surge.py`: covered by their one go, no new ask),
-  the SYNTH environment (`tools/requirements/synth.txt`, the same way as
-  the others), then its test in order (selftest, the patches, the model, the example's four beds AT THE BAR) and the example's
+  the SYNTH environment (`PIPE tools/setup/envs.py synth`), then its test in order (selftest, the patches, the model, the example's four beds AT THE BAR) and the example's
   opening bed sent to them, so they hear what you make. The music of each video is then written on its narration's word times.
 - **Their own picks:** they put tracks they have the rights to into `MEDIA/music/` (any folders); the chat analyses them
   (`tools/sound/analyze_tracks.py`) and picks per chapter by the mixing rules in `standard/SOUND_AND_VOICE.md`.

@@ -23,7 +23,9 @@ cd tools/motion
 npx remotion render src/index.ts Template MEDIA/tmp/test_render.mp4 --frames=0-179 --gl=angle
 ```
 
-(MEDIA written out as the media root's path from `config/paths.toml`.) It passes when the file holds all 180 frames:
+(MEDIA written out as the media root's path from `config/paths.toml`. In the setup's first chat, or in PowerShell, both commands run
+through the studio's runner so they use its own Node and ffmpeg: `PIPE tools/common/paths.py --run --in tools/motion npx remotion
+render ...`, `PIPE tools/common/paths.py --run ffprobe ...`.) It passes when the file holds all 180 frames:
 `ffprobe -v error -count_packets -select_streams v:0 -show_entries stream=width,height,nb_read_packets -of csv=p=0 MEDIA/tmp/test_render.mp4`
 prints the composition's width, height and `180`. That proves headless Chrome (Remotion fetches it on the first render), the GPU
 renderer and ffmpeg. If it fails on the GPU (a GL or driver error), run it again with `--gl=swangle`; when that one passes, this computer

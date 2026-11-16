@@ -1,5 +1,6 @@
 """Writes the repo's Claude Code hooks: <repo>/.claude/settings.json gets the "hooks" block of tools/hooks/settings.template.json,
-every command pointing at this repo's pipeline python (PY_PIPE, tools/common/paths.py) and its hook scripts in tools/hooks/, as
+and an "env" block with the studio's caches (tools/common/paths.py:
+studio_env), every command pointing at this repo's pipeline python (PY_PIPE, tools/common/paths.py) and its hook scripts in tools/hooks/, as
 absolute paths with forward slashes (they work the same on Windows, from Git Bash or cmd, and on macOS). The setup runs it once, after
 the pipeline venv is built; run it again whenever the repo or the venv moves.
 
@@ -7,7 +8,8 @@ the pipeline venv is built; run it again whenever the repo or the venv moves.
   PIPE tools/hooks/install_hooks.py --print    show what would be written, write nothing
   PIPE tools/hooks/install_hooks.py --force    write even when the pipeline python is not there yet (the hooks fail until it is)
 
-The hooks: chat_health.py (UserPromptSubmit, and SessionStart after a compaction), keep_working.py (Stop), no_kill_by_name.py,
+The hooks: studio_env.py (SessionStart: the studio's own programs first for every Bash command), chat_health.py
+(UserPromptSubmit, and SessionStart after a compaction), keep_working.py (Stop), no_kill_by_name.py,
 no_disk_scan.py and commit_guard.py (before Bash/PowerShell), no_recycle_bin.py (before Bash/PowerShell/Write/Edit),
 no_edit_running_script.py (before Write/Edit). Every one of them only reads, refuses with exit 2, or passes; none needs more than the
 standard library and tools/common/paths.py."""
@@ -19,7 +21,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "common"))
-from paths import PY_PIPE, REPO  # noqa: E402
+from paths import PY_PIPE, REPO, studio_env  # noqa: E402
 
 TEMPLATE = HERE / "settings.template.json"
 TARGET = REPO / ".claude" / "settings.json"
@@ -59,6 +61,11 @@ def main():
         except ValueError as e:
             sys.exit(f"{TARGET} is not valid JSON ({e}): fix or remove it, then run this again")
     settings["hooks"] = hooks
+    # the studio's caches and settings inside MEDIA for every tool the chat runs, also in PowerShell (tools/common/paths.py:
+    # studio_env); PATH is set per Bash command by the studio_env.py hook, since "env" values are taken literally. XDG_CACHE_HOME
+    # stays out: it is for the studio's own tools (paths.py, the venvs' sitecustomize), not for the app itself.
+    env = {k: v for k, v in studio_env()["set"].items() if k != "XDG_CACHE_HOME"}
+    settings["env"] = {**settings.get("env", {}), **env}
     text = json.dumps(settings, indent=2, ensure_ascii=False) + "\n"
     if a.show:
         print(text)

@@ -48,9 +48,78 @@ PY_EDIT = _venv_python(VENV_EDIT)
 PY_VISION = _venv_python(VENV_VISION)
 PY_ACCENT = _venv_python(VENV_ACCENT)
 PY_SYNTH = _venv_python(VENV_SYNTH)
-FFMPEG = str(_cfg.get("ffmpeg") or "ffmpeg")
-FFPROBE = str(_cfg.get("ffprobe") or "ffprobe")
-NODE = str(_cfg.get("node") or "node")
+APPS = MEDIA / "apps"                  # the studio's own programs (tools/setup/apps.py): uv, Python, Node, ffmpeg, Surge XT
+CACHE = MEDIA / "cache"                # the package managers' and libraries' caches, kept inside MEDIA too
+
+
+def _app(key, win, mac, bare):
+    """A program: the config key if set, else the studio's own copy in APPS, else the bare name (only before the setup put it there).
+    The studio never runs the computer's own uv, Python, Node or ffmpeg: it has its own (SETUP.md, step 2)."""
+    if _cfg.get(key):
+        return str(_cfg[key])
+    p = APPS / (win if WINDOWS else mac)
+    return str(p) if p.exists() else bare
+
+
+UV = _app("uv", "uv/uv.exe", "uv/uv", "uv")
+NODE = _app("node", "node/node.exe", "node/bin/node", "node")
+NPM = _app("npm", "node/npm.cmd", "node/bin/npm", "npm.cmd" if WINDOWS else "npm")
+NPX = _app("npx", "node/npx.cmd", "node/bin/npx", "npx.cmd" if WINDOWS else "npx")
+FFMPEG = _app("ffmpeg", "ffmpeg/bin/ffmpeg.exe", "ffmpeg/bin/ffmpeg", "ffmpeg")
+FFPROBE = _app("ffprobe", "ffmpeg/bin/ffprobe.exe", "ffmpeg/bin/ffprobe", "ffprobe")
+PYTHONS = APPS / "python"              # the Pythons uv installed for the environments (never the computer's own)
+# the studio's program folders, first on PATH for every command the studio runs
+BIN_DIRS = [APPS / "uv", APPS / "node" if WINDOWS else APPS / "node" / "bin", APPS / "ffmpeg" / "bin"]
+
+
+def studio_env():
+    """The variables every process of the studio runs with: its own programs first on PATH, and every package manager's and
+    library's cache and settings inside MEDIA, so nothing of the computer's own (another uv, Python, Node or ffmpeg, their caches,
+    a user config) is used or changed. Returns {"path": [folders to put first], "set": {name: value}, "dirs": [folders that must
+    exist before a library looks (Ultralytics writes to C:/tmp when its folder is missing)], "media": MEDIA}."""
+    p = Path.as_posix
+    dirs = [CACHE / "uv", CACHE / "npm", CACHE / "ultralytics", CACHE / "matplotlib", MODELS / "hf", MODELS / "torch",
+            MODELS / "u2net"]
+    return {
+        "media": p(MEDIA),
+        "dirs": [p(d) for d in dirs],
+        "path": [str(d) for d in BIN_DIRS],
+        "set": {
+            "UV_CACHE_DIR": p(CACHE / "uv"),
+            "UV_PYTHON_INSTALL_DIR": p(PYTHONS),
+            "UV_MANAGED_PYTHON": "1",                      # only the Pythons in PYTHONS, never one the computer has
+            "UV_NO_CONFIG": "1",                           # no uv.toml of the computer's
+            "UV_PYTHON_INSTALL_BIN": "0",                  # a Python uv installs puts nothing on the computer's PATH
+            "UV_PYTHON_INSTALL_REGISTRY": "0",             # nor into Windows' registry
+            "UV_CREDENTIALS_DIR": p(SECRETS / "uv"),       # an index install would open uv's store in the user's AppData
+            "npm_config_cache": p(CACHE / "npm"),
+            "npm_config_userconfig": p(APPS / "node" / "studio.npmrc"),   # never the user's own .npmrc
+            "npm_config_update_notifier": "false",
+            "npm_config_fund": "false",
+            "HF_HOME": p(MODELS / "hf"),                   # speech to text, aligners, embeddings, the music judge
+            "TORCH_HOME": p(MODELS / "torch"),
+            "U2NET_HOME": p(MODELS / "u2net"),             # the cut-out model
+            "YOLO_CONFIG_DIR": p(CACHE / "ultralytics"),
+            "MPLCONFIGDIR": p(CACHE / "matplotlib"),
+            "XDG_CACHE_HOME": p(CACHE),                    # yt-dlp and any other library that keeps a cache
+        },
+    }
+
+
+def apply_env(env=None):
+    """Put studio_env() into env (default: this process, so every program a tool starts gets it too). Safe to call twice."""
+    env = os.environ if env is None else env
+    s = studio_env()
+    if MEDIA.is_dir():   # only once the setup made MEDIA (step 2): never a folder before the creator's media root exists
+        for d in s["dirs"]:
+            os.makedirs(d, exist_ok=True)
+    for k, v in s["set"].items():
+        env[k] = v
+    key = next((k for k in env if k.upper() == "PATH"), "PATH")
+    rest = [p for p in env.get(key, "").split(os.pathsep) if p and p not in s["path"]]
+    env[key] = os.pathsep.join(s["path"] + rest)
+    return env
+
 
 # the repo's own places
 TOOLS = REPO / "tools"
@@ -68,7 +137,6 @@ MODELS = MEDIA / "models"              # model files the tools load (face detect
 SECRETS = MEDIA / "secrets"            # API keys, one file each; never printed, never committed, never opened by an agent
 TMP = MEDIA / "tmp"                    # lock files, heavy-job tickets, scratch
 HEAVY = TMP / "heavy"                  # the heavy-job tickets (tools/pipeline/heavy.py)
-APPS = MEDIA / "apps"                  # programs the setup unpacks (Surge XT for music made in code: apps/surge-xt)
 
 
 def video_dirs(video):
@@ -82,13 +150,60 @@ def video_dirs(video):
     return VIDEOS_REPO / name, VIDEOS / name
 
 
+def _posix(p):
+    """A folder as bash writes it: C:/Studio/apps -> /c/Studio/apps on Windows (Git Bash), unchanged elsewhere."""
+    p = Path(p).as_posix()
+    return "/" + p[0].lower() + p[2:] if WINDOWS and len(p) > 1 and p[1] == ":" else p
+
+
+def shell_lines():
+    """studio_env() as lines for bash or zsh to source: the variables, then the program folders put first on PATH (once)."""
+    s = studio_env()
+    out = [f"export {k}='{v}'" for k, v in s["set"].items()]
+    first = ":".join(_posix(d) for d in s["path"])
+    out.append(f'case ":$PATH:" in *":{first}:"*) ;; *) export PATH="{first}:$PATH" ;; esac')
+    return out
+
+
+apply_env()   # every tool imports this file: the programs it starts run with the studio's own programs and caches
+
+
+def _run(argv):
+    """paths.py --run [--in DIR] <command> [args]: one command with the studio's programs and caches (studio_env), in DIR (default:
+    here). For the chat's own commands in a shell that hasn't got them (PowerShell, the first chat of the setup)."""
+    import shutil
+    import subprocess
+    cwd = None
+    if argv[:1] == ["--in"]:
+        cwd, argv = argv[1], argv[2:]
+    if not argv:
+        raise SystemExit("usage: paths.py --run [--in DIR] <command> [args]")
+    exe = shutil.which(argv[0], path=os.environ.get("PATH")) or argv[0]
+    return subprocess.run([exe, *argv[1:]], cwd=cwd).returncode
+
+
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["--run"]:
+        raise SystemExit(_run(sys.argv[2:]))
+    if sys.argv[1:2] == ["--env"]:  # the studio's variables as shell lines (sh: bash and zsh) or JSON
+        if sys.argv[2:3] == ["json"]:
+            import json
+            print(json.dumps(studio_env(), indent=1))
+        else:
+            print("\n".join(shell_lines()))
+        raise SystemExit(0)
     if "--init" in sys.argv:  # the setup: create the media root's folders (never touches anything that exists)
-        for d in (VIDEOS, PUBLIC, FOOTAGE, SFX, MUSIC, MODELS, SECRETS, TMP, HEAVY, MEDIA / "voice" / "guard" / "approved", MEDIA / "voice" / "guard" / "flagged", MEDIA / "envs"):
+        for d in (VIDEOS, PUBLIC, FOOTAGE, SFX, MUSIC, MODELS, SECRETS, TMP, HEAVY, MEDIA / "voice" / "guard" / "approved",
+                  MEDIA / "voice" / "guard" / "flagged", MEDIA / "envs", APPS, CACHE):
             Path(d).mkdir(parents=True, exist_ok=True)
     print("config", CONFIG, "(found)" if CONFIG.exists() else "(missing: defaults)")
     for k in ("REPO", "MEDIA", "PY_PIPE", "PY_EDIT", "PY_VISION", "PY_ACCENT", "PY_SYNTH", "MOTION", "VIDEOS", "PUBLIC", "FOOTAGE", "SFX", "MUSIC",
-              "MODELS", "SECRETS", "TMP"):
+              "MODELS", "SECRETS", "TMP", "APPS", "CACHE"):
         v = globals()[k]
         print(f"{k:10s} {v}  {'ok' if Path(v).exists() else '-'}")
+    for k in ("UV", "NODE", "NPM", "NPX", "FFMPEG", "FFPROBE"):
+        v = globals()[k]
+        own = Path(v).is_absolute() and Path(v).exists()
+        note = "ok (the studio's own)" if own else "- (not installed yet: SETUP.md steps 2-3)"
+        print(f"{k:10s} {v}  {note}")
     print("python", sys.version.split()[0], "os", platform.system())

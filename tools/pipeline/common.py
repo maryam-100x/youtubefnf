@@ -16,6 +16,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent                     # tools/pipeline
 sys.path.insert(0, str(HERE.parent / "common"))
+from paths import NPX as paths_NPX  # noqa: E402
 from paths import (FFMPEG, FFPROBE, MAC, MEDIA, MOTION, NODE, PUBLIC, PY_EDIT, PY_PIPE, PY_VISION, REPO, TMP, TOOLS,  # noqa: E402,F401
                    VIDEOS, VIDEOS_REPO, WINDOWS)
 sys.path.insert(0, str(HERE))
@@ -28,7 +29,7 @@ VOICE = TOOLS / "voice"
 WORKFLOW = TOOLS / "workflow"
 # PUBLIC: the media every composition reads (the full public dir); each video's pub dir is a lean set of hard links into it
 # TMP: Remotion's temp (kept off the system drive's temp so a cleaner never deletes a running render's files); the lock lives here too
-NPX = "npx.cmd" if os.name == "nt" else "npx"
+NPX = paths_NPX                            # the studio's own npx (MEDIA/apps/node), tools/common/paths.py
 LOCK = TMP / "remotion.lock"
 HEADLESS = heavy.HEADLESS                                  # Remotion's browser process
 FPS = 60

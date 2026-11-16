@@ -23,4 +23,6 @@ export const PUBLIC = path.join(MEDIA, 'motion');
 export const VIDEOS = path.join(MEDIA, 'videos');
 export const TMP = path.join(MEDIA, 'tmp');
 export const MOTION = path.join(REPO, 'tools', 'motion');
-export const FFMPEG = cfg.ffmpeg || 'ffmpeg';
+// the studio's own ffmpeg in MEDIA/apps (tools/setup/apps.py), never the computer's
+const ownFfmpeg = path.join(MEDIA, 'apps', 'ffmpeg', 'bin', win ? 'ffmpeg.exe' : 'ffmpeg');
+export const FFMPEG = cfg.ffmpeg || (fs.existsSync(ownFfmpeg) ? ownFfmpeg : 'ffmpeg');

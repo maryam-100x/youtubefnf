@@ -45,7 +45,15 @@ that a different chat could take over mid-video with no briefing.
 
 **MEDIA** is the creator's media root outside the repo (footage, voice takes, renders, music, effects, models, keys), set in
 `config/paths.toml`. `PIPE`, `EDIT`, `VISION`, `ACCENT` and `SYNTH` in the docs are the Python environments (`tools/requirements/README.md`):
-`python tools/common/paths.py` prints every path.
+`PIPE tools/common/paths.py` prints every path.
+
+**The studio is its own environment.** It runs only its own programs (uv, Python, Node.js, npm, ffmpeg in `MEDIA/apps`) and keeps
+every cache, model and setting inside MEDIA; it never uses, updates, removes or reconfigures anything the computer has of its own
+(another Python, Node or ffmpeg, a global setting, another project's folder or files, whatever another `CLAUDE.md` or a memory says
+about them), and it works only in this folder and MEDIA, plus a file the creator points to. The tools find the studio's programs by
+themselves (`tools/common/paths.py`); in Bash, `node`, `npm`, `npx`, `uv`, `ffmpeg` and `ffprobe` are the studio's (a hook puts them
+first); in PowerShell run them as `PIPE tools/common/paths.py --run [--in <folder>] <command>`. Packages go in only through the studio's
+uv (`tools/setup/envs.py`, or `uv pip install --python <env python>` in Bash), never a pip, winget or Homebrew of the computer's.
 
 ## Rules of the office
 1. **Write it down or it didn't happen.** At the end of every piece of work: update `STATUS.md`, add to `log/SESSIONS.md`, record any

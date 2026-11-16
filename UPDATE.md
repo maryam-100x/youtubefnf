@@ -67,8 +67,11 @@ main chat runs it; the Shorts chat never does (it reads its line in `STATUS_SHOR
      shows only the merge's files.
 6. **Set up what's new.** Each new entry's "Set up" items, oldest version first, the way `SETUP.md` runs a step: say what in one
    line, do it, check it worked (an item step 5 already did is checked, not done twice). Whatever the entry says: a changed file under `tools/requirements/` is installed into the
-   environment it names, a changed `package.json` gets `npm install` in its folder, a changed `tools/hooks/settings.template.json`
-   gets `PIPE tools/hooks/install_hooks.py` (the hooks load in the next chat).
+   environment it names (`PIPE tools/setup/envs.py <name>`), a changed `package.json` gets
+   `PIPE tools/common/paths.py --run --in <its folder> npm install`, a changed `tools/setup/apps.py` gets `PIPE tools/setup/apps.py`
+   (a moved pin brings that program's new copy), a changed `tools/hooks/settings.template.json` or `studio_env` in
+   `tools/common/paths.py` gets `PIPE tools/hooks/install_hooks.py` (the hooks load in the next chat), and the latter also
+   `PIPE tools/hooks/install_sitecustomize.py`. Everything goes in through the studio's own programs, never the computer's.
 7. **Check.** The tests each entry names, all passing, before the next piece of work.
 8. **Read and write down.** Each entry's "Read" items now, and `CLAUDE.md` again if it changed (the app loaded the old one when this
    chat started; reading it now is enough). Then `STATUS.md` under Phase ("Studio: <version>, updated YYYY-MM-DD", replacing an

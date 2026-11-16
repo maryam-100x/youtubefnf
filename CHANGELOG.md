@@ -7,6 +7,7 @@ writes in it (their own history goes to `log/`).*
 
 ## v1 (2026-11-16)
 - **Brings:** the first version: long videos and Shorts, from the idea to the finished film (script, voice, picture, sound, music in
-  code, every check).
+  code, every check), as an environment of its own: its own programs and caches in its own folders, nothing of the computer's used
+  or changed.
 - **Set up:** `SETUP.md`, from step 1.
 - **Read:** `CLAUDE.md`, then `STANDARD.md` (the study, its section 2).

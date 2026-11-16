@@ -2,7 +2,9 @@
 # key); tools read it through tools/common/paths.py. Use forward slashes, also on Windows. A key left out takes the default.
 
 # The media root, outside the repo: footage, renders, voice takes, music, effects, models, keys. Pick a drive with room
-# (a long video's build needs ~100-200 GB while it is made). A short path with no spaces.
+# (a long video's build needs ~100-200 GB while it is made). A short path with no spaces, a new or empty folder: the studio's
+# own programs and caches live in it too (apps/, cache/). After moving it: PIPE tools/hooks/install_hooks.py and
+# PIPE tools/hooks/install_sitecustomize.py, so the hooks and the environments point at the new place.
 media = "C:/Studio"            # macOS: "~/Studio"
 
 # The Python environments (the setup creates them; change only if you moved them)
@@ -18,7 +20,8 @@ media = "C:/Studio"            # macOS: "~/Studio"
 # surge_xt_vst3 = "/Library/Audio/Plug-Ins/VST3/Surge XT.vst3"
 # surge_xt_data = "/Library/Application Support/Surge XT"
 
-# Programs, when they are not on PATH
+# Programs: the studio runs its own copies in MEDIA/apps (tools/setup/apps.py) and never the computer's. Set these only to
+# point the studio at another copy on purpose.
 # ffmpeg  = "C:/ffmpeg/bin/ffmpeg.exe"
 # ffprobe = "C:/ffmpeg/bin/ffprobe.exe"
 # node    = "node"
