@@ -168,12 +168,12 @@ mix's report is the check (`standard/SOUND_AND_VOICE.md`).
 
 | Part | Version | Where |
 |---|---|---|
-| Surge XT | 1.3.4 (released 2024-08-11) | Windows: the official portable build `surge-xt-win64-1.3.4-portable-install.zip` (301,759,660 bytes, MD5 `30023479e71252e91a7b7a9a59cbaa7d`, from the release's `md5sum.txt`) from github.com/surge-synthesizer/releases-xt/releases/tag/1.3.4, unpacked into `MEDIA/apps/surge-xt` (it holds `Surge Synth Team/` with `Surge XT.vst3` and `SurgeXTData/`; ~490 MB, 3,008 patches). macOS: `surge-xt-macOS-1.3.4.dmg` from the same release (MD5 `8d64166483e704f7b07fd1893b3c4dd9`); its installer (the creator clicks through it) puts the plugin in `/Library/Audio/Plug-Ins/VST3/` and the data in `/Library/Application Support/Surge XT`, where `tools/music` looks first |
+| Surge XT | 1.3.4 (released 2024-08-11) | Windows: the official portable build `surge-xt-win64-1.3.4-portable-install.zip` (301,759,660 bytes, MD5 `30023479e71252e91a7b7a9a59cbaa7d`, from the release's `md5sum.txt`) from github.com/surge-synthesizer/releases-xt/releases/tag/1.3.4, unpacked into `MEDIA/apps/surge-xt` (it holds `Surge Synth Team/` with `Surge XT.vst3` and `SurgeXTData/`; ~490 MB, 3,008 patches). macOS: `surge-xt-macOS-1.3.4.dmg` from the same release (MD5 `8d64166483e704f7b07fd1893b3c4dd9`, signed and notarized), never run as an installer: mounted read-only, its .pkg expanded, the plugin and the library copied into the same `MEDIA/apps/surge-xt/Surge Synth Team/` layout; Surge finds the library through `SURGE_DATA_HOME`. Its user folder: `SurgeXTUserData/` beside the library on Windows (Surge's portable marker); on a Mac always `~/Documents/Surge XT` (its macOS code has no portable user folder) |
 | The SYNTH environment | Python 3.12, `tools/requirements/synth.txt` | `MEDIA/envs/synth`, built with uv like the others; torch from PyTorch's CPU index on Windows (the same flags as EDIT, `tools/requirements/README.md`); ~1.2 GB |
 | The quality model | `facebook/audiobox-aesthetics`, 415 MB | downloads on its first use into `MEDIA/models/hf` |
 
 Surge XT (covered by the creator's one go for the setup's installs, no new ask): `PIPE tools/setup/surge.py` downloads it, checks its size and MD5 against the release's, and unpacks it safely into the empty
-`MEDIA/apps/surge-xt` (on a Mac it opens the installer for the creator, then `--check`). The environment: uv as for the others. Then
+`MEDIA/apps/surge-xt` (on a Mac it copies it out of the .dmg, no installer and no password). The environment: uv as for the others. Then
 the test, in order:
 
 1. `SYNTH tools/music/music.py selftest` -> `ALL OK`
@@ -184,7 +184,8 @@ the test, in order:
    written for it (under the voice with the prototype, section 3 item 9). Music for a vibe before that only when they
    ask for it.
 
-On Windows this is tested; on macOS the same parts and steps (the Mac's installer locations are the ones Surge XT documents).
+The same parts and steps on Windows and on a Mac. If macOS asks whether the app may use the Documents
+folder when music is first made (Surge's user folder lives there), the creator clicks Allow.
 
 ## 9. Known limits
 

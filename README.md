@@ -15,7 +15,7 @@ video. Long-form documentary-style videos and Shorts, for any niche.
 
 That's all. The chat installs everything, sets the studio up with you one step at a time and tells you whenever it needs you (an
 account, a sign-in, a click). The last sentence lets it install everything without asking you each time. The studio keeps its own
-copies of every program in its own folders: nothing else on your computer is changed.
+copies of every program in its own folders and installs nothing into your computer itself.
 
 Only if the app says Git is missing before you can start (Windows): install it from https://git-scm.com/download/win and open the app
 again. A Mac needs an M1 chip or newer and macOS 14 or newer; if a window asks to install developer tools, click Install.
