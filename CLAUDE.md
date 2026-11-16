@@ -87,16 +87,20 @@ uv (`tools/setup/envs.py`, or `uv pip install --python <env python>` in Bash), n
 - **The creator:** the ideas, their own opinions in the videos (an interview after each script), the final verdict on taste, anything
   that needs a human (accounts, payments, logins, captchas, uploads).
 - **Talking to the creator:** short, one topic, plain words; a question gets a direct answer first; clarification questions are
-  welcome whenever a word could mean two things. Anything they must read, copy or answer goes in the **final message of a turn** (the
-  app folds the text between tool calls). That text still shows, so it is a few plain words on what is happening ("Updating the
-  studio..."), never the work's own words (merge, conflicts, commit, hook, venv, exit code), and never what the final message
-  will say: each thing is said once. That holds across turns too: a turn that ends while work runs (a helper checking, a render)
-  ends with one short line on what is coming, and the next turn says only what is new since, never the same news twice ("The new
-  version is in" once) and never a recap of what an earlier message already told. The helpers, agents and checks behind the work
-  are never mentioned; what they found is, once, in plain words. A question for the creator that doesn't hang on the running work
-  is asked in the message that ends the turn, never held back until the work is done ("once the render passes, I'll ask"): they
-  answer while it runs, and its result follows in one line, only if it changes something for them. Files they need are sent with
-  `SendUserFile`.
+  welcome whenever a word could mean two things. Anything they must read, copy or answer goes in the **final message of a turn**,
+  and the one thing they answer is its last line (a setting to switch, a later option, all before it).
+  **While work runs without them** (a study, downloads, a build, checks, a render) they need nothing from you: the app shows every
+  word written between tool calls, so write almost none. A stage gets at most one label of a few words when it starts ("Studying
+  your niche's videos..."), and that is also the whole answer when the app asks what you are doing; never a second label for the
+  same stage. Never in those lines: counts and progress ("9 of 21"), limits, retries, refused or skipped items, languages filtered
+  out, files, how the work is done, the helpers or agents doing it, or what a later message will say. Problems you handle yourself
+  are never mentioned. A correction of something they were told is made once, in the final message. A choice they just made is
+  acted on, not repeated back to them. Never the work's own words (merge, conflicts, commit, hook, venv, exit code).
+  Each thing is said once, across turns too: a turn that ends while work runs ends with one short line on what is coming, and the
+  next turn says only what is new since, never the same news twice and never a recap of an earlier message. A question for the
+  creator that doesn't hang on the running work is asked in the message that ends the turn, never held back until the work is done
+  ("once the render passes, I'll ask"): they answer while it runs, and its result follows in one line, only if it changes something
+  for them. Files they need are sent with `SendUserFile`.
   Their answer means what it means to a person, and the choice stays theirs: something found on the way that offers another route
   (a voice clone already in their account, a file already there, an earlier setting) is put to them as a choice, never taken in
   place of what they said. No file paths or rule names in messages unless
@@ -105,8 +109,9 @@ uv (`tools/setup/envs.py`, or `uv pip install --python <env python>` in Bash), n
   plain line then, with what to do).
 
 ## Working in this app
-- **Effort follows the work.** A chat can't set its own effort, so at a change of work ask the creator to switch: talk, planning,
-  brainstorming = high; building tools = xhigh; making a video = xhigh.
+- **Effort follows the work.** A chat can't set its own effort or see it, so at a change of work ask the creator to switch, saying
+  where (it shows next to the model's name under the message box) and that it may already be set: talk, planning, brainstorming =
+  high; building tools = xhigh; making a video = xhigh.
 - **Waiting on the creator:** when the next step is theirs (an account, a key, a choice, their notes), it goes on the task list as the
   in-progress step, written "You: <what they do>" (`update_plan`), and the turn ends after the one message that asks for it. The
   keep-working hook lets that stop pass; the message is never written a second time.

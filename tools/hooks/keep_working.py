@@ -265,7 +265,8 @@ def hook():
         out = {"decision": "block",
                "reason": (f"keep_working hook (block {n + 1}/{MAX_BLOCKS}): you are ending the turn, but {why}. "
                           "What the creator asked for is finished before you stop, never paused just to report: do the next of those "
-                          "steps now and say in one line which. If a step is already done, mark it (update_plan done) and stop; if it "
+                          "steps now, with no message about it (the creator hears from you when there is something for them). If a step is "
+                          "already done, mark it (update_plan done) and stop; if it "
                           "was dropped or the creator changed the work, give the list its real steps; if the next step is the "
                           "creator's (an account, a key, a choice, their notes), make it the in-progress step on the list as "
                           "\"You: <what they do>\" (update_plan) and stop, without writing your message again (they have it). "
