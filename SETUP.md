@@ -11,8 +11,10 @@ computer: Windows works best (with an NVIDIA graphics card renders are fastest);
 install (README, step 3). Never ask again per program, package, model or file: say in a line what you are installing as you do it.
 If their first message has no such OK, ask once for one go covering all of it, then never again.
 
-**Before step 1:** if the repo was cloned into a subfolder rather than into the folder this chat runs in, say so and continue there
-(every command below runs from the repo's root). Then name the clone's source `studio`: `git remote rename origin studio` (new
+**Before step 1:** the creator asked for the studio in a new folder `studio` inside the folder this chat runs in (README): it is
+cloned there (Git installed first if it was missing: `winget install --id Git.Git -e` on Windows; on a Mac `xcode-select --install`,
+whose window the creator clicks), and every command below runs from that clone's root. Never ask them to make a folder, install Git or
+run a command: that is yours. Then name the clone's source `studio`: `git remote rename origin studio` (new
 versions of the studio come from it, `UPDATE.md`; a remote of the creator's own, if they ever want one, is then free to be `origin`).
 If `git config user.name` prints nothing, give this folder its own git identity, so the chats' commits work:
 `git config user.name "Studio"` and `git config user.email "studio@localhost"` (this folder only, nothing global, nothing of the
@@ -63,11 +65,13 @@ Unpack `assets/house_sfx.zip` into MEDIA's effects folder and build the effects 
 ### Step 8: the hooks, then a fresh chat
 `PIPE tools/hooks/install_hooks.py` writes `.claude/settings.json` (the hooks that keep the work safe and moving: the memory guard,
 no kills by name, permanent deletes, keep working). The app loads hooks and this repo's `CLAUDE.md` when a chat starts, so the setup
-continues in a fresh chat. Write STATUS.md ("Setup: step 8 done, next step 9"), commit, and tell the creator, as the final message:
+continues in a fresh chat that runs in the studio folder itself. Write STATUS.md ("Setup: step 8 done, next step 9") and commit. If
+your app gives you a way to start a new session in another folder, start it yourself in the studio folder with the message below and
+tell the creator in one line where to find it. Otherwise tell them, as the final message (with the clone's full path written out):
 
-> Part one is done. Now open a **new chat in this same folder** (Code tab, this folder) and say **"Let's get started. You have my
-> OK to download and install everything the setup and our videos need."** That chat is your main chat from now on; it finishes the
-> setup with you.
+> Part one is done. Now open a **new chat in the studio folder** (Code tab, choose the folder `<the clone's full path>`) and say
+> **"Let's get started. You have my OK to download and install everything the setup and our videos need."** That chat is your main
+> chat from now on; it finishes the setup with you.
 
 ---
 
