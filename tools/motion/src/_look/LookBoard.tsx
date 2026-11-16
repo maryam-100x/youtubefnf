@@ -189,9 +189,11 @@ const ShortMock: React.FC = () => (
 const Strip: React.FC = () => (
   <div style={{position: 'absolute', left: 0, top: 0, width: LOOK_BOARD_W, height: STRIP, display: 'flex', alignItems: 'center', gap: 28,
     padding: `0 ${SIDE}px`, boxSizing: 'border-box', background: '#000000', color: '#FFFFFF', fontFamily: TEXT}}>
-    <div style={{fontSize: 48, fontWeight: 800}}>{LOOK.name}</div>
-    <div style={{fontSize: 28, fontWeight: 500, opacity: 0.7}}>{LOOK.about}</div>
-    <div style={{marginLeft: 'auto', display: 'flex', gap: 12}}>
+    {/* the name on one line whatever its length; the description takes the room left and wraps to at most two lines */}
+    <div style={{fontSize: 48, fontWeight: 800, whiteSpace: 'nowrap', flex: 'none'}}>{LOOK.name}</div>
+    <div style={{fontSize: 28, fontWeight: 500, opacity: 0.7, flex: '1 1 0', minWidth: 0, lineHeight: 1.25, display: '-webkit-box',
+      WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>{LOOK.about}</div>
+    <div style={{marginLeft: 'auto', display: 'flex', gap: 12, flex: 'none'}}>
       {[ACCENT, LOOK.colors.ink, LOOK.colors.paper, LOOK.colors.alert].map((col, i) => (
         <div key={i} style={{width: 44, height: 44, borderRadius: 22, background: col, boxShadow: '0 0 0 2px rgba(255,255,255,0.25)'}} />
       ))}

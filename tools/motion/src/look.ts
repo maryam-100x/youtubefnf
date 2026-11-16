@@ -7,7 +7,7 @@
 //   DISPLAY / TEXT     the two font families (headlines, numbers, cards / labels, credits, small text), loaded
 //   DISPLAY_FONT       its loader: DISPLAY_FONT.waitUntilDone() is the true "ready" for measuring text
 //   SHADOW / SHADOW_SM the look's card shadow and a small one (chips, buttons); SHADOW_GROUP the card shadow for a row of pieces
-//   displayCase / labelCase / labelTrack   the type's case and tracking as CSS
+//   displayCase / labelCase / labelTrack   the type's case and tracking as CSS; TRACK_END(em) centres tracked text exactly
 import type React from 'react';
 import {getInputProps} from 'remotion';
 import base from './look.json';
@@ -37,6 +37,9 @@ export const FONTS_READY = () => Promise.all([DISPLAY_FONT.waitUntilDone(), TEXT
 export const displayCase = (): React.CSSProperties['textTransform'] => (LOOK.type.display_upper ? 'uppercase' : 'none');
 export const labelCase = (): React.CSSProperties['textTransform'] => (LOOK.type.label_upper ? 'uppercase' : 'none');
 export const labelTrack = `${LOOK.type.label_tracking}em`;
+// CSS tracking adds its space after the last letter too, so tracked text sits off centre by half of it (0.12 em at 110 px: 6.6 px
+// left). Spread this on the element that carries the tracking: it takes that last space back, and the words centre to the pixel.
+export const TRACK_END = (em: number): React.CSSProperties => ({marginRight: `${-em}em`});
 
 // the third: SHADOW as a filter for a group of pieces side by side (a row of buttons): the group casts one shadow under all of them,
 // so one piece's shadow never falls on its neighbour

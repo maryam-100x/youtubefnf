@@ -9,7 +9,7 @@ import {Cover, img, vid} from './kitFlash';
 import {Credit, SHADE} from './kitCards';
 import {settle} from './look';
 import {DISPLAY, TEXT} from '../house/cards';
-import {LOOK} from '../look';
+import {LOOK, TRACK_END} from '../look';
 
 export {img, vid, Credit};
 export type Media = ReturnType<typeof img>;
@@ -142,7 +142,8 @@ export const Tag9: React.FC<{name: string; sub?: string; at: number; color?: str
       <div style={plate ? {display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '18px 44px 22px', borderRadius: 22, background: 'rgba(6,8,12,0.82)',
         boxShadow: '0 20px 50px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(255,255,255,0.08)'} : {display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
         <div style={{width: 64 * p, height: 6, borderRadius: 3, background: color, marginBottom: 16, boxShadow: `0 0 18px ${color}`}} />
-        <div style={{font: `${LOOK.type.display_weight} 84px ${DISPLAY}`, color: '#fff', letterSpacing: `${LOOK.type.display_tracking}em`, textShadow: '0 6px 28px rgba(0,0,0,0.8)'}}>{name}</div>
+        <div style={{font: `${LOOK.type.display_weight} 84px ${DISPLAY}`, color: '#fff', letterSpacing: `${LOOK.type.display_tracking}em`, ...TRACK_END(LOOK.type.display_tracking),
+          textShadow: '0 6px 28px rgba(0,0,0,0.8)'}}>{name}</div>
         {sub ? <div style={{font: `${plate ? 700 : 600} ${plate ? 42 : 34}px ${TEXT}`, color: plate ? '#fff' : 'rgba(255,255,255,0.8)', marginTop: 6,
           textShadow: '0 4px 18px rgba(0,0,0,0.8)'}}>{sub}</div> : null}
       </div>

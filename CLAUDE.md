@@ -90,7 +90,10 @@ uv (`tools/setup/envs.py`, or `uv pip install --python <env python>` in Bash), n
   welcome whenever a word could mean two things. Anything they must read, copy or answer goes in the **final message of a turn** (the
   app folds the text between tool calls). That text still shows, so it is a few plain words on what is happening ("Updating the
   studio..."), never the work's own words (merge, conflicts, commit, hook, venv, exit code), and never what the final message
-  will say: each thing is said once. Files they need are sent with `SendUserFile`.
+  will say: each thing is said once. That holds across turns too: a turn that ends while work runs (a helper checking, a render)
+  ends with one short line on what is coming, and the next turn says only what is new since, never the same news twice ("The new
+  version is in" once) and never a recap of what an earlier message already told. The helpers, agents and checks behind the work
+  are never mentioned; what they found is, once, in plain words. Files they need are sent with `SendUserFile`.
   Their answer means what it means to a person, and the choice stays theirs: something found on the way that offers another route
   (a voice clone already in their account, a file already there, an earlier setting) is put to them as a choice, never taken in
   place of what they said. No file paths or rule names in messages unless

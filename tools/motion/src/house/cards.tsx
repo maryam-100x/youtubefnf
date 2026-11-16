@@ -6,7 +6,7 @@ import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
 import {FPS, clamp} from '../lib';
 import {EASE} from './motion';
 import {ALERT, INK, INK_RGB, PAPER, SURFACE} from '../brand';
-import {DISPLAY, LOOK, TEXT, displayCase} from '../look';
+import {DISPLAY, LOOK, TEXT, TRACK_END, displayCase} from '../look';
 
 // the look's two families: DISPLAY for headlines and numbers, TEXT for small type (kept as the names the kits import)
 export {DISPLAY, TEXT};
@@ -19,7 +19,8 @@ export const TurnCard: React.FC<{text: string; second?: string; secondAt?: numbe
   const pop = second ? interpolate(t, [secondAt, secondAt + 0.08], [0, 1], clamp) : 0;
   return (
     <AbsoluteFill style={{background: PAPER, justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
-      <div style={{font: `${DW} ${size}px ${DISPLAY}`, color: INK, letterSpacing: `${LOOK.type.display_tracking}em`, textTransform: displayCase()}}>{text}</div>
+      <div style={{font: `${DW} ${size}px ${DISPLAY}`, color: INK, letterSpacing: `${LOOK.type.display_tracking}em`, textTransform: displayCase(),
+        ...TRACK_END(LOOK.type.display_tracking)}}>{text}</div>
       {second ? <div style={{font: `italic 500 ${size * 0.62}px ${TEXT}`, color: INK, opacity: pop, marginTop: 10,
         transform: `scale(${0.96 + 0.04 * pop})`}}>{second}</div> : null}
     </AbsoluteFill>
@@ -35,7 +36,8 @@ export const DateStamp: React.FC<{date: string; at?: number; typeDur?: number; s
   const on = t < at + typeDur || Math.floor((t - at - typeDur) * 2.2) % 2 === 1;
   return (
     <AbsoluteFill style={{background: PAPER, justifyContent: 'center', alignItems: 'center'}}>
-      <div style={{font: `${DW} ${size}px ${DISPLAY}`, color, letterSpacing: `${Math.max(0.02, LOOK.type.label_tracking)}em`, textTransform: 'uppercase'}}>
+      <div style={{font: `${DW} ${size}px ${DISPLAY}`, color, letterSpacing: `${Math.max(0.02, LOOK.type.label_tracking)}em`, textTransform: 'uppercase',
+        ...TRACK_END(Math.max(0.02, LOOK.type.label_tracking))}}>
         {date.slice(0, n)}
         {caret && t >= at ? <span style={{display: 'inline-block', width: size * 0.07, height: size * 0.9, marginLeft: size * 0.06, verticalAlign: '-0.08em',
           background: color, opacity: on ? 1 : 0}} /> : null}
@@ -64,7 +66,8 @@ export const NumberFrame: React.FC<{value: string; source?: string; at?: number;
     <AbsoluteFill>
       <AbsoluteFill style={{filter: `blur(${14 * bp}px) brightness(${1 - 0.45 * bp})`, transform: `scale(${1 + 0.04 * bp})`}}>{children}</AbsoluteFill>
       <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
-        <div style={{font: `${DW} ${size}px ${DISPLAY}`, color: accent, letterSpacing: `${LOOK.type.display_tracking}em`, opacity: p, transform: `scale(${(0.7 + 0.3 * p) * (p >= 1 ? settle : 1)})`,
+        <div style={{font: `${DW} ${size}px ${DISPLAY}`, color: accent, letterSpacing: `${LOOK.type.display_tracking}em`, ...TRACK_END(LOOK.type.display_tracking),
+          opacity: p, transform: `scale(${(0.7 + 0.3 * p) * (p >= 1 ? settle : 1)})`,
           textShadow: '0 8px 40px rgba(0,0,0,0.5)', fontVariantNumeric: 'tabular-nums'}}>{shown}</div>
         {source ? <div style={{font: `italic 500 ${Math.min(size * 0.2, 50)}px ${TEXT}`, color: `rgba(${INK_RGB},0.85)`, opacity: src, marginTop: -size * 0.04,
           maxWidth: 1800, textAlign: 'center'}}>{source}</div> : null}
@@ -74,29 +77,29 @@ export const NumberFrame: React.FC<{value: string; source?: string; at?: number;
 };
 
 // A stamp slammed onto a picture ("OUT OF SERVICE"): scale 1.6 -> 1 in 3 frames at the look's tilt; put a stamp/thud on `at`. Its style
-// is the look's (stamp.style): "fill" (the words on a solid block of the colour), "box" (the words and an outline in the colour on the
-// look's solid card surface, nothing of the picture showing through), "underline" (the words in the look's ink over a bar of the colour): each reads on a bright picture as on a dark one.
-// One line always (a stamp wrapped inside a box sized to the frame's edge reads broken).
+// is the look's (stamp.style), each on something solid so it reads on any picture, bright or dark: "fill" (white words on a block of
+// the colour), "box" (the words and an outline in the colour on the look's card surface), "underline" (the words in the look's ink on
+// the card surface, a thick bar of the colour along its bottom, like a news caption). One line always (a stamp wrapped inside a box
+// sized to the frame's edge reads broken). The words are centred in their block to the pixel (TRACK_END: no tracking after the last
+// letter).
 export const Stamp: React.FC<{text: string; at?: number; x?: number; y?: number; rot?: number; color?: string; size?: number; blend?: 'normal' | 'multiply'}> = ({text, at = 0, x = 960, y = 540, rot = LOOK.stamp.tilt, color = ALERT, size = 120, blend = 'normal'}) => {
   const t = useCurrentFrame() / FPS;
   if (t < at) return null;
   const k = interpolate(t, [at, at + 3 / FPS], [1.6, 1], {...clamp, easing: EASE.enter});
   const style = LOOK.stamp.style;
+  const track = Math.max(0.02, LOOK.type.label_tracking);
   const shade = blend === 'normal' ? '0 2px 12px rgba(0,0,0,0.35)' : undefined;
-  // the two styles with no block behind the words (the colour alone on the picture) get a shadow that follows the letters and lines,
-  // so the stamp reads on a bright picture too
-  // (tight, so it reads as the letters' edge, never a dark glow around them)
-  const lift = blend === 'normal' ? 'drop-shadow(0 2px 2px rgba(0,0,0,0.6)) drop-shadow(0 0 8px rgba(0,0,0,0.45))' : undefined;
   const look: React.CSSProperties = style === 'fill'
     ? {background: color, color: '#FFFFFF', padding: `${size * 0.08}px ${size * 0.24}px`, borderRadius: Math.min(LOOK.shape.chip, size * 0.12), boxShadow: shade}
     : style === 'underline'
-      // lineHeight 0.8: the line's box hugs the capitals, so the bar sits just under the letters, not a line's gap below them
-      ? {color: INK, lineHeight: 0.8, padding: `0 ${size * 0.04}px ${size * 0.11}px`, borderBottom: `${size * 0.09}px solid ${color}`, filter: lift}
+      // lineHeight 0.8: the line's box hugs the capitals, so the padding alone sets the space around them
+      ? {color: INK, background: SURFACE, lineHeight: 0.8, padding: `${size * 0.2}px ${size * 0.26}px`, borderBottom: `${size * 0.1}px solid ${color}`,
+        borderRadius: Math.min(LOOK.shape.chip, size * 0.06), boxShadow: shade}
       : {color, border: `${size * 0.08}px solid ${color}`, padding: `${size * 0.05}px ${size * 0.2}px`, borderRadius: Math.min(LOOK.shape.chip, size * 0.1),
-        background: SURFACE, filter: lift};
+        background: SURFACE, boxShadow: shade};
   return (
     <div style={{position: 'absolute', left: x, top: y, transform: `translate(-50%, -50%) rotate(${rot}deg) scale(${k})`,
-      font: `${DW} ${size}px ${DISPLAY}`, letterSpacing: `${Math.max(0.02, LOOK.type.label_tracking)}em`, textTransform: 'uppercase', whiteSpace: 'nowrap',
-      mixBlendMode: blend, ...look}}>{text}</div>
+      font: `${DW} ${size}px ${DISPLAY}`, letterSpacing: `${track}em`, textTransform: 'uppercase', whiteSpace: 'nowrap',
+      mixBlendMode: blend, ...look}}><span style={TRACK_END(track)}>{text}</span></div>
   );
 };
