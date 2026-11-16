@@ -18,7 +18,7 @@ account, a sign-in, a click). The last sentence lets it install everything witho
 copies of every program in its own folders: nothing else on your computer is changed.
 
 Only if the app says Git is missing before you can start (Windows): install it from https://git-scm.com/download/win and open the app
-again. On a Mac, if a window asks to install developer tools, click Install.
+again. A Mac needs an M1 chip or newer and macOS 14 or newer; if a window asks to install developer tools, click Install.
 
 You'll also need a paid **ElevenLabs** plan for the voice; the chat walks you through it when it's time. Music is made by the chat in
 code, or you pick your own.

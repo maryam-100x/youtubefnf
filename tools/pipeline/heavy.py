@@ -252,6 +252,13 @@ def blocker(kind, need, procs=None, me=None):
     held = sum(t["need_gb"] for t in live)
     if held + need > BUDGET_GB:
         return f"{held:g} GB of jobs run ({', '.join(t['what'] for t in live)}); this one needs {need:g} of the {BUDGET_GB} GB budget"
+    if not WINDOWS:
+        # macOS compresses and swaps on its own, so Windows' commit numbers don't fit it (a 16 GB Mac would never reach a render's
+        # 10 GB + 4 free): the OS's own memory-pressure level decides (1 normal, 2 warning, 4 critical)
+        lvl = _sysctl("kern.memorystatus_vm_pressure_level")
+        if lvl and lvl != "1":
+            return f"macOS reports {({'2': 'warning', '4': 'critical'}).get(lvl, lvl)} memory pressure: waiting until it is normal"
+        return None
     ram, commit, limit = memory()
     if commit < need + MARGIN_GB:
         return f"the system has {commit:.1f} GB of commit free of {limit:.0f} (this job needs {need:g} + {MARGIN_GB} spare)"

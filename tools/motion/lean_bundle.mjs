@@ -5,7 +5,7 @@
 // needed) at <bundle>/public pointing at the real public dir. Remotion's file server lstat()s the final file, a real file behind the
 // junction, so it serves it; the junction's target is a lean dir of hard links (pipe.py link), never the originals in PUBLIC (those get
 // the old copy), so even a delete that followed the junction could only remove links. Cleaning takes the junction out first (rmdir on
-// a junction never touches its target), checks it is gone, then deletes the bundle. On macOS (no junctions) it bundles with the copy.
+// a junction never touches its target), checks it is gone, then deletes the bundle. On macOS a symlink does the same (unlink takes out only the link).
 //   in a script:  const {serveUrl, cleanup} = await leanBundle({entryPoint, publicDir});   try { ... } finally { cleanup(); }
 //   for CLI renders (pipe.py):  node lean_bundle.mjs make <publicDir> [entry]   -> prints {"serveUrl": ...}; render with the bundle
 //   folder as the entry point (no --public-dir); then  node lean_bundle.mjs clean <bundleDir>
@@ -29,14 +29,14 @@ export function cleanLeanBundle(serveUrl) {
       throw e;
     }
   };
-  if (isLink()) fs.rmdirSync(link);
+  if (isLink()) (process.platform === 'win32' ? fs.rmdirSync : fs.unlinkSync)(link);   // removes the link only, never what it points at
   if (isLink()) throw new Error(`the junction is still there, the bundle is left for a hand check: ${link}`);
   fs.rmSync(serveUrl, {recursive: true, force: true});
 }
 
 export async function leanBundle({entryPoint, publicDir}) {
   const pub = path.resolve(publicDir);
-  if (process.env.QA_COPY === '1' || process.platform !== 'win32' || pub.toLowerCase() === ORIGINALS) {
+  if (process.env.QA_COPY === '1' || pub.toLowerCase() === ORIGINALS) {   // a junction on Windows, a symlink on macOS: no copy
     const serveUrl = await bundle({entryPoint, publicDir: pub});
     return {serveUrl, cleanup: () => fs.rmSync(serveUrl, {recursive: true, force: true}), junction: false};
   }

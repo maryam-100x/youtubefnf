@@ -32,11 +32,16 @@ class Engine:
         raise NotImplementedError
 
 
+def _device():
+    """NVIDIA, else Apple silicon, else the CPU."""
+    return "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
+
+
 class Chatterbox(Engine):
     def __init__(self, *a):
         super().__init__(*a)
         from chatterbox.mtl_tts import ChatterboxMultilingualTTS
-        self.m = ChatterboxMultilingualTTS.from_pretrained(device="cuda", t3_model="v3")
+        self.m = ChatterboxMultilingualTTS.from_pretrained(device=_device(), t3_model="v3")
 
     def synth(self, text):
         return self.m.generate(text, language_id="en", audio_prompt_path=self.ref_wav).squeeze(0).cpu().numpy(), self.m.sr
@@ -46,7 +51,7 @@ class Qwen3(Engine):
     def __init__(self, *a, size="1.7B"):
         super().__init__(*a)
         from qwen_tts import Qwen3TTSModel
-        self.m = Qwen3TTSModel.from_pretrained(f"Qwen/Qwen3-TTS-12Hz-{size}-Base", device_map="cuda:0", dtype=torch.bfloat16,
+        self.m = Qwen3TTSModel.from_pretrained(f"Qwen/Qwen3-TTS-12Hz-{size}-Base", device_map=_device(), dtype=torch.bfloat16,
                                                attn_implementation="sdpa")
         self.p = self.m.create_voice_clone_prompt(ref_audio=self.ref_wav, ref_text=self.ref_text, x_vector_only_mode=False)
 

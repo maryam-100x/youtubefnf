@@ -31,7 +31,7 @@ B=$DJ/build
 # script.md's hash at the start: a chain whose script changed under it does not land. The narration and beats as they came in are
 # kept; a changed script puts them back and stops (exit 5)
 SCRIPT=$REPO/videos/$VID/script.md
-H0=$(sha256sum "$SCRIPT" | cut -c1-64)
+H0=$({ sha256sum "$SCRIPT" 2>/dev/null || shasum -a 256 "$SCRIPT"; } | cut -c1-64)
 # the chain always starts from the narration as LAID OUT from the takes (narration_laid.wav + beats_laid.json, written by the layout,
 # tools/voice/proto_narration.py), never from an earlier run's output or a hand edit, so narration_prechain.wav (A1's reference) never
 # holds a cut. A fix after the chain is a chain tool on its output, then gate_sound.py; the gate's A1 and A13 read the layout.
@@ -41,11 +41,11 @@ if [ -f "$B/voice/narration_laid.wav" ]; then
   echo "== from the layout (narration_laid.wav)"
 fi
 cp "$B/voice/narration.wav" "$B/voice/narration_chainstart.wav"; cp "$B/beats.json" "$B/beats_chainstart.json"
-same_script() { if [ "$(sha256sum "$SCRIPT" | cut -c1-64)" != "$H0" ]; then cp "$B/voice/narration_chainstart.wav" "$B/voice/narration.wav"; cp "$B/beats_chainstart.json" "$B/beats.json"; echo "== STOP $(date +%H:%M:%S): script.md changed during the chain ($1): narration.wav and beats.json put back as they came in; voice the changed lines, then run the chain again"; exit 5; fi; }
+same_script() { if [ "$({ sha256sum "$SCRIPT" 2>/dev/null || shasum -a 256 "$SCRIPT"; } | cut -c1-64)" != "$H0" ]; then cp "$B/voice/narration_chainstart.wav" "$B/voice/narration.wav"; cp "$B/beats_chainstart.json" "$B/beats.json"; echo "== STOP $(date +%H:%M:%S): script.md changed during the chain ($1): narration.wav and beats.json put back as they came in; voice the changed lines, then run the chain again"; exit 5; fi; }
 # every captions pass is followed by linestarts.py: Whisper times some lines' first words late and squashed, and every later step,
 # the picture's cues and the gate read those times.
 # A failed `dj captions` stops the chain (its exit is read past the pipe), so no later step reads the words of an older run.
-cap() { ( "$PIPE" "$REPO/tools/pipeline/heavy.py" take score "$VID captions (voice chain)" $BASHPID; cd "$REPO/tools" && { "$PIPE" -m dj captions "../videos/$VID" 2>&1 | tail -2; rc=${PIPESTATUS[0]}; }; rm -f "$HEAVY/$BASHPID.json"; if [ "$rc" != 0 ]; then echo "== STOP $(date +%H:%M:%S): dj captions failed (exit $rc, above): every later step would read the words of an older run"; exit 7; fi; PYTHONUTF8=1 "$EDIT" "$SND/linestarts.py" "$VID" | tail -1 ) || exit 7; }
+cap() { ( "$PIPE" "$REPO/tools/pipeline/heavy.py" take score "$VID captions (voice chain)" ${BASHPID:-$$}; cd "$REPO/tools" && { "$PIPE" -m dj captions "../videos/$VID" 2>&1 | tail -2; rc=${PIPESTATUS[0]}; }; rm -f "$HEAVY/${BASHPID:-$$}.json"; if [ "$rc" != 0 ]; then echo "== STOP $(date +%H:%M:%S): dj captions failed (exit $rc, above): every later step would read the words of an older run"; exit 7; fi; PYTHONUTF8=1 "$EDIT" "$SND/linestarts.py" "$VID" | tail -1 ) || exit 7; }
 echo "== captions 0 $(date +%H:%M:%S)"; cap
 # the words, judged where the gate judges them, before the long passes: a misread or swapped word would otherwise pass every take
 # check and fail the gate's A5 only at the END of a long chain. The laid narration's own words (captions 0, Whisper in context) against

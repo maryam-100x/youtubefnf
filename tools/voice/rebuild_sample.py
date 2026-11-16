@@ -75,7 +75,7 @@ def rebuild(x):
         w16 = torch.nn.functional.pad(w16, (0, 24000))
         outs, cache = [], None
         for chunk in w16.view(-1).split(16000 * 96):
-            inputs = pre(torch.nn.functional.pad(chunk, (160, 160)), return_tensors="pt")
+            inputs = pre(torch.nn.functional.pad(chunk, (160, 160)), sampling_rate=16_000, return_tensors="pt")
             feat = fe(inputs["input_features"])["last_hidden_state"]
             if cache is not None:
                 feat = torch.cat([cache, feat], dim=1)

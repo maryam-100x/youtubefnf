@@ -22,9 +22,9 @@ SLUG=${SLUG%$'\r'}; DJ=${DJ%$'\r'}   # Windows python ends its line with a carri
 V=$DJ/build/voice
 # the voice lock (standard/VOICE_LOCK.md): a locked narration is changed only by tools/voice/voice_layin.py
 "$EDIT" "$REPO/tools/voice/voice_lock.py" "$SLUG" refuse short_chain.sh || exit 4
-SCRIPT=$REPO/videos/$SLUG/script.md; H0=$(sha256sum "$SCRIPT" | cut -c1-64)   # a script edited mid-chain: the result doesn't land
-same_script() { [ "$(sha256sum "$SCRIPT" | cut -c1-64)" = "$H0" ] || { echo "== STOP $(date +%H:%M:%S): script.md changed during the chain ($1): voice the changed lines, run it again"; exit 5; }; }
-cap() { ( "$PIPE" "$REPO/tools/pipeline/heavy.py" take score "$SLUG captions" $BASHPID; cd "$REPO/tools" && PYTHONUTF8=1 "$PIPE" -m dj captions "../videos/$SLUG" 2>&1 | tail -2; rm -f "$HEAVY/$BASHPID.json" ) }
+SCRIPT=$REPO/videos/$SLUG/script.md; H0=$({ sha256sum "$SCRIPT" 2>/dev/null || shasum -a 256 "$SCRIPT"; } | cut -c1-64)   # a script edited mid-chain: the result doesn't land
+same_script() { [ "$({ sha256sum "$SCRIPT" 2>/dev/null || shasum -a 256 "$SCRIPT"; } | cut -c1-64)" = "$H0" ] || { echo "== STOP $(date +%H:%M:%S): script.md changed during the chain ($1): voice the changed lines, run it again"; exit 5; }; }
+cap() { ( "$PIPE" "$REPO/tools/pipeline/heavy.py" take score "$SLUG captions" ${BASHPID:-$$}; cd "$REPO/tools" && PYTHONUTF8=1 "$PIPE" -m dj captions "../videos/$SLUG" 2>&1 | tail -2; rm -f "$HEAVY/${BASHPID:-$$}.json" ) }
 # the raw narration rebuilt from the cached takes first (no credits), so a re-run starts from the takes, not from a tightened voice
 echo "== $SLUG tts (cached) $(date +%H:%M:%S)"; (cd "$REPO/tools" && PYTHONUTF8=1 "$PIPE" -m dj tts "../videos/$SLUG" 2>&1 | tail -1)
 echo "== $SLUG captions 1 $(date +%H:%M:%S)"; cap
