@@ -1,0 +1,10 @@
+incoming/
+__pycache__/
+*.pyc
+.venv/
+node_modules/
+config/paths.toml
+config/tts.toml
+.claude/settings.json
+.claude/settings.local.json
+tools/sound/palette.json

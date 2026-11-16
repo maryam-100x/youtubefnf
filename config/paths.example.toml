@@ -1,0 +1,24 @@
+# config/paths.toml: where this studio keeps everything. The setup writes the real file on the first run (this one shows every
+# key); tools read it through tools/common/paths.py. Use forward slashes, also on Windows. A key left out takes the default.
+
+# The media root, outside the repo: footage, renders, voice takes, music, effects, models, keys. Pick a drive with room
+# (a long video's build needs ~100-200 GB while it is made). A short path with no spaces.
+media = "C:/Studio"            # macOS: "~/Studio"
+
+# The Python environments (the setup creates them; change only if you moved them)
+# venv_pipeline = "<repo>/tools/.venv"
+# venv_edit     = "C:/Studio/envs/edit"
+# venv_vision   = "C:/Studio/envs/vision"
+# venv_accent   = "C:/Studio/envs/accent"
+# venv_synth    = "C:/Studio/envs/synth"        (only when the music is made in code)
+
+# Surge XT, the synth that plays music made in code (only then). The setup unpacks the portable Windows build into
+# MEDIA/apps/surge-xt; on a Mac its installer puts it where tools/music finds it. Set these only if it lives elsewhere.
+# surge_xt_dir  = "C:/Studio/apps/surge-xt"     (the folder that holds "Surge Synth Team/")
+# surge_xt_vst3 = "/Library/Audio/Plug-Ins/VST3/Surge XT.vst3"
+# surge_xt_data = "/Library/Application Support/Surge XT"
+
+# Programs, when they are not on PATH
+# ffmpeg  = "C:/ffmpeg/bin/ffmpeg.exe"
+# ffprobe = "C:/ffmpeg/bin/ffprobe.exe"
+# node    = "node"

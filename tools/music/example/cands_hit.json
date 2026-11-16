@@ -1,0 +1,30 @@
+{
+ "_doc": "music.py pick's candidates for the close's hit, judged in context in bed E over film 134-156 s of the example (the hit on the last word's end, ~153.8 s with the voice timing of words.json). The other parts play their kit sounds; '@12' plays a patch an octave up (the sub sounds an octave under its written note).",
+ "order": [
+  "hit"
+ ],
+ "hit": {
+  "base": "A.Liv/Basses/Bonsai 808",
+  "cands": [
+   "A.Liv/Basses/808er Than 808",
+   "Vospi/Basses/808 Builder A",
+   "Cybersoda/Leads/Simple 808",
+   "Kinsey Dulcet/Percussion/808s & More",
+   "John Valentine/Percussion/Timpani",
+   "John Valentine/Percussion/Taiko Drum",
+   "Psiome Send Sound/FX/Boom"
+  ]
+ },
+ "pulse": {
+  "base": "Plucks/Diamonds@-12",
+  "cands": []
+ },
+ "sub": {
+  "base": "Vospi/Basses/Floored@12",
+  "cands": []
+ },
+ "pad": {
+  "base": "Kyurumi/Pads/Neverending",
+  "cands": []
+ }
+}

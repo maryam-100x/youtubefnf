@@ -1,0 +1,32 @@
+{
+ "duration": 17.0712,
+ "narration": null,
+ "placeholder": true,
+ "note": "placeholder_words.py from the template's script at the house voice's measured pace; the voice's own words.json replaces it",
+ "beats": [
+  {
+   "id": "S01",
+   "start": 0.0,
+   "voice_end": 4.339,
+   "end": 4.619
+  },
+  {
+   "id": "S02",
+   "start": 4.619,
+   "voice_end": 8.743,
+   "end": 9.023
+  },
+  {
+   "id": "S03",
+   "start": 9.023,
+   "voice_end": 11.8796,
+   "end": 12.1596
+  },
+  {
+   "id": "S04",
+   "start": 12.1596,
+   "voice_end": 16.6712,
+   "end": 17.0712
+  }
+ ]
+}

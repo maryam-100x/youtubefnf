@@ -1,0 +1,9 @@
+# The creator's choices for how the videos are made: asked at setup (SETUP.md step 11), changed any time on their word.
+# The tools read these keys by name.
+
+# How each long video is made:
+#   true  = a 60-second prototype first: the opening built at the finished look goes to the creator, and the rest is built after
+#           they pass it (standard/WORKFLOW.md section 2);
+#   false = the whole video in one go: the opening is still built and checked first as the level for the rest, but nothing waits
+#           for the creator; their first watch is the full film.
+prototype_first = true

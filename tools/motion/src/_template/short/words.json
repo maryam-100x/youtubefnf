@@ -1,0 +1,152 @@
+[
+ {
+  "w": "This",
+  "start": 0.005,
+  "end": 0.239,
+  "beat": "S01"
+ },
+ {
+  "w": "is",
+  "start": 0.254,
+  "end": 0.432,
+  "beat": "S01"
+ },
+ {
+  "w": "the",
+  "start": 0.447,
+  "end": 0.654,
+  "beat": "S01"
+ },
+ {
+  "w": "Short",
+  "start": 0.669,
+  "end": 0.93,
+  "beat": "S01"
+ },
+ {
+  "w": "template,",
+  "start": 0.945,
+  "end": 1.288,
+  "beat": "S01"
+ },
+ {
+  "w": "and",
+  "start": 1.508,
+  "end": 1.714,
+  "beat": "S01"
+ },
+ {
+  "w": "a",
+  "start": 1.729,
+  "end": 1.88,
+  "beat": "S01"
+ },
+ {
+  "w": "name",
+  "start": 1.895,
+  "end": 2.129,
+  "beat": "S01"
+ },
+ {
+  "w": "lands",
+  "start": 2.144,
+  "end": 2.405,
+  "beat": "S01"
+ },
+ {
+  "w": "on",
+  "start": 2.42,
+  "end": 2.599,
+  "beat": "S01"
+ },
+ {
+  "w": "its",
+  "start": 2.614,
+  "end": 2.82,
+  "beat": "S01"
+ },
+ {
+  "w": "word.",
+  "start": 2.835,
+  "end": 3.069,
+  "beat": "S01"
+ },
+ {
+  "w": "A",
+  "start": 3.349,
+  "end": 3.5,
+  "beat": "S02"
+ },
+ {
+  "w": "number",
+  "start": 3.515,
+  "end": 3.803,
+  "beat": "S02"
+ },
+ {
+  "w": "lands",
+  "start": 3.818,
+  "end": 4.079,
+  "beat": "S02"
+ },
+ {
+  "w": "under",
+  "start": 4.094,
+  "end": 4.355,
+  "beat": "S02"
+ },
+ {
+  "w": "the",
+  "start": 4.37,
+  "end": 4.577,
+  "beat": "S02"
+ },
+ {
+  "w": "captions:",
+  "start": 4.592,
+  "end": 4.935,
+  "beat": "S02"
+ },
+ {
+  "w": "ninety",
+  "start": 5.155,
+  "end": 5.443,
+  "beat": "S02"
+ },
+ {
+  "w": "percent",
+  "start": 5.458,
+  "end": 5.774,
+  "beat": "S02"
+ },
+ {
+  "w": "of",
+  "start": 5.789,
+  "end": 5.968,
+  "beat": "S02"
+ },
+ {
+  "w": "it",
+  "start": 5.983,
+  "end": 6.162,
+  "beat": "S02"
+ },
+ {
+  "w": "is",
+  "start": 6.177,
+  "end": 6.355,
+  "beat": "S02"
+ },
+ {
+  "w": "the",
+  "start": 6.37,
+  "end": 6.577,
+  "beat": "S02"
+ },
+ {
+  "w": "picture.",
+  "start": 6.592,
+  "end": 6.907,
+  "beat": "S02"
+ }
+]

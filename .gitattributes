@@ -1,0 +1,8 @@
+# Every text file is stored and checked out with LF line endings on every computer, so an update compares lines, not line endings.
+* text=auto eol=lf
+*.zip binary
+*.gz binary
+*.wav binary
+*.mp3 binary
+*.png binary
+*.jpg binary

@@ -1,0 +1,155 @@
+# config/tts.example.toml: the voice and caption settings of the dj pipeline (`cd tools && PIPE -m dj tts|captions ../videos/<video>`).
+# The setup copies this file to config/tts.toml and fills the placeholders (written as "<...>"); dj reads tts.toml, and falls back
+# to this file when tts.toml is missing (every step works then except the voice, which stops with a message until voice_id is set).
+# Override any key on the command line: --set tts.engine=dummy. A script can pin its own: a `CONFIG: tts.takes=2` line in script.md.
+# Secrets never go here: the ElevenLabs key is a file in the media root's secrets/ folder (tools/common/paths.py SECRETS).
+
+[paths]
+# Everything defaults to tools/common/paths.py (config/paths.toml). Set a key here only to override it for dj.
+# assets = "C:/Studio/footage"      # VIS paths resolve against this
+# out_root = "C:/Studio/videos"     # build output = <out_root>/<video>/build (no media root: <video folder>/build)
+# fonts = "C:/Studio/fonts"         # Google Fonts are downloaded here once
+# metrics = "metrics.csv"           # date, video, command, seconds (relative = under tools/)
+# ffmpeg = ""                       # empty = config/paths.toml, then PATH, then the imageio-ffmpeg binary
+
+[video]
+format = ""                   # "" = auto (folder name contains "short" -> short), or "short" / "long"
+short_resolution = "1080x1920"
+long_resolution = "1920x1080" # or "2560x1440"
+fps = 60                      # 30-fps clips just play as 30 inside it (29.97 also works)
+short_loop = true             # Shorts loop: the last sentence runs into the first, so no sign of an ending (no tail silence beyond
+                              # loop_tail, no music fade-out, no end card)
+loop_tail = 0.10              # s after the last word of a looping Short (about a sentence gap, so the replay joins like the next sentence)
+
+[tts]
+# ElevenLabs is the engine: a whole section in one request, so there is no seam inside it. A local engine (tools/voice/voice_cli.py)
+# is the fallback: --set tts.engine=command. Tests and dry runs: --set tts.engine=dummy
+engine = "elevenlabs"         # dummy | command | elevenlabs
+mode = "continuous"           # continuous = sections rendered in one go, then cut into beats at the pause before each beat (Whisper);
+                              # beats = every beat rendered separately (tone jumps between beats and cuts mid-sentence: not for finals)
+words_per_second = 3.9       # the voice's speaking rate, pauses included: the length check on a script before it is voiced
+                              # (tools/voice/voice_full.py, the 8:00 floor). 3.9 until measured; after the first finished narration
+                              # set it to its words / its seconds
+section_words = 220           # words per request; a whole Short fits in one, so it has no seam. Long videos: sections of this size
+max_pause = 0.16              # pauses longer than this are cut to 0.12 s; shorter ones stay as the model made them. Spliced finals use
+                              # close_gaps (stretching or adding pauses makes the voice sound laggy)
+# One flow: silence and in-breaths between words cut down to this much (s); anything voiced or near speech level stays
+# (dj/tts.py tighten_gaps)
+gaps = { sentence = 0.12, comma = 0.07, word = 0.04 }
+cut_fillers = true            # "um"/"uh"/"hmm" the voice added (not in the script) are cut
+clean_ends = true             # lone sounds before a beat's first / after its last stretch of speech are muted
+level_beats = true            # every beat at the same voiced level (louder lines otherwise sound piercing)
+deess = 0                     # ffmpeg deesser intensity before loudnorm; off: it audibly lowers the voice's quality
+dehum = true                  # steady tones under the voice (an engine artifact, like blowing into a bottle) are notched
+dehum_db = 12.0               # a tone this far over the local floor counts
+takes = 3                     # takes per voice section; each is scored (script match, fillers, long pauses) and the best kept
+                              # (dj/tts.py take_score). 1 = one take
+retakes = 2                   # a filler that can't be cut without its word -> a new take of that section, up to this many times
+# final_name = "narration_final"  # a polished narration dropped next to build/ (any of wav/flac/mp3/m4a) replaces the voice
+tempo = 1.04                  # every voiced beat at 1.04x; the hook runs at the same speed, so the hook rule below is off
+hook_syl_s = 0                # the first beat (the hook) is sped up to this rate (syllables/s) if slower; 0 = off
+hook_max_tempo = 1.3          # ... by at most this factor
+tempo_share = 0.5             # with tempo_all, the beats after the hook get this share of their speed-up (halfway between the hook's
+                              # speed and normal)
+hook_like_rest = true         # the hook gets the same share as the rest, so it runs at their speed
+wpm = 165                     # dummy engine speaking rate
+gap = 0.15                    # seconds of silence between beats/sections (rounded up to whole frames)
+tail = 0.6                    # seconds after the last beat
+
+[tts.command]
+# The local engine (tools/voice/voice_cli.py runs one in its own venv). {text} = the text, {txt} = path to a UTF-8 file with the text,
+# {voice} = voice below, {wav} = output file.
+# A list = argv without a shell (Windows, macOS, Linux; no quoting needed): ["<venv python>", "tts.py", "--txt", "{txt}", "--out", "{wav}"]
+# A string = a bash command line (macOS/Linux only; values get shell-quoted)
+# Batch mode (a list with {manifest}): ONE call renders every uncached beat, so the model loads once. {manifest} = a JSON list of
+# {"text", "txt", "wav"}; the engine writes each "wav". Per-beat calls reload the model every beat.
+# template = ["<engine venv python>", "<repo>/tools/voice/voice_cli.py", "--engine", "voxcpm", "--voice", "{voice}", "--manifest", "{manifest}"]
+template = []
+voice = "<path to a reference wav of the creator's voice>"   # + a .txt next to it with its exact transcript
+
+[tts.pronounce]
+# Respellings sent to the local voice engine only (captions and descriptions keep the real spelling). Add an entry only after
+# measuring it (cut the word out of a few takes and transcribe it alone). Example:
+# Saoirse = "Sersha"
+# ElevenLabs takes its respellings from tools/sound/names.json (dj/tts.py voice_text).
+
+[tts.elevenlabs]
+voice_id = "<your ElevenLabs voice id>"   # the creator's clone or a stock voice (the setup asks which)
+model_id = "eleven_v4"        # the model these settings were tuned on: 1 credit/char, 10,000 chars per request, no style/speed/speaker
+                              # boost. No fallback model: the older multilingual model sounds like computer TTS
+output_format = "wav_48000"   # 48 kHz 16-bit WAV, no lossy step (needs a paid plan)
+stitch = true                 # per-beat mode only: previous/next text; continuous mode links sections by request id
+voice_settings = { stability = 0.95, similarity_boost = 0.75 }  # flat and even (the model's only two settings)
+prefix = "[flat, calm, even tone] [American accent] "  # a direction tag at the head of every request; the model doesn't speak it.
+                              # The accent tag is on every narration: without it the model picks the accent from the words and slips
+                              # into British. Both tags' characters are cut from the timestamps (dj.tts.elevenlabs)
+seed = 1903                   # the same seed for every section, so takes are repeatable
+lead_in = "Alright guys, so here's what's going on, and it's actually pretty crazy."
+                              # unspoken context for a request with none (a video's first section, a fresh_at section, a single-beat
+                              # patch): its start comes out awake, not tired. Not part of the cache key. Write it the way the creator talks
+warmup = "Alright guys, so here's what's going on, and it's actually pretty crazy. I went through all of it, and there's a lot to get through, so let's just get into it."
+                              # spoken before a video's first section and cut away by the voice lock's generation
+                              # (tools/voice/span_takes.py; `dj tts` doesn't send it, and it is not part of the cache key): two lines
+                              # before for the one request that has none, so the opening's pitch sits at the take's own level instead of
+                              # under it (tools/voice/opening.py measures it). Never heard in the video
+# pronunciation_dictionaries = [{ id = "<dictionary id>", version = "<version id>" }]   # tools/voice/eleven_dict.py makes one (up to 3)
+
+[tts.short]
+# Shorts get their own voice: faster and livelier than the flat long-form read. Applied by dj.core.Ctx to every Short (the script's
+# own CONFIG: lines still win); a Short in the long-form voice is pinned with CONFIG: tts.short_profile=false.
+tempo = 1.0
+hook_syl_s = 5.65             # the hook sped up to 5.65 syllables/s if slower, every other beat given tempo_share of that speed-up
+tempo_all = true
+elevenlabs = { voice_settings = { stability = 0.5, similarity_boost = 0.75 }, prefix = "[American accent] ", lead_in = "", warmup = "" }
+                              # lead_in and warmup are measured on the long-form voice only
+
+[audio]
+loudness = -14.0              # LUFS target (YouTube)
+true_peak = -1.5
+aac_bitrate = "384k"          # YouTube's recommended stereo AAC rate; at 192k the AAC encoder can turn a limited peak into a near-0 dBTP spike
+makeup_max = 3.0              # dB at most: the mix is measured and raised to the loudness target into the limiter
+lra = 11.0
+
+[captions]
+mode = "whisper"              # align (ElevenLabs timestamps) | whisper (faster-whisper) | even (always works)
+max_chars = 42                # long-form SRT cue length
+chunk_words = 2               # Shorts: 1-2 words per chunk
+style = "ass"                 # Shorts: animated ASS captions (pop-in, key words in colour, hero pops)
+hero_hold = 0.3               # a **hero** phrase stays this long after its last word (unless the next words start)
+chunk_chars = 18
+pair_with_number = []         # words that keep the number after them in one caption, never split ("iPhone 17", "Model 3"): ["iPhone", "Model"]
+
+[captions.whisper]
+model = "small.en"            # tiny.en for a quick CPU test; small.en / medium.en on a GPU
+device = "auto"               # cuda | cpu | auto
+compute_type = "default"      # float16 on CUDA, int8 on CPU
+language = "en"
+
+[visuals]
+# The burned-in Shorts captions (dj/ass.py), as fractions of the 1080x1920 frame. YouTube's Shorts UI covers the top ~150 px (status
+# bar), the like/comment column from x 900 down from y ~1040, and the channel/title from y ~1645.
+caption_y = 0.50              # caption centre: dead centre of the frame
+caption_w = 0.62              # max caption width (wider runs under the like/comment buttons)
+caption_size = 0.052          # caption font size (fraction of height): fixed, never shrinks; fewer words per chunk instead
+hero_scale = 2.3              # hero pop size vs the caption size (shrinks only if the phrase is wider than 90% of the frame)
+hero_y = 0.50                 # hero pop centre = the caption line (one line for everything)
+safe_right = 900              # the like/comment/share column starts at this x from y ~1040 down
+hero_pop_from = 0.83          # hero pop-in: 83% -> 107% in 4 frames (hero_pop_ms) with motion blur, settled at 100% by hero_settle_ms
+hero_pop_over = 1.07
+hero_pop_ms = 67
+hero_settle_ms = 200
+
+[brand]
+# Caption colours and fonts (the edit's colours live in tools/motion/src/brand.ts, which the setup fills).
+yellow = "#FFD21F"            # a real highlighter's colour
+caption_key = "#FFD21F"       # caption key words + hero drops
+caption_color = "#FFFFFF"
+outline = "#000000"
+text_upper = true
+caption_upper = true
+fonts = { heavy = "Anton", caption = "Montserrat:wght@800", body = "Montserrat:wght@600", serif = "DM Serif Display" }
+
+[script]
+# Long form only (Shorts have none): the spoken opener and sign-off `dj parse` checks every long-form script for. "" = no check.
+opener = ""
+signoff = ""

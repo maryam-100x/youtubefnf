@@ -1,0 +1,12 @@
+S01 Every day, millions of people cross a bridge without ever thinking about it. They drive over rivers, rail lines and valleys, and the road simply carries on.
+S02 But a bridge is never really still. Wind pushes it, heat stretches it, and every truck makes it bend a little. On the morning a new bridge opens, a whole town gathers on the bank and holds its breath.
+S03 So how do you build something that can carry a city, survive floods and frost, and still be standing in a hundred years? To find out, we have to start at the very bottom, and work our way up.
+S04 The ground. Every bridge starts where nobody will ever look: deep under the water, in the mud of the riverbed.
+S05 Engineers drill down through sand and clay until they reach rock that will not move. Then they fill the holes with steel and concrete, one column at a time.
+S06 But the river does not wait. It pushes against everything they build, every hour of every day, and in spring it rises fast. The crews work in shifts, day and night, racing the water to get the columns above the surface before the floods arrive.
+S07 The span. Piece by piece, the deck reaches out from both banks toward the middle of the river. Each new section is lifted by a crane, bolted to the last one, and checked before the next one comes.
+S08 The two halves have to meet in the air, within a few millimetres of each other. Nobody on the crew says a word.
+S09 At dawn, the last piece is lifted from a barge, swings slowly into the gap, and locks into place.
+S10 The test. Before anyone is allowed across, trucks loaded with gravel roll onto the deck and stop in a line.
+S11 Sensors measure how far the bridge bends under them. A few centimetres, exactly as the drawings said.
+S12 And then the town walks across, talking, laughing, without thinking about it at all. Children run ahead, someone stops to look at the water, and the road simply carries on. Which is exactly how it should be.

@@ -1,0 +1,48 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {"type": "command", "command": "\"{PY}\" \"{HOOKS}/chat_health.py\" --hook", "timeout": 25}
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {"type": "command", "command": "\"{PY}\" \"{HOOKS}/keep_working.py\" --hook", "timeout": 30}
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {"type": "command", "command": "\"{PY}\" \"{HOOKS}/chat_health.py\" --hook", "timeout": 60}
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {"type": "command", "command": "\"{PY}\" \"{HOOKS}/no_kill_by_name.py\""},
+          {"type": "command", "command": "\"{PY}\" \"{HOOKS}/no_disk_scan.py\""},
+          {"type": "command", "command": "\"{PY}\" \"{HOOKS}/commit_guard.py\""}
+        ]
+      },
+      {
+        "matcher": "Bash|PowerShell|Write|Edit",
+        "hooks": [
+          {"type": "command", "command": "\"{PY}\" \"{HOOKS}/no_recycle_bin.py\""}
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {"type": "command", "command": "\"{PY}\" \"{HOOKS}/no_edit_running_script.py\"", "timeout": 15}
+        ]
+      }
+    ]
+  }
+}

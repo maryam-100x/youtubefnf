@@ -1,0 +1,362 @@
+[
+ {
+  "w": "Every",
+  "start": 0.005,
+  "end": 0.266,
+  "beat": "S01"
+ },
+ {
+  "w": "shot",
+  "start": 0.281,
+  "end": 0.515,
+  "beat": "S01"
+ },
+ {
+  "w": "in",
+  "start": 0.53,
+  "end": 0.708,
+  "beat": "S01"
+ },
+ {
+  "w": "this",
+  "start": 0.723,
+  "end": 0.957,
+  "beat": "S01"
+ },
+ {
+  "w": "template",
+  "start": 0.972,
+  "end": 1.315,
+  "beat": "S01"
+ },
+ {
+  "w": "starts",
+  "start": 1.33,
+  "end": 1.619,
+  "beat": "S01"
+ },
+ {
+  "w": "on",
+  "start": 1.634,
+  "end": 1.812,
+  "beat": "S01"
+ },
+ {
+  "w": "a",
+  "start": 1.827,
+  "end": 1.979,
+  "beat": "S01"
+ },
+ {
+  "w": "word",
+  "start": 1.994,
+  "end": 2.227,
+  "beat": "S01"
+ },
+ {
+  "w": "of",
+  "start": 2.242,
+  "end": 2.421,
+  "beat": "S01"
+ },
+ {
+  "w": "the",
+  "start": 2.436,
+  "end": 2.642,
+  "beat": "S01"
+ },
+ {
+  "w": "voice,",
+  "start": 2.657,
+  "end": 2.918,
+  "beat": "S01"
+ },
+ {
+  "w": "never",
+  "start": 3.138,
+  "end": 3.399,
+  "beat": "S01"
+ },
+ {
+  "w": "on",
+  "start": 3.414,
+  "end": 3.593,
+  "beat": "S01"
+ },
+ {
+  "w": "a",
+  "start": 3.608,
+  "end": 3.76,
+  "beat": "S01"
+ },
+ {
+  "w": "typed",
+  "start": 3.775,
+  "end": 4.036,
+  "beat": "S01"
+ },
+ {
+  "w": "second.",
+  "start": 4.051,
+  "end": 4.339,
+  "beat": "S01"
+ },
+ {
+  "w": "The",
+  "start": 4.619,
+  "end": 4.825,
+  "beat": "S02"
+ },
+ {
+  "w": "idea",
+  "start": 4.84,
+  "end": 5.074,
+  "beat": "S02"
+ },
+ {
+  "w": "came",
+  "start": 5.089,
+  "end": 5.322,
+  "beat": "S02"
+ },
+ {
+  "w": "in",
+  "start": 5.337,
+  "end": 5.516,
+  "beat": "S02"
+ },
+ {
+  "w": "January,",
+  "start": 5.531,
+  "end": 5.847,
+  "beat": "S02"
+ },
+ {
+  "w": "the",
+  "start": 6.067,
+  "end": 6.273,
+  "beat": "S02"
+ },
+ {
+  "w": "first",
+  "start": 6.288,
+  "end": 6.549,
+  "beat": "S02"
+ },
+ {
+  "w": "draft",
+  "start": 6.564,
+  "end": 6.825,
+  "beat": "S02"
+ },
+ {
+  "w": "in",
+  "start": 6.84,
+  "end": 7.019,
+  "beat": "S02"
+ },
+ {
+  "w": "March,",
+  "start": 7.034,
+  "end": 7.295,
+  "beat": "S02"
+ },
+ {
+  "w": "and",
+  "start": 7.515,
+  "end": 7.721,
+  "beat": "S02"
+ },
+ {
+  "w": "the",
+  "start": 7.736,
+  "end": 7.942,
+  "beat": "S02"
+ },
+ {
+  "w": "release",
+  "start": 7.957,
+  "end": 8.273,
+  "beat": "S02"
+ },
+ {
+  "w": "in",
+  "start": 8.288,
+  "end": 8.467,
+  "beat": "S02"
+ },
+ {
+  "w": "April.",
+  "start": 8.482,
+  "end": 8.743,
+  "beat": "S02"
+ },
+ {
+  "w": "That",
+  "start": 9.023,
+  "end": 9.257,
+  "beat": "S03"
+ },
+ {
+  "w": "is",
+  "start": 9.272,
+  "end": 9.45,
+  "beat": "S03"
+ },
+ {
+  "w": "ninety-eight",
+  "start": 9.465,
+  "end": 9.891,
+  "beat": "S03"
+ },
+ {
+  "w": "days",
+  "start": 9.906,
+  "end": 10.139,
+  "beat": "S03"
+ },
+ {
+  "w": "from",
+  "start": 10.154,
+  "end": 10.388,
+  "beat": "S03"
+ },
+ {
+  "w": "the",
+  "start": 10.403,
+  "end": 10.609,
+  "beat": "S03"
+ },
+ {
+  "w": "first",
+  "start": 10.624,
+  "end": 10.885,
+  "beat": "S03"
+ },
+ {
+  "w": "idea",
+  "start": 10.9,
+  "end": 11.134,
+  "beat": "S03"
+ },
+ {
+  "w": "to",
+  "start": 11.149,
+  "end": 11.328,
+  "beat": "S03"
+ },
+ {
+  "w": "the",
+  "start": 11.343,
+  "end": 11.549,
+  "beat": "S03"
+ },
+ {
+  "w": "release.",
+  "start": 11.564,
+  "end": 11.88,
+  "beat": "S03"
+ },
+ {
+  "w": "If",
+  "start": 12.16,
+  "end": 12.338,
+  "beat": "S04"
+ },
+ {
+  "w": "this",
+  "start": 12.353,
+  "end": 12.587,
+  "beat": "S04"
+ },
+ {
+  "w": "helped,",
+  "start": 12.602,
+  "end": 12.89,
+  "beat": "S04"
+ },
+ {
+  "w": "leave",
+  "start": 13.11,
+  "end": 13.371,
+  "beat": "S04"
+ },
+ {
+  "w": "a",
+  "start": 13.386,
+  "end": 13.538,
+  "beat": "S04"
+ },
+ {
+  "w": "like,",
+  "start": 13.553,
+  "end": 13.786,
+  "beat": "S04"
+ },
+ {
+  "w": "and",
+  "start": 14.006,
+  "end": 14.213,
+  "beat": "S04"
+ },
+ {
+  "w": "tell",
+  "start": 14.228,
+  "end": 14.461,
+  "beat": "S04"
+ },
+ {
+  "w": "me",
+  "start": 14.476,
+  "end": 14.655,
+  "beat": "S04"
+ },
+ {
+  "w": "in",
+  "start": 14.67,
+  "end": 14.849,
+  "beat": "S04"
+ },
+ {
+  "w": "the",
+  "start": 14.864,
+  "end": 15.07,
+  "beat": "S04"
+ },
+ {
+  "w": "comments",
+  "start": 15.085,
+  "end": 15.428,
+  "beat": "S04"
+ },
+ {
+  "w": "what",
+  "start": 15.443,
+  "end": 15.677,
+  "beat": "S04"
+ },
+ {
+  "w": "you",
+  "start": 15.692,
+  "end": 15.898,
+  "beat": "S04"
+ },
+ {
+  "w": "will",
+  "start": 15.913,
+  "end": 16.147,
+  "beat": "S04"
+ },
+ {
+  "w": "make",
+  "start": 16.162,
+  "end": 16.395,
+  "beat": "S04"
+ },
+ {
+  "w": "first.",
+  "start": 16.41,
+  "end": 16.671,
+  "beat": "S04"
+ }
+]

@@ -1,0 +1,88 @@
+# video.toml: the settings of ONE video, read by tools/pipeline/pipe.py and every tool it runs. Copy this file next to the video's
+# script.md (videos/<folder>/video.toml), keep the keys the video needs and delete the rest: every key shows its default in [brackets],
+# and a key that is left out takes that default. No video gets its own copy of the render/link/audit/finish/srt scripts: what differs
+# between videos lives here.
+#
+# How a path is read (tools/common/paths.py holds the roots: REPO = this repository, MEDIA = the media root from config/paths.toml):
+#   [video] src, [link] scan and pages, [audit], [gate] sources      relative to REPO/tools/motion (the Remotion project)
+#   [link] folders and files                                         relative to the public dir, MEDIA/motion (the full media set)
+#   [score] cues                                                     relative to the video's repo folder, REPO/videos/<folder>
+#   [score] mix, [srt] captions                                      relative to the video's media folder ([video] dj)
+#   [video] dj, [render] pub                                         full paths; leave them out and they follow MEDIA (the defaults below)
+# Write paths with forward slashes on every system.
+
+[video]
+id = "012"                                   # the video's number, used in file and job names  [the folder name's first three characters]
+kind = "long"                                # long | short  [short when "short" is in the folder name, else long]
+name = "012_city_at_night"                   # the export's base name; pipe appends _v<N>  [the folder name]
+comp = "V12"                                 # the Remotion composition id (registered in tools/motion/src/Root.tsx)
+src = "v12"                                  # tools/motion/src/<src>: beats.json, words.json, the composition module and its parts
+module = "V12.tsx"                           # the module exporting SHOTS and <NAME>_SECONDS, for the static audit and qa_camera  [<comp>.tsx]
+fps = 60                                     # the composition's frame rate  [60]
+# frames = 3000                              # the composition's length in frames, when it is not the beats' duration (a Short that
+                                             # ends 0.4 s after its last word)  [beats.json duration x fps]
+# dj = "C:/Studio/videos/012-city-at-night"  # the build/render/export folder  [MEDIA/videos/<folder name>]
+
+[render]
+# pub = "C:/Studio/pub012"                   # the lean public dir of hard links the link step fills  [MEDIA/pub<id>]
+part_frames = 3000                           # a long render goes in parts of ~50 s (render_parts.mjs, one browser for all): a failure costs
+                                             # one part, which retries at concurrency 4 then 2; `pipe render --only 3,4` redoes parts,
+                                             # `--changed` the parts whose shots changed  [3000]
+concurrency = 8                              # browser tabs rendering at once; measured with render_bench.py: 8 with veryfast ran 1.22x
+                                             # faster than 6 with slow. Lower it on a machine with less memory  [3]
+scale = 1.3333333333333333                   # 1440p from a 1080p composition (finish_long.py upscales to 4K)  [1.3333333333333333]
+preset = "veryfast"                          # x264 for the parts (finish_long re-encodes them): veryfast at CRF 14 = slow at 16 in SSIM  ["veryfast"]
+crf = 14                                     # (0.99382 against 0.99372 to a lossless reference; +37% file size)  [14]
+parallel = "force"                           # encode while rendering (Remotion turns it off by itself when memory runs low)  ["force"]
+image_format = "jpeg"                        # the frames Remotion hands the encoder  ["jpeg"]
+jpeg_quality = 92                            #  [92]
+timeout_ms = 120000                          # Remotion's per-frame timeout  [120000]
+gl = "angle"                                 # angle = draw on the GPU; swangle = software, for good once the GPU driver resets during a
+                                             # render (the GPU guard stops the line then)  ["angle"]
+scan = true                                  # the render scan on the real picture after every full render (qa_render_scan.py)  [true]
+
+[link]                                       # what the lean public dir holds: whole folders, every path the sources name, the page lists
+folders = ["v12", "shared/covers"]           # whole folders under the public dir (the video's own media folder first)
+scan = ["src/v12/*.tsx"]                     # code read for `const C = 'v12/x/';` + `C + 'file.mp4'` pairs and quoted 'v12/.../file.ext'
+                                             # paths (a pattern for the video's own folder reads the subfolder files the film imports too)
+pages = ["src/v12/pages12.json"]             # receipt lists (captured pages, posts): every entry's "src"
+files = []                                   # extra single files under the public dir, e.g. "shared/logos/maker_logo.png"
+
+[audit]                                      # the static clip audit (tools/pipeline/audit.tsx): the components that play a file
+plays = ["Foot", "VClip", "VideoCard", "Clip"]   # components with src + start|from (+ dur, rate); Chain is always walked
+bg = []                                      # components with bg + bgStart (a card drawn over a playing clip)
+min_shot = 0.5                               # a shot or play shorter than this reads as a flash  [0.5]
+edge = 0.5                                   # a source cut within this many seconds of a play's edge is a sliver of the next shot  [0.5]
+scene = 0.3                                  # ffmpeg's scene score that counts as a cut inside the source  [0.3]
+
+[gate]                                       # the pre-render gate (gate.py); every key optional
+# clips_json = "src/v12/clips12.json"        # the clips manifest (name -> [master, file] or [master, a, b]): a file, a glob or a list,
+                                             # one per builder when several build the video
+# sources = ["prep12.py"]                    # prep scripts whose tables name each clip's master (`"harbour_aerial": ("OV", 12.0, 18.5)`;
+                                             # the master codes live in tools/pipeline/gate_masters.json)
+# leads = ["Ada Park"]                       # the people the film is about: a portrait device is allowed only where the words name a lead
+                                             # and the shot says `// device: portrait <why>` (qa_devices.py)  [none]
+# [[gate.signed]]                            # a stretch the creator passed as it is: its flags are listed apart while its code is unchanged
+# frames = "0-3345"                          # the stretch, on the current timing
+# files = ["tools/motion/src/v12/open12.tsx"]   # the code it is drawn from (repo-relative)
+# sha = "<gate.files_sha(files)>"            # the code's hash when it was passed: any change makes its flags count again
+# note = "the creator's verdict, in their words"
+
+[score]
+cues = "score/cues12.py"                     # the cue sheet tools/sound/score.py reads (relative to the video's repo folder)
+mix = "build/score/mix_v1.wav"               # the mix the finish muxes when `pipe finish --mix` is not given and build/score/mix_v<N>.wav
+                                             # is missing (relative to dj)  ["build/score/mix_v<N>.wav"]
+
+[finish]
+args = ["--lufs", "-14", "--gain-only"]      # finish_long.py's sound settings: the delivery loudness, gain only (the mix is already set)
+gpu = true                                   # h264_nvenc on an NVIDIA GPU; false: the CPU's x264 (any other machine)  [true]
+
+[srt]
+captions = "build/captions/captions.srt"     # `python -m dj captions` output on the final voice (relative to dj)  ["build/captions/captions.srt"]
+fixes = [["600 ,000", "600,000"], ["co -founded", "co-founded"]]   # Whisper's misreads, [heard, written]; each must still apply
+                                             # (a fix that no longer matches means a new voice: look; --loose writes the file anyway)
+holds = [["S12h", 0.0, 1.75, "Ada Park: That will probably happen too."]]
+                                             # a real voice in a HOLD beat: [beat, from, to (seconds into the hold), "Name: line"]
+
+[qa]
+allow = ""                                   # qa_render.py --allow ranges kept on purpose ("12.0-15.5,..."), each with its reason in QA_v<N>.md
