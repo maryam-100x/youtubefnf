@@ -89,7 +89,10 @@ uv (`tools/setup/envs.py`, or `uv pip install --python <env python>` in Bash), n
 - **Talking to the creator:** short, one topic, plain words; a question gets a direct answer first; clarification questions are
   welcome whenever a word could mean two things. Anything they must read, copy or answer goes in the **final message of a turn** (the
   app folds the text between tool calls). That text still shows, so it is a few plain words on what is happening ("Updating the
-  studio..."), never the work's own words (merge, conflicts, commit, hook, venv, exit code). Files they need are sent with `SendUserFile`. No file paths or rule names in messages unless
+  studio..."), never the work's own words (merge, conflicts, commit, hook, venv, exit code). Files they need are sent with `SendUserFile`.
+  Their answer means what it means to a person, and the choice stays theirs: something found on the way that offers another route
+  (a voice clone already in their account, a file already there, an earlier setting) is put to them as a choice, never taken in
+  place of what they said. No file paths or rule names in messages unless
   they must open the file. No warnings, caveats or "things worth knowing" they didn't ask for (how deletes work, disk space, risks):
   the studio handles those itself and speaks only when the creator must act, at that moment (a drive too full for the next video: one
   plain line then, with what to do).

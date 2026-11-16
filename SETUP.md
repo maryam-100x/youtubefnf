@@ -119,8 +119,11 @@ and until a fresh chat has them, run those programs through `PIPE tools/common/p
 1. The creator needs an **ElevenLabs** account on the **Creator** plan: the studio's voice comes as uncompressed 48 kHz WAV
    (`wav_48000`), tested and working on Creator (Pro is not needed; the cheaper Starter was never tested for it). They make it
    themselves at https://elevenlabs.io; you wait.
-2. Ask: **their own voice, or a stock voice?**
-   - **Their own, as an instant clone (recommended):** 1-3 minutes of clean speech, ready in minutes. It is the kind of clone the
+2. Ask: **which voice?** Three answers, all named in the question: **a new clone of their own voice** (they record 1-3 minutes;
+   recommended), **a clone they already have in ElevenLabs**, or **a stock voice**. "My own voice" means a new recording. A clone
+   already in the account is used only when they choose it: if they do, once the key is in, list the account's cloned voices and
+   they pick one by name. Never pick for them, even when their account already holds clones.
+   - **A new clone of their own voice, an instant clone (recommended):** 1-3 minutes of clean speech, ready in minutes. It is the kind of clone the
      studio's own videos were made with, at the level they show. Guide the recording in plain steps: a quiet room, a phone or a
      microphone close to the mouth, the same distance throughout, reading anything in their normal telling-a-friend voice, no music.
      They put the file into `MEDIA/voice/sample/` (you make the folder and open it for them). Then the **mic check**:
