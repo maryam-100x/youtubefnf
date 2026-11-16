@@ -126,7 +126,9 @@ and until a fresh chat has them, run those programs through `PIPE tools/common/p
    - **A new clone of their own voice, an instant clone (recommended):** 1-3 minutes of clean speech, ready in minutes. It is the kind of clone the
      studio's own videos were made with, at the level they show. Guide the recording in plain steps: a quiet room, a phone or a
      microphone close to the mouth, the same distance throughout, reading anything in their normal telling-a-friend voice, no music.
-     They put the file into `MEDIA/voice/sample/` (you make the folder and open it for them). Then the **mic check**:
+     They put the file into `MEDIA/voice/sample/` (you make the folder and open it for them). A phone recording goes in the guide
+     with how it gets to the computer: as the file itself (a cable, AirDrop, email, Google Drive or iCloud), never as a voice
+     message in a chat app (WhatsApp, Telegram, Discord squeeze it to phone-call sound). Then the **mic check**:
      `EDIT tools/voice/rebuild_sample.py <the file> --check`. A full-band mic: they upload that file in ElevenLabs as an instant voice
      clone (where that is in today's ElevenLabs, you look up and tell them). A narrow mic (a headset, a laptop or Bluetooth mic: an
      instant clone copies the mic too, so its voice would sound muffled whatever comes after): rebuild the sample first,

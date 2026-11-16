@@ -9,7 +9,8 @@ writes in it (their own history goes to `log/`).*
 - **Brings:** renders on any computer: the frames rendered at once are capped at the computer's CPU cores (before, a computer with
   fewer than 6 cores could not render at all), and a failed part's retries step lower from there. The chat's lines while it works are plain words, never the work's own (merge, commit,
   hook). The ElevenLabs API key: the direct link to the key page. The voice question names all three answers (a new clone of
-  their voice, a clone already in their account, a stock voice); a clone already there is used only when they choose it.
+  their voice, a clone already in their account, a stock voice); a clone already there is used only when they choose it. A phone recording reaches the computer as the
+  file itself, never as a chat app's voice message.
 - **Set up:** nothing to install.
 - **Read:** `CLAUDE.md` ("Talking to the creator"), `SETUP.md` step 9 items 2 and 3.
 
