@@ -7,7 +7,7 @@
     "caption": {"family": "Figtree", "weight": 800}
   },
   "type": {"display_weight": 800, "display_tracking": -0.025, "display_upper": false, "label_upper": false, "label_tracking": 0.01},
-  "colors": {"ink": "#F3F5F8", "paper": "#0F1217", "key": "#6EE7C8", "alert": "#FF5D52", "surface": "#141820", "surface_alpha": 0.92},
+  "colors": {"ink": "#F3F5F8", "paper": "#0F1217", "key": "#6EE7C8", "alert": "#FF5D52", "surface": "#141820", "surface_alpha": 1},
   "shape": {"radius": 18, "chip": 9, "border": 0, "shadow": "soft"},
   "motion": {"pop": 1.05},
   "stamp": {"tilt": -3, "style": "fill"},

@@ -168,7 +168,7 @@ def board_pictures(pub):
     d = pub / "board"
     d.mkdir(parents=True, exist_ok=True)
     g = _sky(1920, 1080, [(0, "#1D2240"), (0.55, "#6E4664"), (0.8, "#E9966B")])
-    g = _glow(g, 1390, 610, 260, "#FFD9A6", 74).convert("RGB")
+    g = g.convert("RGB")   # no sun: the number reads on it, nothing bright behind its words
     _ridge(g, 7, 760, 260, 0.06, "#4A3A5C")
     _city(g, 11, "#181626", 0.28, 420)
     g.save(d / "ground.jpg", quality=92)

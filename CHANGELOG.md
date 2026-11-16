@@ -5,6 +5,18 @@ brings, what to set up (in order, each command with its environment, PIPE, EDIT,
 it) and what to read; a file renamed or removed is named with what replaced it. This file is the studio's: a creator's chat never
 writes in it (their own history goes to `log/`).*
 
+## v1.6 (2026-11-16)
+- **Brings:** solid plates and clean shadows, found by looking at every tile at full size. Every look's card surface is fully solid
+  (`colors.surface_alpha` 1: before, the picture showed faintly through the subscribe ask, the info cards and the question card);
+  the "box" stamp sits on the look's solid card surface; the "underline" stamp's bar sits just under the letters, and its shadow is
+  tight (no dark glow); the sign-off's two buttons cast one shadow together (the comment button's no longer darkens the like
+  button's edge); the "bar" subscribe ask's avatar lost its half-see-through ring. The board's pictures: no bright sun behind an
+  info card's edge or a number's words, and the sea's horizon higher so the sign-off has room under it.
+- **Set up:** nothing to install. A creator whose look is already written: in `tools/motion/src/look.json`, `colors.surface_alpha`
+  to 1 (keep theirs only if they chose see-through cards themselves), then `PIPE tools/motion/look_board.py --current --scale 2`
+  and every tile looked at. A chat in step 11's look part renders the boards again.
+- **Read:** nothing new.
+
 ## v1.5 (2026-11-16)
 - **Brings:** the look's pieces and its board, redesigned and checked at full size in every look. The sign-off is one column on one
   axis at the frame's safe edge: the question card over a row of two same-height buttons, like and comment (centred low for "bar",
