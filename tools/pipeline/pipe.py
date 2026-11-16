@@ -518,12 +518,23 @@ RENDER_DEFAULTS = {"crf": 14, "preset": "veryfast", "imageFormat": "jpeg", "jpeg
 STEP_DOWN = [None, 4, 2]   # a part that failed renders again at the video's concurrency, then 4, then 2 (rule: a failed part never restarts the run)
 
 
+def _cores():
+    return (os.process_cpu_count() if hasattr(os, "process_cpu_count") else None) or os.cpu_count() or 1
+
+
 def cap_conc(c):
     """A render concurrency this computer can run: Remotion refuses one over the CPU cores (a 4-core laptop and a video set to 6)."""
     if not c:
         return c
-    cores = (os.process_cpu_count() if hasattr(os, "process_cpu_count") else None) or os.cpu_count() or 1
-    return max(1, min(int(c), cores))
+    return max(1, min(int(c), _cores()))
+
+
+def step_conc(k, conc):
+    """The concurrency of a part's try k (0 = the first): the video's, then STEP_DOWN's 4 and 2, each try lower than the one before
+    where the computer allows it (a 3-core computer: 3, 2, 1)."""
+    if k == 0:
+        return conc
+    return max(1, min(STEP_DOWN[min(k, len(STEP_DOWN) - 1)], conc - k))
 
 
 def comp_info(v, bundle, settings):
@@ -601,13 +612,14 @@ def render_parts(v, a, bundle, settings, parts, conc, pdir, t_start, status):
     """render the parts [(i, f0, f1)] into pdir/part_NNN.mkv: each part whole or not at all; a failed part tries again at a lower
     concurrency, a lost-frame clip is re-encoded and the part tried again, a kit3 refusal stops the line with its reason; the parts already
     done stay done (a part that fails twice never sends the whole render back to the start)."""
+    conc = cap_conc(conc)
     pending = list(parts)
     tries = defaultdict(int)
     reenc = set()
     n_run = 0
     while pending:
         i0 = pending[0][0]
-        c = cap_conc(STEP_DOWN[min(tries[i0], len(STEP_DOWN) - 1)] or conc)
+        c = step_conc(tries[i0], conc)
         batch = pending if c == conc else pending[:1]   # a part retried at a lower concurrency goes alone, the rest at the video's
         job = {"serveUrl": bundle, "comp": v.comp, "concurrency": c, **settings,
                "parts": [{"i": i, "f0": f0, "f1": f1, "file": str(pdir / f"part_{i:03d}.mkv")} for i, f0, f1 in batch]}
@@ -658,8 +670,9 @@ def render_parts(v, a, bundle, settings, parts, conc, pdir, t_start, status):
                     continue
         tries[i] += 1
         if tries[i] >= len(STEP_DOWN) + 1:
-            raise SystemExit(f"part {i} ({f0}-{f1}) failed {tries[i]} times (concurrency {conc}, then {STEP_DOWN[1:]}): {msg[:800]}")
-        say(f"{hhmm()} part {i} failed ({msg[:200]}); again at concurrency {STEP_DOWN[min(tries[i], len(STEP_DOWN) - 1)] or conc} after 30 s")
+            raise SystemExit(f"part {i} ({f0}-{f1}) failed {tries[i]} times (concurrency {conc}, then "
+                             f"{[step_conc(k, conc) for k in range(1, len(STEP_DOWN))]}): {msg[:800]}")
+        say(f"{hhmm()} part {i} failed ({msg[:200]}); again at concurrency {step_conc(tries[i], conc)} after 30 s")
         time.sleep(30)
 
 

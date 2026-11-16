@@ -19,9 +19,11 @@ class FakeV:
         self.render_dir = tmp / "render"
 
 
-def fake_runs(script, tmp, monkeypatch):
-    """script: a list of functions (job) -> stdout, one per render_parts.mjs run; parts reported DONE get a file of the right frames"""
+def fake_runs(script, tmp, monkeypatch, cores=16):
+    """script: a list of functions (job) -> stdout, one per render_parts.mjs run; parts reported DONE get a file of the right frames.
+    cores: the computer's CPU cores as pipe sees them (the tests never depend on the computer running them)"""
     calls = []
+    monkeypatch.setattr(pipe, "_cores", lambda: cores)
 
     def run_watched(cmd, cwd, env, log, stall=300):
         import json
@@ -75,6 +77,22 @@ def test_a_failing_part_steps_down_then_the_rest_go_on(tmp_path, monkeypatch):
     assert [c["concurrency"] for c in calls] == [8, 4, 2, 8]
     assert [len(c["parts"]) for c in calls] == [3, 1, 1, 2]   # a part retried low goes alone
     assert done == [(0, 2), (1, 8), (2, 8)]
+
+
+def test_a_computer_with_few_cores_renders_at_its_cores_and_still_steps_down(tmp_path, monkeypatch):
+    v = FakeV(tmp_path)
+    done = []
+    script = [lambda job: "FAIL 0 Target closed",
+              lambda job: "FAIL 0 Target closed",
+              lambda job: "DONE 0 100 9.0",
+              lambda job: "\n".join(f"DONE {p['i']} 100 5.0" for p in job["parts"])]
+    calls = fake_runs(script, tmp_path, monkeypatch, cores=3)
+    pipe.render_parts(v, None, "bundle", SETTINGS, PARTS, 8, tmp_path, 0, lambda i, f0, f1, s, c: done.append((i, c)))
+    assert [c["concurrency"] for c in calls] == [3, 2, 1, 3]   # Remotion refuses more than the cores; each retry lower still
+    assert [len(c["parts"]) for c in calls] == [3, 1, 1, 2]
+    assert done == [(0, 1), (1, 3), (2, 3)]
+    monkeypatch.setattr(pipe, "_cores", lambda: 3)
+    assert pipe.cap_conc(6) == 3 and pipe.cap_conc(2) == 2 and pipe.cap_conc(None) is None
 
 
 def test_a_part_failing_every_way_stops_the_line(tmp_path, monkeypatch):
