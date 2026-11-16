@@ -1336,8 +1336,8 @@ craft. A gap kept for its own sake always looks squeezed.
 
 **AL243 · A word worth reading is stamped.** A name or phrase the viewer should remember (a working title, a nickname) stamps on screen
 as it is said, with the house `stamp` sound; the headline claim of a passage (a multiplier, a record: "10x FASTER") lands as
-big words over its pictures on its word, with the stamp sound; a short quoted statement can land as plain white text in quotes on its
-words with the stamp sound and no stamp visual. A word that is a known meme gets a quick cameo of it (a real cut-out peeking in at a
+big words over its pictures on its word, with the stamp sound; a short quoted statement can land as plain text in the look's ink, in
+quotes, on its words with the stamp sound and no stamp visual. A word that is a known meme gets a quick cameo of it (a real cut-out peeking in at a
 corner, from behind a chart for instance, and out again with a smooth animation, on the word it reacts to), never held, never over the
 receipt the voice reads. A stamped claim is remembered.
 

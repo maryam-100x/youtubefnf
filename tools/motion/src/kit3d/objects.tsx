@@ -1,7 +1,7 @@
 // kit3d · Case3D and Number3D: a real thing and its number, standing in one lit space (standard/3D.md §5).
 //
 // A number stands beside the thing it counts, in 3D too. Case3D is the product's real box: its cover art under a glossy sleeve (a clear
-// coat), a dark plastic case (135 x 170 x 14 mm, a standard media case), rounded corners. Number3D is the number cut from Archivo
+// coat), a dark plastic case (135 x 170 x 14 mm, a standard media case), rounded corners. Number3D is the number cut from the look's display font (kit3d/fonts/display.ttf: look_fonts.py)
 // ExtraBold itself (the house face, its own TTF: kit3d/fonts), extruded with a small bevel, ink on its face and a darker ink
 // on its sides, so it reads exactly like the house type when it faces the camera. Its digits stand up one after another on their word
 // (each turns up from lying back, EASE.enter, 0.08 s apart: no overshoot, nothing springs back), and the camera ends almost face-on,
@@ -102,7 +102,7 @@ export const CaseNumber3D: React.FC<{dur: number; cover: string; value: string; 
   const abs = Internals.useAbsoluteTimelinePosition();
   const fonts = useFontsReady();
   if (!unit || !subject) throw new Error('kit3d CaseNumber3D: a number needs its unit and its subject (what it counts, of what)');
-  const a = useAssets(`casenum:${cover}`, () => all({cover: Load.texture(cover), font: Load.font('kit3d/fonts/Archivo-ExtraBold.ttf')}));
+  const a = useAssets(`casenum:${cover}`, () => all({cover: Load.texture(cover), font: Load.font('kit3d/fonts/display.ttf')}));
   // the layout in world units: the case left of centre, the number right, both on the same floor line
   const size = 1.05;                  // cap height ~ 0.75 of size
   const caseX = -1.55;

@@ -1813,10 +1813,19 @@ def check_mark_zoom(layout):
     return flags
 
 
+def signoff_words():
+    """the sign-off's like / liked / comment labels in the creator's look (src/look.json), upper-cased as the layout's texts are compared"""
+    try:
+        so = json.loads((MOTION / "src" / "look.json").read_text(encoding="utf-8"))["signoff"]
+    except (OSError, ValueError, KeyError):
+        so = {"like": "Like", "liked": "Liked", "comment": "Comment"}
+    return {k: str(so.get(k, k)).strip().upper() for k in ("like", "liked", "comment")}
+
+
 def check_outro(v, layout):
     """B26 OUTRO: a long video whose narration's last 25 s ask for a like and a comment shows the house SignOff (the outro elements) on
-    them: a LIKE (or LIKED) and a COMMENTS
-    text on screen in the film's last 25 s. A Short, or a film whose last words don't ask (a prototype), is not read"""
+    them: its like label (or its liked label) and its comment label, the words of the creator's look (src/look.json "signoff"), on
+    screen in the film's last 25 s. A Short, or a film whose last words don't ask (a prototype), is not read"""
     if v.kind != "long" or not layout:
         return []
     try:
@@ -1830,10 +1839,11 @@ def check_outro(v, layout):
     last = max(layout)
     win = [f for f in layout if f >= last - 25 * FPS]
     texts = {str(it.get("t") or "").strip().upper() for f in win for it in layout[f] if it["k"] == "text" and it["op"] >= 0.3}
-    if texts & {"LIKE", "LIKED"} and "COMMENTS" in texts:
+    so = signoff_words()
+    if texts & {so["like"], so["liked"]} and so["comment"] in texts:
         return []
     return [{"check": "OUTRO", "key": "signoff", "at": win[0] if win else last, "to": last,
-             "what": "the last line asks for a like and a comment, but the house SignOff (its LIKE and COMMENTS) never shows "
+             "what": f"the last line asks for a like and a comment, but the house SignOff (its {so['like']} and {so['comment']}) never shows "
                      "in the film's last 25 s (the outro elements are missing)"}]
 
 

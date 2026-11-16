@@ -47,7 +47,7 @@ example's devices (its opening, its props, its layout) is the template mistake; 
 
 ## The bar
 
-- **Frame 0 is the package.** `flash_open` plays alone at frame 0 (a 0.25-s white flash, `FlashIn` in the Shorts kits; no slam or metal
+- **Frame 0 is the package.** `flash_open` plays alone at frame 0 (a 0.25-s flash, `FlashIn` in the Shorts kits; no slam or metal
   hit layered on it) over a picture that already tells the story without being read: a company's wordmark alone on a plain dark ground,
   three lawyers' cut-out rising from the bottom on "lawyers"; a service's logo flickering like a failing bulb while the line says it
   nearly died. The first word is on frame 0. **Something to look at:** a subject the eye lands on at once, big enough, lit and moving,
@@ -103,7 +103,7 @@ example's devices (its opening, its props, its layout) is the template mistake; 
   numbers and icons at y 1080-1410; everything inside x 180-900; a source under 1080p plays as a 16:9 `Card9` at or under its own size
   in the upper zone over a real ground, never blown up to fill (a 405-px slice blown up 2.7x is mush).
 - **Captions:** full text, 1:1 with the voice, one size, 1-2 words per chunk, no punctuation except "?", one key phrase per beat in the
-  caption key colour (`KEY` in `tools/motion/src/brand.ts`, a yellow; `*like this*` in the script); a name and its number always one
+  look's caption key colour (`tools/motion/src/look.json`; `*like this*` in the script); a name and its number always one
   caption; no label, stamp or number card repeating the line. **The planner** (`tools/dj/ass.py` `plan()`, called by
   `tools/motion/finish_short.py`): it chooses the chunks that cost least (1 a chunk, +0.8 for ending a chunk on a weak word or a bare
   number: never "ONLY 30 | MINUTES"), keeps a `*key*` phrase whole while it fits the width (62% of the frame), pairs a name with its number
@@ -122,8 +122,8 @@ example's devices (its opening, its props, its layout) is the template mistake; 
   `videos/<video>/captions_hide.json` for anything else); a logo shows on the line only while its name is said; a clip's own speech is
   captioned once, by the house captions (`videos/<video>/captions_bites.json`). A stamp of words is rare: only a number said as a
   statement, never a slogan or a label for what the picture already shows.
-- **White and yellow only:** every designed colour in a Short (stamps, counts, crosses, glows, lines, rings) is white or the caption key
-  colour, whatever the long videos' accent: a theme colour plus one odd accent word looks off.
+- **The captions' two colours only:** every designed colour in a Short (stamps, counts, crosses, glows, lines, rings) is the look's plain
+  caption colour or its caption key colour, whatever the long videos' accent: a theme colour plus one odd accent word looks off.
 - **The voice:** the Shorts voice (`[tts.short]` in the config: stability 0.5, the "[American accent]" tag and no other) at the middle
   speed (every line gets half the speed-up toward the hook rate of 5.65 syllables a second, `tempo_share`), the hook at the same speed
   as the rest, about 200 words a minute, no pause between words (every gap, breaths included, to ~0.07 s by

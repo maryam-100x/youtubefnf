@@ -1,23 +1,27 @@
-// kit3 · the tokens: one look for every long video (standard/KIT3.md): the grid, the type scale, one ink, the creator's accent as the one
-// accent (src/brand.ts), one card, one credit, one motion set. Every kit3 component takes its numbers from here: a video never sets its
+// kit3 · the tokens: the creator's look for every long video (standard/KIT3.md; the look itself: src/look.json): the grid, the type
+// scale, one ink, the creator's accent as the one accent (src/brand.ts), one card, one credit, one motion set. Every kit3 component takes its numbers from here: a video never sets its
 // own sizes, colours or curves. A video's own palette is NOT a kit3 thing: the brand repeats, the devices don't.
 //
 //   DS        the grid (content box x 120-1800, y 96-968; centre lines x 960, y 532), spacing (8 16 24 40 64 96), radii, colours, motion
-//   TYPE      the five type roles (display 168, headline 84, title 52, label 40, meta 26; Archivo; tabular figures)
+//   TYPE      the five type roles (display 168, headline 84, title 52, label 40, meta 26; the look's display family; tabular figures)
 //   type(k)   a role's whole CSS font style
 //   enterP / exitP / moveP / lightP / enterStyle   motion progress 0..1 on the house EASE curves (src/house/motion.tsx)
 //   markStart / heldT   where a mark's light starts and the time a held layer sees (the picture under a mark stands still)
 import type React from 'react';
 import {interpolate} from 'remotion';
-import {loadFont} from '@remotion/google-fonts/Archivo';
-import {ACCENT, ACCENT_RGB, INK, INK_RGB, ON_ACCENT} from '../brand';
+import {ACCENT, ACCENT_RGB, INK, INK_RGB, ON_ACCENT, RADIUS, RADIUS_CHIP, SURFACE} from '../brand';
+import {DISPLAY, DISPLAY_FONT, LOOK, SHADOW as LOOK_SHADOW, SHADOW_SM} from '../look';
 import {clamp} from '../lib';
 import {EASE} from '../house/motion';
 
-// the one family (Archivo). loadFont blocks the render until its faces are in; FONTS.waitUntilDone() is the only true "ready" for
-// measuring text (document.fonts.load alone can resolve on the fallback face, every width 13% off)
-export const FONTS = loadFont('normal', {weights: ['500', '600', '700', '800'], subsets: ['latin']});
-export const FONT = FONTS.fontFamily;
+// the one family: the look's display family (src/look.json). Its loader blocks the render until its faces are in; FONTS.waitUntilDone()
+// is the only true "ready" for measuring text (document.fonts.load alone can resolve on the fallback face, every width 13% off)
+export const FONTS = DISPLAY_FONT;
+export const FONT = DISPLAY;
+// the family's nearest loaded weight to w (a family without 800 never gets a faux bold)
+export const W = (w: number) => LOOK.fonts.display.weights.reduce((a, b) => (Math.abs(b - w) < Math.abs(a - w) ? b : a));
+// the look's case for every kit3 text (measured the same way: measure.ts)
+export const UPPER = LOOK.type.display_upper;
 
 export const DS = {
   W: 1920,
@@ -30,17 +34,19 @@ export const DS = {
   SAFE_X: 96,                    // title-safe: the credit's corner
   SAFE_Y: 54,
   S: {xs: 8, s: 16, m: 24, l: 40, xl: 64, xxl: 96},
-  R: 12,                         // cards, photo frames, page cards
-  R_CHIP: 6,                     // chips, marks, the credit's backing
+  R: RADIUS,                     // cards, photo frames, page cards (the look's corners)
+  R_CHIP: RADIUS_CHIP,           // chips, marks, the credit's backing
   INK,
   INK2: `rgba(${INK_RGB},0.66)`,
   INK3: `rgba(${INK_RGB},0.3)`,
   ACCENT,                        // the one accent (src/brand.ts), only on what the voice names now
   ACCENT_TINT: `rgba(${ACCENT_RGB},0.14)`,
   ON_ACCENT,
-  SURFACE: 'rgba(12,12,12,0.88)',
-  CHIP: 'rgba(12,12,12,0.86)',
-  SHADOW: '0 2px 6px rgba(0,0,0,0.35), 0 28px 72px rgba(0,0,0,0.55)',
+  SURFACE,                       // the look's card surface
+  CHIP: SURFACE,
+  BORDER: LOOK.shape.border ? `${LOOK.shape.border}px solid rgba(${INK_RGB},0.22)` : 'none',
+  SHADOW: LOOK_SHADOW,           // the look's card shadow
+  SHADOW_SM,
   CUT_SHADOW: 'drop-shadow(0 22px 34px rgba(0,0,0,0.55))',
   GROUND: {blur: 8, dim: 0.42, scale: 1.04},
   // zoom: Foot's quick zoom into its marks
@@ -54,15 +60,16 @@ export const DS = {
 
 export type TypeKey = 'display' | 'headline' | 'title' | 'label' | 'meta';
 export const TYPE: Record<TypeKey, {fontSize: number; fontWeight: number; lineHeight: number; letterSpacing: number}> = {
-  display: {fontSize: 168, fontWeight: 800, lineHeight: 0.92, letterSpacing: -0.02},
-  headline: {fontSize: 84, fontWeight: 800, lineHeight: 1.0, letterSpacing: -0.01},
-  title: {fontSize: 52, fontWeight: 700, lineHeight: 1.12, letterSpacing: 0},
-  label: {fontSize: 40, fontWeight: 600, lineHeight: 1.2, letterSpacing: 0},
-  meta: {fontSize: 26, fontWeight: 500, lineHeight: 1.25, letterSpacing: 0},
+  display: {fontSize: 168, fontWeight: W(LOOK.type.display_weight), lineHeight: 0.92, letterSpacing: LOOK.type.display_tracking},
+  headline: {fontSize: 84, fontWeight: W(LOOK.type.display_weight), lineHeight: 1.0, letterSpacing: LOOK.type.display_tracking / 2},
+  title: {fontSize: 52, fontWeight: W(700), lineHeight: 1.12, letterSpacing: 0},
+  label: {fontSize: 40, fontWeight: W(600), lineHeight: 1.2, letterSpacing: 0},
+  meta: {fontSize: 26, fontWeight: W(500), lineHeight: 1.25, letterSpacing: 0},
 };
 export const type = (k: TypeKey, color: string = DS.INK, weight?: number): React.CSSProperties => ({
   fontFamily: FONT, fontSize: TYPE[k].fontSize, fontWeight: weight ?? TYPE[k].fontWeight, lineHeight: TYPE[k].lineHeight,
   letterSpacing: `${TYPE[k].letterSpacing}em`, color, fontVariantNumeric: 'tabular-nums', fontStyle: 'normal',
+  textTransform: UPPER ? 'uppercase' : 'none',
 });
 
 // an entrance landing on its word: it starts DUR.lead before `at`, so the thing is there as the word starts

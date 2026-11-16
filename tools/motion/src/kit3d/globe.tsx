@@ -8,7 +8,7 @@
 // the camera tilts toward the horizon as it comes down, so the last frames look across the coast, not straight down at a map.
 //
 // Places are pinned with `pins`: a small dot on the ground (the accent only while the voice names it: `lit` time) and the place's name
-// as an HTML Tag beside it (Archivo, the house chip), placed by projecting the same camera; a pin on the far side is hidden.
+// as an HTML Tag beside it (the look's display family, the house chip), placed by projecting the same camera; a pin on the far side is hidden.
 //
 // Props: dur, from/to {lat, lon, alt (Earth radii above the ground), tilt (degrees from straight down)}, at (start, default 0),
 //   move (length, default 3.2 s), pins [{lat, lon, name, at, lit?}], drift (degrees of longitude a second after the move, default 0.15)

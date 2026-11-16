@@ -30,7 +30,7 @@ from paths import FFMPEG, FFPROBE, MUSIC as MUSIC_DIR, TOOLS, VIDEOS, VIDEOS_REP
 
 sys.path.insert(0, str(TOOLS))
 from dj import ass as house_ass  # noqa: E402
-from dj.core import Ctx, load_config  # noqa: E402
+from dj.core import Ctx, font, load_config  # noqa: E402
 from onsets import apply_onsets  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
@@ -38,7 +38,6 @@ SR = 48000
 MUSIC = None      # --music: the bed (None: no bed)
 MIX_LUFS = -15.0  # the Short's level
 PICTURE_ONLY = False  # --picture-only: captions burned in, the sound mixed by score.py
-FONTS = Path.home() / ".cache/dj/fonts"
 
 
 def _data(name, default):
@@ -231,7 +230,9 @@ def main(slug, render, name, m_start=None, m_span=None):
     house_ass.write(ctx, chunks, heroes, ass)
     fonts = B / "captions/fonts"
     fonts.mkdir(parents=True, exist_ok=True)
-    (fonts / "Anton.ttf").write_bytes((FONTS / "Anton.ttf").read_bytes())
+    # the look's caption font (look.json fonts.caption), the file dj fetched into the studio's fonts folder when it measured the captions
+    cap_font = Path(font(ctx.cfg, "heavy", 10).path)
+    (fonts / cap_font.name).write_bytes(cap_font.read_bytes())
     pic = B / f"{name}_picture.mp4"
     subprocess.run([FFMPEG, "-hide_banner", "-loglevel", "error", "-y", "-i", str(render), "-an", "-vf", f"ass=captions/{name}.ass:fontsdir=captions/fonts",
                     "-c:v", "libx264", "-crf", "15", "-preset", "slow", "-pix_fmt", "yuv420p", str(pic)], cwd=str(B), check=True)

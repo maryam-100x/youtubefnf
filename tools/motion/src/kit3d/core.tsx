@@ -13,7 +13,7 @@
 //             `threshold` (nothing glows but real highlights), the tone map (Khronos PBR Neutral by default: the logo's and the
 //             cover's own colours stay true under white light), a vignette and a grain seeded by the frame (deterministic)
 //   cam       {pos, target, fov, up?}: the pieces compute it from the frame; `project(cam, p)` puts an HTML label on a 3D point
-//             with the same math (text stays HTML, Archivo: kit3's type)
+//             with the same math (text stays HTML, the look's display family: kit3's type)
 //
 // Rules the core keeps for every piece (sources in standard/3D.md §3):
 //   - nothing animates by itself: no useFrame for motion, no clock, no Math.random; every pose is f(frame) (remotion.dev/docs/three)

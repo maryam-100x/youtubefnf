@@ -153,7 +153,7 @@ level of quality, never a set of devices to repeat. The brand (type, colours, ca
 
 ## One design system per video
 
-Every built graphic of a video comes from one system: kit3's (`standard/KIT3.md` §1: the grid, one type family in five roles, one ink
+Every built graphic of a video comes from one system: kit3's (`standard/KIT3.md` §1: the grid, the look's fonts in five roles, the look's ink
 and the creator's one accent, one card, one credit line, one motion set, the never-list). Eight hands building with eight looks (five
 credit styles, four ink colours, type from 22 to 220 px, every component its own stage) is what an amateur film looks like. A graphic that
 needs something the system lacks gets it added to kit3 first, then used. Design and coherency are objective: an amateur-looking graphic,
@@ -193,9 +193,9 @@ real thing we could show? Then show the thing. 3. Could this frame illustrate an
 4. How many tells from the table? Two or more: redo. 5. Does any number or proportion claim something nobody measured? Source it or
 remove it.
 
-**What premium is made of:** the footage is the palette (graphics take their colour from the shot they sit on; warm white ink, plain
-black for scrims and shadows, the one accent only on the thing the voice names); one type family, sentence case, tabular figures with
-units; materials: the shot itself, page captures and the subject's own interface, cut-outs from real photos and frames with contact
+**What premium is made of:** the footage is the palette (graphics take their colour from the shot they sit on; the look's ink, plain
+black for scrims and shadows, the one accent only on the thing the voice names); the look's fonts only, sentence case, tabular figures
+with units; materials: the shot itself, page captures and the subject's own interface, cut-outs from real photos and frames with contact
 shadows that match the shot's light, real effect plates (smoke, sparks, dust) on black or with alpha, real data imagery (satellite,
 microscopy), real 3D renders of free (CC0) scenes, paper scans for maps and documents; depth in three planes (the footage at the back,
 defocused when something in front is speaking; the subject in the middle; the annotation at the front, attached to the subject, never a
@@ -306,8 +306,8 @@ media side `MEDIA/videos/<video>/`, its pictures and clips under the public dir 
     must show the words). The pieces come from kit3 (`import {...} from '../kit3'`, never copied: `standard/KIT3.md`); a video's own
     graphics file holds only that video's own ideas; 3D once or twice a video (`standard/3D.md`); kit 2 only where kit3 has no form for the
     idea (`standard/GRAPHICS_KIT2.md`). Footage only through `lib.tsx`'s `Clip` (never below 1.0x, skips stray edge frames, writes the clip
-    log the checks read). The end: the subscribe ask at a real break, the house sign-off (`SignOff` in `tools/motion/src/house/signoff.tsx`: LIKE on "like", the comment card on
-    "comments") on the last line, then the fade. Type-check: `npx tsc --noEmit -p .`.
+    log the checks read). The end: the subscribe ask at a real break, the sign-off in the look's design (`SignOff` in `tools/motion/src/house/signoff.tsx`: the like on "like", the
+    comment on "comments") on the last line, then the fade. Type-check: `npx tsc --noEmit -p .`.
     **The reasons above each shot**, read by the checks: `// subject: <label> x y w h` (the named thing in the picture file's pixels;
     `-> x y w h` for a glide) on every still and every cropped or zoomed clip; `// art: <why no real picture shows it>` on artwork;
     `// card: <why the text itself is the point>`; `// zoom: <why>`; `// device: <why this line needs it>`; `// stamp: <why it is the

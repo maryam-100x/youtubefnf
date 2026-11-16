@@ -83,7 +83,7 @@ where a sheet starts, which score.py's measures above then confirm or move.
 | `mark` | a highlight lights (a phrase or a thing marked) | -14 | on the light's first frame, `sync=0.0`; one per lit phrase |
 | `count_up` | a number counting up | -10 | only under digits that visibly roll, cut to the count's length |
 | `number_land` | a number or date landing on screen | -10 | on the landing frame |
-| `flash_open` | a Short's frame 0, the white flash open | 0 | alone at frame 0 |
+| `flash_open` | a Short's frame 0, the flash open | 0 | alone at frame 0 |
 | `reveal` | a big reveal (pure sub) | -13 | on the reveal |
 | `bass_drop` | a statement drop, a heavy percussive hit (the same one for every drop) | -7 | on the statement's key word |
 | `black_cut` | a low suspense stinger on a cut to black | -8 | on the cut to black |

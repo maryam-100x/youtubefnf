@@ -16,7 +16,8 @@ main chat runs it; the Shorts chat never does (it reads its line in `STATUS_SHOR
 
 ## What is the creator's
 - **Their files:** `STATUS.md`, `STATUS_SHORTS.md`, `HANDOFF.md`, `log/`, `decisions/`, `creator/`, `cases/`, `kb/`, `videos/` (all but
-  `videos/_template/`), `tools/motion/src/brand.ts`, `tools/sound/names.json`, `standard/research/LINGO.md`; each video's code in
+  `videos/_template/`), their look `tools/motion/src/look.json`, in `tools/motion/src/brand.ts` its `BRAND` and `CHANNEL` lines (the
+  rest of that file is the studio's), `tools/sound/names.json`, `standard/research/LINGO.md`; each video's code in
   `tools/motion/` (`src/<video>/`, `prep<id>*.py` and their `_clips.json`); the files the tools write as videos are made
   (`tools/motion/src/clipdurs.json`, `tools/motion/src/clipedges.json`, `tools/motion/data/*.json`); in `tools/motion/src/Root.tsx`
   their videos' registrations (both sides' registrations stay); the git-ignored ones

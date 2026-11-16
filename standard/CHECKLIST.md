@@ -40,7 +40,7 @@ gates (`standard/PIPELINE.md`) run before this; the QA report's delivery checkli
 - [ ] The first frame is the package (the payoff visible, bright), the flash open alone on frame 0.
 - [ ] A new picture every 0.5-2.2 s, each on the word it shows.
 - [ ] Captions: Whisper's spellings fixed in script.md's `## Caption fixes` (`- "17 -year -old" = "17-year-old"`); one key phrase per beat
-      marked in the VOICE line (`*key*` in the accent colour, `**hero**` for a hero pop); no big on-screen number that repeats the caption.
+      marked in the VOICE line (`*key*` in the look's caption key colour, `**hero**` for a hero pop); no big on-screen number that repeats the caption.
 - [ ] It ends right after the last word (the bar about 0.4 s; the QA gate's band 0.15-0.8 s).
 
 ## 5. Packaging

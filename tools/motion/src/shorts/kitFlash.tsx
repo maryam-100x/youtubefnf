@@ -4,7 +4,7 @@
 import React from 'react';
 import {AbsoluteFill, Img, Internals, interpolate, OffthreadVideo, staticFile, useCurrentFrame} from 'remotion';
 import {gateLog, gateOn} from '../gate';
-import {clamp, clipFps, easeIn, easeInOut, easeOut, fitClip, FPS, INK, kf, PAPER, useT} from '../lib';
+import {clamp, clipFps, easeIn, easeInOut, easeOut, fitClip, FPS, INK, INK_RGB, kf, PAPER, useT} from '../lib';
 import {PhotoPrint, SHADOW_LIFT, settle} from './look';
 
 export type M = {src: string; iw: number; ih: number; video?: boolean};
@@ -199,11 +199,11 @@ export const Bubble: React.FC<{at: number; x: number; y: number; s?: number; tai
   );
 };
 
-// the opening flash: from white over the first 0.25 s, with its sound (every Short opens on it)
+// the opening flash: from the look's ink (src/look.json colors.ink) over the first 0.25 s, with its sound (every Short opens on it)
 export const FlashIn: React.FC = () => {
   const t = useT();
   const o = kf(t, [[0, 1], [0.25, 0]], (x) => x);
-  return o > 0 ? <AbsoluteFill style={{background: `rgba(255,255,255,${o})`}} /> : null;
+  return o > 0 ? <AbsoluteFill style={{background: `rgba(${INK_RGB},${o})`}} /> : null;
 };
 
 // cinema bars (the "main character" moment); they stay clear of the captions (y 1018-1100)

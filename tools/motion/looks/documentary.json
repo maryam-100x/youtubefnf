@@ -1,0 +1,17 @@
+{
+  "name": "Documentary",
+  "about": "Serious and editorial: a serif for headlines, square corners, no shadows, slow calm motion.",
+  "fonts": {
+    "display": {"family": "Fraunces", "weights": [500, 600, 700]},
+    "text": {"family": "IBM Plex Sans", "weights": [400, 500, 600, 700]},
+    "caption": {"family": "IBM Plex Sans", "weight": 700}
+  },
+  "type": {"display_weight": 600, "display_tracking": -0.01, "display_upper": false, "label_upper": true, "label_tracking": 0.12},
+  "colors": {"ink": "#E7E9EC", "paper": "#111315", "key": "#E8B86B", "alert": "#D9534F", "surface": "#16191C", "surface_alpha": 0.9},
+  "shape": {"radius": 4, "chip": 2, "border": 0, "shadow": "none"},
+  "motion": {"pop": 1.02},
+  "stamp": {"tilt": 0, "style": "underline"},
+  "signoff": {"design": "corner", "like": "Like", "liked": "Liked", "comment": "Comment"},
+  "subscribe": {"design": "bar", "button": "Subscribe", "done": "Subscribed"},
+  "captions": {"color": "#FFFFFF", "key": "#E8B86B", "outline": "#000000", "upper": false, "pop_from": 0.92, "pop_over": 1.02, "hero_scale": 1.6}
+}

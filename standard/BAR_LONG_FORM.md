@@ -159,22 +159,23 @@ graphic is worth alone. What the system is:
   hand-set `left:`); title-safe 96 px at the sides and 54 at the top and foot; the band under y 968 is the credit's; spacing steps 8
   (inside chips), 16 (kicker to headline, photo to caption), 24 (headline to the line under it, number to its subject), 40 (card
   padding, 48 at the sides), 64 (between pictures in a row), 96 (a picture to the text beside it).
-- **Type:** one family (Archivo), tabular figures, sentence case, normal tracking, no italics, HTML text (never SVG text). Display 168
-  px / 800 (one per frame: the number, the stamp, a year); Headline 84 / 800 (a statement, a quote up to ~70 characters); Title 52 /
+- **Type:** kit3's one family, the look's display family, tabular figures, the look's case and tracking, no italics, HTML text
+  (never SVG text). The default scale: Display 168 px at the look's display weight (one per frame: the number, the stamp, a year);
+  Headline 84 at the same weight (a statement, a quote up to ~70 characters); Title 52 /
   700 (names on pictures, a number's subject, longer quotes); Label 40 / 600 (kickers, captions, rows: the smallest anything to be
   read may be); Meta 26 / 500 (the credit only). Caps only in a stamp. Words are written to fit (a headline line ~24 characters in an
   820-px block), never shrunk to fit.
-- **Colour:** ink `#F4EFE6` for all text and marks, 66% for muted lines, 30% for a quote's words not said yet; the creator's one
-  accent (`tools/motion/src/brand.ts`) only on what the voice names now, at most one accent thing a frame (two only when the voice
-  names both), never on decoration; black for every dim and shadow; the one card's surface black at 88%.
-- **One card** (radius 12, padding 40 / 48, shadow `0 2px 6px rgba(0,0,0,.35), 0 28px 72px rgba(0,0,0,.55)`, no border, no glow;
-  760-820 wide beside a picture, up to 1200 alone), one card a frame; chips radius 6. A card holds text; a cut-out never stands on a
-  card, a clip never goes in one.
+- **Colour:** the look's ink (`tools/motion/src/look.json`) for all text and marks, 66% for muted lines, 30% for a quote's words not
+  said yet; the creator's one accent (`tools/motion/src/brand.ts`) only on what the voice names now, at most one accent thing a frame
+  (two only when the voice names both), never on decoration; black for every dim and shadow; the one card in the look's surface.
+- **One card** (the look's radius, padding 40 / 48, the look's shadow, no border, no glow; 760-820 wide beside a picture, up to 1200
+  alone), one card a frame; chips in the look's chip shape. A card holds text; a cut-out never stands on a card, a clip never goes in
+  one.
 - **Pictures:** the ground under a built graphic is the shot's own footage, full frame and running, defocused 8 px, dimmed to 42%,
   scaled 1.04, a soft vignette (`Stage`); consecutive built shots on grounds of different colour (four small objects in a row on the
   same murky blur read as a slide deck). Rows of cut-outs: one height, widths from their visible pixels, 64 px between visible
   figures, centred while items arrive, one floor with a contact shadow under each, names under them, never overlapping, never a
-  straight cut edge inside the frame (`Row`). Photos whole at their own shape, radius 12, at most 1.3x their pixels, a caption under
+  straight cut edge inside the frame (`Row`). Photos whole at their own shape, the look's radius, at most 1.3x their pixels, a caption under
   (who or what; when, where). Logos alone, centred to the eye, about 280 px tall, never under text or half hidden.
 - **Motion** (`tools/motion/src/house/motion.tsx` `EASE`): entrances 0.40 s on the enter curve, rising 32 px (cut-outs 56), starting
   0.06 s before their word; text 0.30 s, a block's parts 0.08 s apart; exits rare and quicker (0.25 s); a move on screen 0.90 s, a row
@@ -563,9 +564,9 @@ the promise is said and shown before 0:40; the minute ends on a finished sentenc
   receipt, varied, never the same card twice close together; no device spreads across the film; footage never repeats inside it. A
   version 1 should already be the finished video: pictures on their words and the voice's pauses are craft and checkable, so they
   never reach the creator wrong; taste (a song, a look) is the creator's to judge.
-- **The end:** the subscribe ask at a real break, its card popping on the ask's own first word; the video ends on its strongest fact,
-  then the like and comment sign-off with the house SignOff on screen (LIKE pressed on "like", the comment card on "comments"; gate
-  B26 OUTRO), then a fade to black and silence.
+- **The end:** the subscribe ask at a real break, the look's subscribe design popping on the ask's own first word; the video ends on
+  its strongest fact, then the like and comment sign-off with `SignOff` on screen in the look's design (the like lands on "like", the
+  comment on "comments"; gate B26 OUTRO), then a fade to black and silence.
 - **What sank videos below the bar:** one source frozen for most of the length (13.9 cuts a minute, 51% of shots 4 s or more); a
   promised span skimmed; text cards and number cards where the thing existed as a picture; graphics drawn from shapes; zooms into
   nothing and shots opening on crops; one effect on every number until the ears hurt; clips cut half a second long; marks drifting on

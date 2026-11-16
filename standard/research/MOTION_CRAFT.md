@@ -106,7 +106,7 @@ the motion lab (`standard/research/MOTION_LAB.md`) against a reference frame.*
 - `Clip` (OffthreadVideo with edge-safe trims), `Still`/`useMove` (Ken Burns), `useBlurIn` (22 px → 0 in 0.3 s), `Vignette` (radial
   gradient), `Grain` (SVG feTurbulence, reseeded every 2 frames, overlay at 7%), `Dust` (noise2D specks), `Glitch` (RGB split + 7
   slices), `Flash`, `LightBar` (CSS gradient sweep, screen), `Letterbox`.
-- Fonts: Anton, Montserrat, Space Grotesk; colours from the brand tokens in `tools/motion/src/brand.ts`.
+- Fonts and colours from the creator's look (`tools/motion/src/look.json`) and the accent in `tools/motion/src/brand.ts`.
 
 The shared kits are kit3 (`standard/KIT3.md`), graphics kit 2 (`standard/GRAPHICS_KIT2.md`) and the Shorts kit
 (`tools/motion/src/shorts/kitS.tsx`). Before them, per-video kits (not shipped) held these techniques, named here because the catalogue

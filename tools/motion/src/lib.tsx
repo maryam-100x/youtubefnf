@@ -17,13 +17,10 @@ import {noise2D} from '@remotion/noise';
 import clipDurs from './clipdurs.json';
 import clipEdges from './clipedges.json';
 import {gateLog, gateOn} from './gate';
-import {loadFont as loadAnton} from '@remotion/google-fonts/Anton';
-import {loadFont as loadMontserrat} from '@remotion/google-fonts/Montserrat';
-import {loadFont as loadSpace} from '@remotion/google-fonts/SpaceGrotesk';
+import {DISPLAY, LOOK, TEXT} from './look';
 
-export const ANTON = loadAnton().fontFamily;
-export const MONT = loadMontserrat('normal', {weights: ['600', '800', '900']}).fontFamily;
-export const SPACE = loadSpace('normal', {weights: ['500', '600', '700']}).fontFamily;
+// the creator's look (src/look.json): DISPLAY for headlines and numbers, TEXT for small type; LOOK for the rest
+export {DISPLAY, LOOK, TEXT};
 // the creator's colours (brand.ts, set at setup): the accent, light ink, the dark paper ground, the Shorts' key-phrase colour
 export {ACCENT, ACCENT_RGB, ON_ACCENT, INK, INK_RGB, PAPER, PAPER_RGB, KEY, KEY_RGB, CHANNEL} from './brand';
 // REMOTION_FPS=30 renders a composition at 30 fps (for 30-fps source footage on a busy CPU); everything here is in seconds and converts with FPS

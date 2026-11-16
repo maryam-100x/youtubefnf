@@ -7,7 +7,12 @@ import {feature, mesh} from 'topojson-client';
 import land50 from 'world-atlas/land-50m.json';
 import countries50 from 'world-atlas/countries-50m.json';
 import {FPS, clamp} from '../lib';
-import {ACCENT, INK} from '../brand';
+import {ACCENT, INK, PAPER, mix} from '../brand';
+import {TEXT} from '../look';
+
+// the globe's tones, all from the look's paper and ink (src/look.json)
+const SKY0 = mix(PAPER, INK, 0.06), SKY1 = mix(PAPER, '#000000', 0.5), SEA0 = mix(PAPER, INK, 0.12), SEA1 = mix(PAPER, '#000000', 0.3);
+const LANDC = mix(PAPER, INK, 0.24), EDGE = mix(PAPER, INK, 0.55), ATMO = mix(PAPER, INK, 0.6);
 import {EASE} from './motion';
 
 const LAND = feature(land50 as never, (land50 as never as {objects: {land: never}}).objects.land);
@@ -45,12 +50,12 @@ export const Globe: React.FC<{dur: number; pins?: Pin[]; routes?: Route[]; look?
     return {d: pts.length > 1 ? 'M' + pts.map((q) => q.join(',')).join('L') : '', head: pts[pts.length - 1], p};
   };
   return (
-    <AbsoluteFill style={{background: 'radial-gradient(ellipse at 50% 45%, #111a24 0%, #05080c 78%)'}}>
+    <AbsoluteFill style={{background: `radial-gradient(ellipse at 50% 45%, ${SKY0} 0%, ${SKY1} 78%)`}}>
       <svg width={1920} height={1080}>
         <defs>
-          <radialGradient id="g-sea" cx="38%" cy="32%" r="75%"><stop offset="0%" stopColor="#1b2c3d" /><stop offset="100%" stopColor="#070d14" /></radialGradient>
+          <radialGradient id="g-sea" cx="38%" cy="32%" r="75%"><stop offset="0%" stopColor={SEA0} /><stop offset="100%" stopColor={SEA1} /></radialGradient>
           <radialGradient id="g-atmo" cx="50%" cy="50%" r="50%">
-            <stop offset="88%" stopColor="#7fa6d6" stopOpacity="0" /><stop offset="93%" stopColor="#7fa6d6" stopOpacity="0.22" /><stop offset="100%" stopColor="#7fa6d6" stopOpacity="0" />
+            <stop offset="88%" stopColor={ATMO} stopOpacity="0" /><stop offset="93%" stopColor={ATMO} stopOpacity="0.22" /><stop offset="100%" stopColor={ATMO} stopOpacity="0" />
           </radialGradient>
           <radialGradient id="g-light" cx="34%" cy="28%" r="80%"><stop offset="0%" stopColor="#ffffff" stopOpacity="0.10" /><stop offset="55%" stopColor="#000000" stopOpacity="0" /><stop offset="100%" stopColor="#000000" stopOpacity="0.45" /></radialGradient>
           <filter id="g-glow"><feGaussianBlur stdDeviation="5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
@@ -58,8 +63,8 @@ export const Globe: React.FC<{dur: number; pins?: Pin[]; routes?: Route[]; look?
         <circle cx={cx} cy={cy} r={scale * 1.09} fill="url(#g-atmo)" />
         <path d={path({type: 'Sphere'} as never) ?? ''} fill="url(#g-sea)" />
         <path d={path(geoGraticule10()) ?? ''} fill="none" stroke="#ffffff" strokeOpacity={0.045} strokeWidth={1} />
-        <path d={path(LAND as never) ?? ''} fill="#3a4652" />
-        <path d={path(BORDERS as never) ?? ''} fill="none" stroke="#8a98a6" strokeOpacity={0.35} strokeWidth={0.7} />
+        <path d={path(LAND as never) ?? ''} fill={LANDC} />
+        <path d={path(BORDERS as never) ?? ''} fill="none" stroke={EDGE} strokeOpacity={0.35} strokeWidth={0.7} />
         <path d={path({type: 'Sphere'} as never) ?? ''} fill="url(#g-light)" />
         {routes.map((r, i) => {
           const a = arc(r);
@@ -80,7 +85,7 @@ export const Globe: React.FC<{dur: number; pins?: Pin[]; routes?: Route[]; look?
             <g key={i} opacity={o}>
               <circle cx={q[0]} cy={q[1]} r={7} fill={accent} />
               <circle cx={q[0]} cy={q[1]} r={7 + 20 * pulse} fill="none" stroke={accent} strokeOpacity={0.6 * (1 - pulse)} strokeWidth={2} />
-              <text x={q[0] + 18} y={q[1] - 16} fill={INK} style={{font: '800 30px Montserrat, Arial', letterSpacing: 2}}>{p.name}</text>
+              <text x={q[0] + 18} y={q[1] - 16} fill={INK} style={{font: `700 30px ${TEXT}`, letterSpacing: 1}}>{p.name}</text>
             </g>
           );
         })}

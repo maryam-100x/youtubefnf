@@ -25,7 +25,7 @@ import {Lit} from './text';
 import {Picture} from './pictures';
 
 export const Odometer: React.FC<{value: number; max: number; decimals?: number; group?: boolean; lh?: number; weight?: number}> = ({value,
-  max, decimals = 0, group = true, lh = TYPE.display.lineHeight, weight = 800}) => {
+  max, decimals = 0, group = true, lh = TYPE.display.lineHeight, weight = TYPE.display.fontWeight}) => {
   const fonts = useFontsReady();
   const scale = Math.pow(10, decimals);
   const n = Math.max(0, value * scale);
@@ -103,10 +103,10 @@ export const NumberBeside: React.FC<Beside & {d: number; value: number; at: numb
   if (!fonts) return <Stage dur={d} ground={ground} img={img} start={start} dim={dim} credit={credit} source={source} />;
   const enter = Math.max(0, at - (fixed ? 0.06 : 0.08));
   const sz = size ?? TYPE.display.fontSize;
-  const dw = Math.max(...'0123456789'.split('').map((c) => textW(c, 100, 800))) / 100;
+  const dw = Math.max(...'0123456789'.split('').map((c) => textW(c, 100, TYPE.display.fontWeight))) / 100;
   const digits = value.toFixed(decimals ?? 0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  const row = textW((prefix ?? '') + (suffix ?? ''), sz, 800) + digits.length * dw * sz + DS.S.m
-    + textW(unit, TYPE.headline.fontSize, 800, TYPE.headline.letterSpacing);
+  const row = textW((prefix ?? '') + (suffix ?? ''), sz, TYPE.display.fontWeight) + digits.length * dw * sz + DS.S.m
+    + textW(unit, TYPE.headline.fontSize, TYPE.headline.fontWeight, TYPE.headline.letterSpacing);
   const sub = textW(subject, TYPE.title.fontSize, TYPE.title.fontWeight);
   const l2 = line ? textW(line.join(''), TYPE.title.fontSize, TYPE.title.fontWeight) : 0;
   const kk = kicker ? textW(kicker, TYPE.label.fontSize, TYPE.label.fontWeight) : 0;

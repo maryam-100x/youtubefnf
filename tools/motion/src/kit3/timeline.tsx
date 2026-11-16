@@ -1,6 +1,6 @@
 // kit3 · Timeline: dates on one line at their TRUE distances (three dates over 61 days, 45 then 16 apart, sit 45 and 16 parts apart),
 // each landing on its words with what it was; `span` lights the stretch the words name (a line that marks something).
-// By construction (layout.timelineLayout, unit-tested): each label measured in Archivo, centred under its dot; a label that would touch
+// By construction (layout.timelineLayout, unit-tested): each label measured in the look's display family, centred under its dot; a label that would touch
 // the one before it goes above the line instead; one that touches on both sides is refused (the dates are too close for words: show
 // fewer); the first and last labels stay inside the content box (the dots keep their true places), so no two labels run into each
 // other (gate B13).

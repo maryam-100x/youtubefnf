@@ -238,8 +238,8 @@ blurred frame; a grid of items plopping in; an opening that shows all its frames
 techniques hold.
 
 **PI80** (long form) FLAGGED: the like and comment pop-ups missing at the end; a subscribe pop-up 5 s before the spoken ask -> the line:
-every long video's last line carries the house sign-off (like pressed on "like", the comment card on "comments"); a pop-up lands on its
-spoken word.
+every long video's last line carries the sign-off in the look's design (the like on "like", the comment on "comments"); a pop-up lands
+on its spoken word.
 
 **PI81** FLAGGED: speech bubbles stacked on top of each other -> the line: one at a time.
 
@@ -335,12 +335,12 @@ the page), sharp, with its number lit on it.
 and gaps; a caption squeezed under a picture -> the line: text sits on calm ground, proportionate, with even gaps; sized first, then
 placed; where things meet they layer, nothing shrunk to fit.
 
-**PI115** FLAGGED: a title card that looked unprofessional; PASSED: a thin, white title card chosen over three heavier designs -> the
+**PI115** FLAGGED: a title card that looked unprofessional; PASSED: a thin, plain title card chosen over three heavier designs -> the
 line: clean type over heavy styling.
 
-**PI116** (long form) FLAGGED: highlights in the Shorts' yellow in a long video; a speaker's quote shown plainly, where the fix asked
-for was a big speech bubble with its key words in the brand accent colour -> the line: key words in long-form text use the brand accent;
-Shorts captions keep their own colour.
+**PI116** (long form) FLAGGED: highlights in the Shorts' caption key colour in a long video; a speaker's quote shown plainly, where the
+fix asked for was a big speech bubble with its key words in the brand accent colour -> the line: key words in long-form text use the
+brand accent; Shorts captions keep their own colour.
 
 **PI117** FLAGGED: a circle added over a detail already zoomed in, under a source clip's own subtitled line; PASSED: the subtitle alone
 -> the line: other people's lines are subtitled at the bottom with the speaker's name, and need nothing more.
@@ -395,7 +395,8 @@ works.
 split across two captions; a last caption ending in a dash; captions off-centre in a split layout -> the line: captions are full words,
 1:1 with the voice, one fixed size, no punctuation but "?", a name kept together, dead centre.
 
-**PI141** FLAGGED: captions in another colour than yellow -> the line: the captions stay the industry-standard yellow.
+**PI141** FLAGGED: captions in another colour than the chosen caption colours -> the line: the captions stay in the look's caption
+colours on every Short.
 
 **PI142** FLAGGED: text hidden behind the phone's status bar (three uploads lost to it) -> the line: nothing in the status bar's zone;
 text sits mid-screen, or at the top well below the status bar.

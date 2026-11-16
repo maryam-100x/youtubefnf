@@ -1,7 +1,8 @@
 # kit3: the house kit for long videos
 
 *Part of `STANDARD.md`, beside `standard/LONG_FORM.md`. Code: `tools/motion/src/kit3/`. kit3 is two things at once: **the one look**
-every built graphic of a long video has (section 1: the design system, its numbers in `tokens.ts`, its colours in `src/brand.ts`), and
+every built graphic of a long video has (section 1: the design system, its numbers in `tokens.ts`, its fonts, colours and shapes from
+the creator's look in `src/look.json`, the accent in `src/brand.ts`), and
 **the one set of pieces** that draw it (sections 2-6), each existing once, with every known fix, its rules enforced by the code.*
 
 **Why it exists.** When every section of a film carries its own copy of the same pieces (a page card in five graphics files, a footage
@@ -34,42 +35,43 @@ nothing in the never-list (1.9) is on screen.
 Placement is never a hand-set `left:` number for a picture or a group: a row goes through `Row` (it measures), a picture and its text
 through `Split` (flexbox centres the group by its real widths).
 
-### 1.2 Type: one family (Archivo)
-One family, tabular figures on every number, sentence case, normal tracking, no italics. `type(k)` gives a role's whole font style.
+### 1.2 Type: the look's display family
+One family in every role: the look's display family (`src/look.json`, `fonts.display`), at the look's display weight for Display and
+Headline. Tabular figures on every number; the look's case (sentence case, or capitals when the look sets `display_upper`) and its
+display tracking; no italics. `type(k)` gives a role's whole font style. The table is the default scale.
 
 | Role | Size | Weight | Line height | Tracking | Used for |
 |---|---|---|---|---|---|
-| Display | 168 px | 800 | 0.92 | -0.02 em | ONE per frame: the number (`BigNumber`), the stamp (fitted, at most 168), a year |
-| Headline | 84 px | 800 | 1.0 | -0.01 em | the statement, a quote up to 70 characters, a number's unit |
-| Title | 52 px | 700 | 1.12 | 0 | names on pictures, a number's subject, a list's title, quotes past 70 characters |
+| Display | 168 px | the look's display weight | 0.92 | the look's display tracking | ONE per frame: the number (`BigNumber`), the stamp (fitted, at most 168), a year |
+| Headline | 84 px | the look's display weight | 1.0 | half the display tracking | the statement, a quote up to 70 characters, a number's unit |
+| Title | 52 px | 700 (the nearest the family has) | 1.12 | 0 | names on pictures, a number's subject, a list's title, quotes past 70 characters |
 | Label | 40 px | 600 (700 in list rows) | 1.2 | 0 | kickers, captions, list rows, the line under a headline; **the smallest size anything to be read may have** |
 | Meta | 26 px | 500 | 1.25 | 0 | the credit line, nothing else |
 
-- Caps only in a Stamp (it is a slogan); everywhere else sentence case. No tracked-out caps "eyebrows" above headings.
+- Caps only in a Stamp (it is a slogan); everywhere else the look's case (sentence case, or capitals in a look that sets them). No tracked-out caps "eyebrows" above headings.
 - A headline line holds about 24 characters at 84 px in an 820-px block, a label line about 42 in the same block: write to fit, never
   shrink the type to make words fit (only the Stamp fits itself).
 - Text is HTML, never SVG `<text>`: SVG text in a graphic came out clipped on every third frame of a render while the HTML beside it
   was fine (lines and shapes may stay SVG).
 
-### 1.3 Colour (from `src/brand.ts`, set at setup)
+### 1.3 Colour (the look's colours from `src/look.json`, the accent from `src/brand.ts`, both set at setup)
 | Token | Value | Use |
 |---|---|---|
-| Ink | `INK` (warm white, `#F4EFE6` by default) | all text, all marks' outlines |
+| Ink | `INK` (the look's ink) | all text, all marks' outlines |
 | Ink, muted | ink at 66% (`DS.INK2`) | kickers, units under things, ranks, a caption's second line |
 | Ink, unlit | ink at 30% (`DS.INK3`) | a quote's words not said yet |
 | **The accent** | `BRAND` (the creator's accent) | **the one accent, only on what the voice names now**: the number, the lit word, the hero row, the named cut-out's tag. At most one accent thing per frame (two only when the voice names both). Never on decoration |
 | On the accent | `ON_ACCENT` | text on an accent fill |
-| Surface | black at 88% (`DS.SURFACE`) | the one card |
+| Surface | the look's surface (`DS.SURFACE`) | the one card |
 | Black | `#000` | every dim, every shadow |
 
 Never: a second accent, gradients as decoration, glows, coloured shadows, borders on cards, glass.
 
 ### 1.4 The card
-- One card (`Card`): surface fill, radius 12, padding 40 top and bottom and 48 at the sides (quotes 44 / 56), shadow
-  `0 2px 6px rgba(0,0,0,.35), 0 28px 72px rgba(0,0,0,.55)`, no border, no glow. Widths from the grid: 760-820 beside a picture, 1100
-  for a list, up to 1200 alone.
+- One card (`Card`): the look's surface fill, the look's radius, padding 40 top and bottom and 48 at the sides (quotes 44 / 56), the
+  look's shadow, no border, no glow. Widths from the grid: 760-820 beside a picture, 1100 for a list, up to 1200 alone.
 - One card per frame (two only for a side-by-side comparison of two equal things).
-- Chips (`Tag`, the credit's backing): radius 6, padding 8 / 22 (a name) or 4 / 12 (the credit).
+- Chips (`Tag`, the credit's backing): the look's chip shape, padding 8 / 22 (a name) or 4 / 12 (the credit).
 - A card holds text. A cut-out never stands on a card (the gate's CUTOUT_ON_CARD); a clip never goes in one.
 
 ### 1.5 Pictures
@@ -78,7 +80,7 @@ Never: a second accent, gradients as decoration, glows, coloured shadows, border
 | **Clips** | full frame, filling the screen, always: never in a panel, never cropped to hide an overlay, a picture-in-picture, a ticker or a label; a letterboxed source shows whole with its own bars |
 | **The ground under a built graphic** (`Stage`) | the shot's own footage, full frame, running the whole shot (the gate's STILL), defocused 8 px and dimmed to 42%, scaled 1.04 to hide the blur's edge, a soft edge vignette (black 45% at the corners); or the graphic's own picture blurred. Plain near-black only when no footage fits the words |
 | **Cut-outs** (`Row`, `Cutout`) | one height per row (the visible figure's height); each width from its own visible pixels (alpha over 16, measured in the browser: transparent margins don't count); 64 px between every pair of visible figures; the row centred on x 960 (or its column) and kept centred while its items arrive one by one; a row wider than 1680 shrinks as a whole. A size per item only when the words compare real sizes. **floor** (things): one floor line (by default the one that centres figures and names together on y 532), a contact shadow under each (an ellipse 110% of its width, 44 px tall, black 62% to 0), its name under it (title, 28 px below the floor). **bleed** (people cut at the legs): the cut 40 px under the frame's foot, no contact shadow, the name on a chip 160 px above the foot. Every cut-out a drop shadow `0 22px 34px` black 55%. Never two figures overlapping, never a straight cut edge inside the frame, never a cut-out over its own blurred copy |
-| **Photos** (`PhotoFrame`) | shown whole at their own shape (no crop), radius 12, the card's shadow, at most 1.3x their own pixels (it caps itself), 600-760 px tall beside text; the caption under it (label: who or what; muted line: when, where). Full bleed only when the photo is 1477 px wide or more (1.3x), as a `Stage img` |
+| **Photos** (`PhotoFrame`) | shown whole at their own shape (no crop), the look's radius, the look's shadow, at most 1.3x their own pixels (it caps itself), 600-760 px tall beside text; the caption under it (label: who or what; muted line: when, where). Full bleed only when the photo is 1477 px wide or more (1.3x), as a `Stage img` |
 | **Logos** (`LogosLand`) | alone, centred, about 280 px tall (or 640 wide when wide), clean; never under text, never under a stamp, never half hidden |
 | **Pages** (`Page`) | the page whole, or its lit lines framed whole: never a fragment that says nothing |
 
@@ -106,7 +108,8 @@ Never: a second accent, gradients as decoration, glows, coloured shadows, border
 
 ### 1.7 Credits: one style, one place
 `Credit` (also built into `Stage` as `credit` / `source`): ONE line, bottom right, its right edge on x 1824 (title-safe 96) and its foot
-on y 1026 (54), meta 26 / 500, ink at 80%, on a quiet chip (black 50%, radius 6) so it reads over anything. Format: `whose picture  ·
+on y 1026 (54), the meta role (the look's text font), the look's ink at 80%, on a quiet chip (black 50%, the look's chip shape) so
+it reads over anything. Format: `whose picture  ·
 Source: where the number or quote comes from`, e.g. `The maker's official video  ·  Source: the maker's annual report`. Never two lines,
 never at the top, never centred, never italic (the gate's CREDITS_STACKED; B9 reads it against the clip's master: name the footage's
 real source).

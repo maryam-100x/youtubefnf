@@ -90,9 +90,9 @@ different problems.
 
 ## Sound
 
-**SH15 · Every Short opens on the white flash, with flash_open alone.** The first frame comes in with the white flash-in animation and
-the house `flash_open` sound, whatever tool builds it; frame 0 is flash_open only, with no slam or metal hit layered on top. The flash
-is the Shorts' signature open.
+**SH15 · Every Short opens on the flash, with flash_open alone.** The first frame comes in with the flash-in animation and the house
+`flash_open` sound, whatever tool builds it; frame 0 is flash_open only, with no slam or metal hit layered on top. The open is the
+Shorts' signature; how its flash looks is the creator's look.
 
 **SH16 · Sounds on every key moment.** A bass drop plus an instant zoom on a punchline claim, drops on claims and reveals, pops on
 things appearing and a fitting effect where the line invites one. A Short without its hits feels flat.
@@ -170,9 +170,9 @@ framing sheet. A pan without a job makes the eye chase nothing.
 behind a text is the document itself in shadow or nothing busy (a spotlight), never a dim menu screen. The eye goes to the centre of a
 phone first.
 
-**SH28 · Shorts use white and the caption key colour only.** Every designed colour in a Short (stamps, counts, crosses, marks, name
-dashes, bars) is the caption key colour (a yellow, a `brand.ts` token) or white, whatever a long video's colour theme. A theme colour
-plus one odd accent word looks off.
+**SH28 · Shorts use the captions' two colours only.** Every designed colour in a Short (stamps, counts, crosses, marks, name dashes,
+bars) is the captions' plain colour or their key colour (both the look's, `tools/motion/src/look.json`), whatever a long video's colour
+theme. A theme colour plus one odd accent word looks off.
 
 ## Graphics
 

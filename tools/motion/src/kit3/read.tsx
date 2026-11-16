@@ -2,7 +2,7 @@
 // page can't be shown sharp at a readable size; when the page can, Page is the receipt (show the thing itself).
 //
 // By construction:
-//  - the card fits its text: every line is measured in Archivo; the size is headline (84) when the whole text is 70 characters or less and
+//  - the card fits its text: every line is measured in the look's display family; the size is headline (84) when the whole text is 70 characters or less and
 //    every line fits, title (52) otherwise; a line that doesn't fit at title size is refused (text running past its card, gate B13)
 //  - the words show whole from the card's first frame; only the lit phrases turn to the accent on their words (a word-by-word reveal
 //    implies the words on the card are read one by one). `reveal` (each word's time) is the one exception: only where the voice reads

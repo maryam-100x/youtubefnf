@@ -9,7 +9,7 @@
 // the old fade back where a page should arrive softly. A long page shows only its part (`crop`, the rest fading out under it) and the
 // camera can travel to the quote (`focus`), so the words read at TV size (never walls of small text).
 import React from 'react';
-import {KEY} from '../brand';
+import {INK, KEY, KEY_RGB, PAPER, mix} from '../brand';
 import {AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import {linearProgressiveBlur} from '@remotion/effects/linear-progressive-blur';
 import {MacOSCursor} from '@remotion/mac-cursors';
@@ -56,7 +56,7 @@ const Marker: React.FC<{m: Mark; k: number; w: number; light?: boolean}> = ({m, 
     mixBlendMode: 'multiply'}} />
 ) : (
   <div data-gate="mark" style={{position: 'absolute', left: m.x * k - 4, top: m.y * k + m.h * k * 0.08, height: m.h * k * 0.86, width: Math.max(0, w * k + 8),
-    background: 'linear-gradient(180deg, rgba(255,224,40,0.62), rgba(255,206,0,0.55))', mixBlendMode: 'multiply',
+    background: `linear-gradient(180deg, rgba(${KEY_RGB},0.62), rgba(${KEY_RGB},0.55))`, mixBlendMode: 'multiply',
     borderRadius: '6px 14px 8px 12px / 10px 8px 12px 6px', transform: 'rotate(-0.35deg)'}} />
 );
 
@@ -95,7 +95,7 @@ export const PageStage: React.FC<PageProps> = ({src, capW, capH, marks = [], dur
   // a cropped page fades out over its last `fadeBand` px, so the line above the band stays whole however tight the crop
   const fadeMask = crop ? `linear-gradient(180deg, #000 0px, #000 calc(100% - ${fadeBand}px), transparent 100%)` : undefined;
   return (
-    <AbsoluteFill style={{background: dark ? 'radial-gradient(ellipse at 35% 40%, #3a4148 0%, #15191c 72%)' : 'radial-gradient(ellipse at 40% 40%, #f3f1ec 0%, #cfccc4 80%)',
+    <AbsoluteFill style={{background: dark ? `radial-gradient(ellipse at 35% 40%, ${mix(PAPER, INK, 0.2)} 0%, ${mix(PAPER, '#000000', 0.1)} 72%)` : 'radial-gradient(ellipse at 40% 40%, #f3f1ec 0%, #cfccc4 80%)',
       perspective: 1400, overflow: 'hidden'}}>
       <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', opacity,
         transform: `translateX(${x - fx * s}px) translateY(${-fy * s}px) scale(${s}) rotateY(${tilt[0]}deg) rotateX(${tilt[1]}deg)`,

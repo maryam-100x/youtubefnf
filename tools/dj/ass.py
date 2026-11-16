@@ -23,7 +23,8 @@ def ass_colour(hexstr):
 
 def em_scale(ttf):
     """libass sizes a font by its full line height (OS/2 winAscent + winDescent), PIL by the em, so the same number draws
-    Anton at 58% of the size in the ASS. ASS Fontsize = PIL size * this (Anton: 1.733, measured 1.735 on a render)."""
+    a tall display font at 58% of the size in the ASS. ASS Fontsize = PIL size * this (one such font: 1.733, measured 1.735 on a
+    render)."""
     import struct
     data = open(ttf, "rb").read()
     tabs = {data[12 + 16 * i:16 + 16 * i]: struct.unpack(">I", data[20 + 16 * i:24 + 16 * i])[0]
@@ -31,6 +32,25 @@ def em_scale(ttf):
     upm = struct.unpack(">H", data[tabs[b"head"] + 18:tabs[b"head"] + 20])[0]
     win_ascent, win_descent = struct.unpack(">HH", data[tabs[b"OS/2"] + 74:tabs[b"OS/2"] + 78])
     return (win_ascent + win_descent) / upm
+
+
+def ass_family(ttf):
+    """The family name libass matches an ASS Fontname against: the file's own name-table family (nameID 1, the Windows record). A
+    static weight of a family carries its weight in it ("Figtree ExtraBold"); the bare family ("Figtree") falls back to a system font
+    (measured: the caption drew in Arial)."""
+    import struct
+    data = open(ttf, "rb").read()
+    tabs = {data[12 + 16 * i:16 + 16 * i]: struct.unpack(">I", data[20 + 16 * i:24 + 16 * i])[0]
+            for i in range(struct.unpack(">H", data[4:6])[0])}
+    o = tabs[b"name"]
+    count, strings = struct.unpack(">HH", data[o + 2:o + 6])
+    found = {}
+    for i in range(count):
+        plat, enc, lang, nid, ln, off = struct.unpack(">HHHHHH", data[o + 6 + 12 * i:o + 18 + 12 * i])
+        if nid == 1:
+            raw = data[o + strings + off:o + strings + off + ln]
+            found.setdefault(plat, raw.decode("utf-16-be" if plat in (0, 3) else "mac_roman", errors="replace"))
+    return found.get(3) or found.get(0) or found.get(1) or ""
 
 
 def ass_time(t):
@@ -151,9 +171,9 @@ def write(ctx, chunks, heroes, path):
     hero_size = int(size * v.get("hero_scale", 2.3))
     ol = max(4, int(size * 0.09))
     white, key, outline = ass_colour(b["caption_color"]), ass_colour(b.get("caption_key", b["yellow"])), ass_colour(b["outline"])
-    fam = b["fonts"]["heavy"].split(":")[0]
     x, y, hy = ctx.W // 2, int(ctx.H * v["caption_y"]), int(ctx.H * v.get("hero_y", 0.42))
     hf = font(ctx.cfg, "heavy", hero_size)
+    fam = ass_family(hf.path) or b["fonts"]["heavy"].split(":")[0]   # the file's own family name, as libass matches it
     k = em_scale(hf.path)  # sizes below are PIL sizes (what plan() measured); the ASS needs them in its own unit
     # YCbCr Matrix: None = colours are plain RGB. Without it libass assumes TV-range subtitles and dims them on the transparent
     # Resolve layer (the caption yellow 255,210,31 came out 235,196,43); the burned-in MP4 is the same either way.
@@ -164,7 +184,9 @@ def write(ctx, chunks, heroes, path):
              f"Style: Cap,{fam},{round(size * k)},{white},{white},{outline},&H80000000,0,0,0,0,100,100,1,0,1,{ol},0,5,0,0,0,1",
              f"Style: Hero,{fam},{round(hero_size * k)},{key},{key},{outline},&H80000000,0,0,0,0,100,100,2,0,1,{int(ol * 1.8)},0,5,0,0,0,1",
              "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"]
-    pop = r"\fscx70\fscy70\t(0,70,\fscx108\fscy108)\t(70,140,\fscx100\fscy100)"
+    # each caption chunk pops in at the look's pop (look.json captions pop_from -> pop_over -> 100%, 70 ms each way)
+    pf, po = int(100 * v.get("hero_pop_from", 0.7)), int(100 * v.get("hero_pop_over", 1.08))
+    pop = rf"\fscx{pf}\fscy{pf}\t(0,70,\fscx{po}\fscy{po})\t(70,140,\fscx100\fscy100)"
     for c in chunks:
         txt = " ".join(f"{{\\c{key}}}{esc(t)}{{\\c{white}}}" if e == "key" else esc(t) for t, e in c["words"])
         lines.append(f"Dialogue: 0,{ass_time(c['start'])},{ass_time(c['end'])},Cap,,0,0,0,,{{\\an5\\pos({x},{y}){pop}}}{txt}")

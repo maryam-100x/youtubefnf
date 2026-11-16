@@ -56,8 +56,33 @@ def path_defaults(cfg):
     return cfg
 
 
+LOOK = REPO / "tools" / "motion" / "src" / "look.json"
+
+
+def apply_look(cfg):
+    """The captions' look comes from the creator's look (tools/motion/src/look.json "captions" and "fonts.caption"), the one place the
+    pictures read theirs too: its font, colours, case and pop go over [brand] and [visuals]. Without the file, tts.toml's stand."""
+    try:
+        look = json.loads(LOOK.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return cfg
+    c, f = look.get("captions", {}), look.get("fonts", {}).get("caption", {})
+    b, v = cfg.setdefault("brand", {}), cfg.setdefault("visuals", {})
+    for k_look, k_cfg in (("color", "caption_color"), ("key", "caption_key"), ("outline", "outline"), ("upper", "caption_upper")):
+        if k_look in c:
+            b[k_cfg] = c[k_look]
+    if "key" in c:
+        b["yellow"] = c["key"]
+    if f.get("family"):
+        b.setdefault("fonts", {})["heavy"] = f"{f['family']}:wght@{int(f.get('weight', 700))}"
+    for k_look, k_cfg in (("pop_from", "hero_pop_from"), ("pop_over", "hero_pop_over"), ("hero_scale", "hero_scale")):
+        if k_look in c:
+            v[k_cfg] = c[k_look]
+    return cfg
+
+
 def load_config(path=None, overrides=()):
-    cfg = tomllib.loads(config_file(path).read_text(encoding="utf-8"))
+    cfg = apply_look(tomllib.loads(config_file(path).read_text(encoding="utf-8")))
     for ov in overrides:  # "section.key=value" (value parsed as TOML, else kept as string)
         key, _, val = ov.partition("=")
         try:

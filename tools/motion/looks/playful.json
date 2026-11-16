@@ -1,0 +1,17 @@
+{
+  "name": "Playful",
+  "about": "Friendly and bright: wide round letters, big soft corners, springy motion.",
+  "fonts": {
+    "display": {"family": "Unbounded", "weights": [600, 700, 800]},
+    "text": {"family": "Outfit", "weights": [400, 500, 600, 700, 800]},
+    "caption": {"family": "Outfit", "weight": 800}
+  },
+  "type": {"display_weight": 700, "display_tracking": -0.03, "display_upper": false, "label_upper": false, "label_tracking": 0.02},
+  "colors": {"ink": "#FFFFFF", "paper": "#170F1A", "key": "#FF9BD7", "alert": "#FF4D6D", "surface": "#251628", "surface_alpha": 0.94},
+  "shape": {"radius": 28, "chip": 14, "border": 0, "shadow": "soft"},
+  "motion": {"pop": 1.12},
+  "stamp": {"tilt": -8, "style": "fill"},
+  "signoff": {"design": "bar", "like": "Like", "liked": "Liked!", "comment": "Comment"},
+  "subscribe": {"design": "corner", "button": "Subscribe", "done": "Subscribed"},
+  "captions": {"color": "#FFFFFF", "key": "#FF9BD7", "outline": "#120C22", "upper": false, "pop_from": 0.75, "pop_over": 1.12, "hero_scale": 2.0}
+}
