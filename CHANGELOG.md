@@ -5,6 +5,19 @@ brings, what to set up (in order, each command with its environment, PIPE, EDIT,
 it) and what to read; a file renamed or removed is named with what replaced it. This file is the studio's: a creator's chat never
 writes in it (their own history goes to `log/`).*
 
+## v1.7 (2026-11-16)
+- **Brings:** three fixes to the look's pieces and one to how the chat talks. Tracked text is centred to the pixel: CSS tracking adds
+  its space after the last letter too, which pushed the date, the turn card, the number, the stamp and the button labels a few
+  pixels left of centre (`TRACK_END` in `tools/motion/src/look.ts`). The "underline" stamp now sits on the look's solid card
+  surface with the bar along its bottom, so it reads on a bright sky too. The look board's header keeps a long look name on one
+  line (its description wraps instead). `CLAUDE.md`, talking to the creator: a job that spans turns says each piece of news once,
+  and the helpers behind the work are never mentioned. A folder whose chat already fixed any of these in `house/cards.tsx`,
+  `house/signoff.tsx`, `_look/LookBoard.tsx` or `shorts/kitS.tsx`: the studio's fix covers it, so their change is not re-applied
+  in the merge unless it did something more.
+- **Set up:** nothing to install. `PIPE tools/motion/look_board.py --current --scale 2` and every tile looked at; the Template
+  test render (`standard/PIPELINE.md` section 0).
+- **Read:** `CLAUDE.md`, "Talking to the creator".
+
 ## v1.6 (2026-11-16)
 - **Brings:** solid plates and clean shadows, found by looking at every tile at full size. Every look's card surface is fully solid
   (`colors.surface_alpha` 1: before, the picture showed faintly through the subscribe ask, the info cards and the question card);

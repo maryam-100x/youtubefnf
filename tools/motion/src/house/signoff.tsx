@@ -14,7 +14,7 @@ import React from 'react';
 import {AbsoluteFill, Img, staticFile} from 'remotion';
 import {easeInOut, easeOut, kf, useT} from '../lib';
 import {ACCENT, CHANNEL, INK, INK_RGB, ON_ACCENT, RADIUS, SURFACE} from '../brand';
-import {LOOK, SHADOW, SHADOW_GROUP, TEXT, labelCase, labelTrack} from '../look';
+import {LOOK, SHADOW, SHADOW_GROUP, TEXT, TRACK_END, labelCase, labelTrack} from '../look';
 
 const PATHS: Record<'like' | 'comment' | 'bell', string[]> = {
   like: ['M7 10v12', 'M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z'],
@@ -76,8 +76,8 @@ export const SignOff: React.FC<{likeAt: number; knowAt: number; commentsAt: numb
       <Icon name={icon} size={BUTTON_H * 0.44} color={on ? ON_ACCENT : INK} filled={on} />
       <div style={{display: 'grid'}}>
         {labels.map((l) => (
-          <div key={l} style={{...LABEL, gridArea: '1 / 1', fontSize: BUTTON_H * 0.39, color: on ? ON_ACCENT : INK,
-            visibility: l === shown ? 'visible' : 'hidden'}}>{l}</div>
+          <div key={l} style={{...LABEL, ...TRACK_END(LOOK.type.label_tracking), gridArea: '1 / 1', fontSize: BUTTON_H * 0.39,
+            color: on ? ON_ACCENT : INK, visibility: l === shown ? 'visible' : 'hidden'}}>{l}</div>
         ))}
       </div>
     </div>
@@ -112,7 +112,8 @@ export const SubscribeAsk: React.FC<{clickAt: number; bellAt: number; exitAt: nu
   const swing = t > bellAt && t < bellAt + 0.9 ? Math.sin((t - bellAt) * 30) * 12 * (1 - (t - bellAt) / 0.9) : 0;
   const button = (
     <div style={{...LABEL, fontSize: 30, height: 68, padding: '0 34px', display: 'flex', alignItems: 'center', borderRadius: Math.min(RADIUS, 34),
-      background: done ? `rgba(${INK_RGB},0.14)` : ACCENT, color: done ? INK : ON_ACCENT, transform: `scale(${btnS})`}}>{done ? S.done : S.button}</div>
+      background: done ? `rgba(${INK_RGB},0.14)` : ACCENT, color: done ? INK : ON_ACCENT, transform: `scale(${btnS})`}}>
+      <span style={TRACK_END(LOOK.type.label_tracking)}>{done ? S.done : S.button}</span></div>
   );
   const bell = <Icon name="bell" size={46} color={rung ? ACCENT : INK} filled={rung} style={{transform: `rotate(${swing}deg)`, transformOrigin: '50% 10%'}} />;
   if (S.design === 'corner') {
