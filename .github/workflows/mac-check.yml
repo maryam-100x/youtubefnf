@@ -1,0 +1,125 @@
+# The setup's computer part (SETUP.md steps 2-8), run on a fresh Apple-silicon Mac exactly as its macOS lines say, plus the pipeline's
+# tests, the type check and the voice sample rebuild. Lives only on the mac-check branch: a check of the studio, not part of it.
+name: mac-check
+on:
+  push:
+    branches: [mac-check]
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: macos-15
+    timeout-minutes: 180
+    env:
+      LOGS: ${{ github.workspace }}/../logs
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Outside, before
+        run: |
+          mkdir -p "$LOGS"
+          for d in "$HOME/.cache" "$HOME/.local/bin" "$HOME/.npm" "$HOME/Library/Caches" "$HOME/.config" "$HOME/Library/Application Support"; do
+            [ -e "$d" ] && find "$d" -maxdepth 2 2>/dev/null | sort > "$LOGS/before_$(echo "$d" | tr '/ ' '__').txt" || true
+          done
+          touch "$LOGS/t0"
+
+      - name: Step 2 - media root, uv, the pipeline's Python
+        run: |
+          set -euxo pipefail
+          exec > >(tee "$LOGS/step2.log") 2>&1
+          sed 's|^media = "C:/Studio".*|media = "~/Studio"|' config/paths.example.toml > config/paths.toml
+          M="$HOME/Studio"
+          curl -L --fail --create-dirs -o "$M/tmp/downloads/uv.tar.gz" https://github.com/astral-sh/uv/releases/download/0.13.6/uv-aarch64-apple-darwin.tar.gz
+          echo "60fbd5c8a1ed681845eea28d9d622fcde03c51e91a43465b64a1e17db1ed3472  $M/tmp/downloads/uv.tar.gz" | shasum -a 256 -c
+          mkdir -p "$M/apps/uv" && tar -xzf "$M/tmp/downloads/uv.tar.gz" -C "$M/apps/uv" --strip-components 1
+          "$M/apps/uv/uv" python install 3.14.0 --install-dir "$M/apps/python" --no-bin --no-registry --no-config --cache-dir "$M/cache/uv"
+          PY="$(ls -d "$M"/apps/python/cpython-3.14.0-*/bin/python3.14 | head -1)"
+          "$M/apps/uv/uv" venv tools/.venv --python "$PY" --no-config --cache-dir "$M/cache/uv"
+          tools/.venv/bin/python tools/common/paths.py --init
+
+      - name: Step 3 - Node.js and ffmpeg
+        run: |
+          set -euxo pipefail
+          exec > >(tee "$LOGS/step3.log") 2>&1
+          tools/.venv/bin/python tools/setup/apps.py
+
+      - name: Step 4 - the Python environments
+        run: |
+          set -euxo pipefail
+          exec > >(tee "$LOGS/step4.log") 2>&1
+          tools/.venv/bin/python tools/setup/envs.py
+          df -h "$HOME" | tail -1
+
+      - name: Step 5 - Remotion and the test render
+        run: |
+          set -euxo pipefail
+          exec > >(tee "$LOGS/step5.log") 2>&1
+          P=tools/.venv/bin/python
+          $P tools/common/paths.py --run --in tools/motion npm ci
+          OUT="$HOME/Studio/tmp/test_render.mp4"
+          $P tools/common/paths.py --run --in tools/motion npx remotion render src/index.ts Template "$OUT" --frames=0-179 --gl=angle \
+            || $P tools/common/paths.py --run --in tools/motion npx remotion render src/index.ts Template "$OUT" --frames=0-179 --gl=swangle
+          $P tools/common/paths.py --run ffprobe -v error -count_packets -select_streams v:0 -show_entries stream=width,height,nb_read_packets -of csv=p=0 "$OUT" | tee "$LOGS/probe.txt"
+          grep -q ",180" "$LOGS/probe.txt"
+
+      - name: Step 6 - the models
+        run: |
+          set -euxo pipefail
+          exec > >(tee "$LOGS/step6.log") 2>&1
+          tools/.venv/bin/python tools/setup/models.py
+
+      - name: Step 7 - the house sound effects
+        run: |
+          set -euxo pipefail
+          exec > >(tee "$LOGS/step7.log") 2>&1
+          tools/.venv/bin/python tools/sound/palette_from_manifest.py
+          tools/.venv/bin/python tools/sound/palette_from_manifest.py --check
+
+      - name: Step 8 - the hooks, and Bash finds the studio's programs
+        run: |
+          set -euxo pipefail
+          exec > >(tee "$LOGS/step8.log") 2>&1
+          tools/.venv/bin/python tools/hooks/install_hooks.py
+          echo '{}' | CLAUDE_ENV_FILE="$LOGS/envfile.sh" tools/.venv/bin/python tools/hooks/studio_env.py --hook
+          bash -c ". '$LOGS/envfile.sh'; command -v node ffmpeg npx uv" | tee "$LOGS/which.txt"
+          [ "$(grep -c "$HOME/Studio/apps" "$LOGS/which.txt")" = 4 ]
+
+      - name: Pipeline tests and the type check
+        run: |
+          set -euxo pipefail
+          exec > >(tee "$LOGS/tests.log") 2>&1
+          tools/.venv/bin/python -m pytest tools/pipeline/tests -q
+          bash -c '. tools/common/paths.sh; cd tools/motion && npx tsc --noEmit -p .'
+
+      - name: Voice sample rebuild (EDIT, CPU)
+        run: |
+          set -euxo pipefail
+          exec > >(tee "$LOGS/voice.log") 2>&1
+          say -o "$HOME/Studio/tmp/sample.aiff" "This is a short test of the voice sample rebuild, read by the computer, just to prove the tool runs on a Mac."
+          EDIT="$HOME/Studio/envs/edit/bin/python"
+          $EDIT tools/voice/rebuild_sample.py "$HOME/Studio/tmp/sample.aiff" --check
+          $EDIT tools/voice/rebuild_sample.py "$HOME/Studio/tmp/sample.aiff"
+          ls -la "$HOME/Studio/tmp/"
+
+      - name: Outside, after (nothing of the studio's outside its folders)
+        run: |
+          set -uo pipefail
+          exec > >(tee "$LOGS/outside.log") 2>&1
+          bad=0
+          for d in "$HOME/.cache" "$HOME/.local/bin" "$HOME/.npm" "$HOME/Library/Caches" "$HOME/.config" "$HOME/Library/Application Support"; do
+            f="$LOGS/before_$(echo "$d" | tr '/ ' '__').txt"
+            [ -e "$d" ] || continue
+            find "$d" -maxdepth 2 2>/dev/null | sort > "$f.after"
+            new=$(comm -13 "$f" "$f.after" 2>/dev/null || cat "$f.after")
+            if [ -n "$new" ]; then echo "NEW under $d:"; echo "$new" | head -20; bad=1; fi
+          done
+          du -sh "$HOME/Studio" "$GITHUB_WORKSPACE" 2>/dev/null
+          [ $bad = 0 ] || echo "::warning title=outside::the studio wrote outside its folders (see the list above)"
+
+      - name: Report a failure
+        if: failure()
+        run: |
+          L=$(ls -t "$LOGS"/*.log 2>/dev/null | head -1)
+          [ -n "$L" ] || exit 0
+          msg=$(tail -60 "$L" | cut -c1-300 | sed -e 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+          echo "::error title=$(basename "$L")::$msg"
