@@ -7,7 +7,7 @@
     "caption": {"family": "Outfit", "weight": 800}
   },
   "type": {"display_weight": 700, "display_tracking": -0.03, "display_upper": false, "label_upper": false, "label_tracking": 0.02},
-  "colors": {"ink": "#FFFFFF", "paper": "#170F1A", "key": "#FF9BD7", "alert": "#FF4D6D", "surface": "#251628", "surface_alpha": 0.94},
+  "colors": {"ink": "#FFFFFF", "paper": "#170F1A", "key": "#FF9BD7", "alert": "#FF4D6D", "surface": "#251628", "surface_alpha": 1},
   "shape": {"radius": 28, "chip": 14, "border": 0, "shadow": "soft"},
   "motion": {"pop": 1.12},
   "stamp": {"tilt": -8, "style": "fill"},

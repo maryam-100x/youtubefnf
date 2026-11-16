@@ -6,7 +6,7 @@
 //   ACCENT_TRY         inputProps.accent, a render's own accent (the look board's); null in videos
 //   DISPLAY / TEXT     the two font families (headlines, numbers, cards / labels, credits, small text), loaded
 //   DISPLAY_FONT       its loader: DISPLAY_FONT.waitUntilDone() is the true "ready" for measuring text
-//   SHADOW / SHADOW_SM the look's card shadow and a small one (chips, buttons)
+//   SHADOW / SHADOW_SM the look's card shadow and a small one (chips, buttons); SHADOW_GROUP the card shadow for a row of pieces
 //   displayCase / labelCase / labelTrack   the type's case and tracking as CSS
 import type React from 'react';
 import {getInputProps} from 'remotion';
@@ -38,9 +38,12 @@ export const displayCase = (): React.CSSProperties['textTransform'] => (LOOK.typ
 export const labelCase = (): React.CSSProperties['textTransform'] => (LOOK.type.label_upper ? 'uppercase' : 'none');
 export const labelTrack = `${LOOK.type.label_tracking}em`;
 
-const SHADOWS: Record<string, [string, string]> = {
-  soft: ['0 2px 6px rgba(0,0,0,0.3), 0 24px 64px rgba(0,0,0,0.5)', '0 2px 4px rgba(0,0,0,0.3), 0 10px 24px rgba(0,0,0,0.35)'],
-  hard: ['10px 10px 0 rgba(0,0,0,0.92)', '5px 5px 0 rgba(0,0,0,0.92)'],
-  none: ['none', 'none'],
+// the third: SHADOW as a filter for a group of pieces side by side (a row of buttons): the group casts one shadow under all of them,
+// so one piece's shadow never falls on its neighbour
+const SHADOWS: Record<string, [string, string, string]> = {
+  soft: ['0 2px 6px rgba(0,0,0,0.3), 0 24px 64px rgba(0,0,0,0.5)', '0 2px 4px rgba(0,0,0,0.3), 0 10px 24px rgba(0,0,0,0.35)',
+    'drop-shadow(0 2px 6px rgba(0,0,0,0.3)) drop-shadow(0 24px 64px rgba(0,0,0,0.5))'],
+  hard: ['10px 10px 0 rgba(0,0,0,0.92)', '5px 5px 0 rgba(0,0,0,0.92)', 'drop-shadow(10px 10px 0 rgba(0,0,0,0.92))'],
+  none: ['none', 'none', 'none'],
 };
-export const [SHADOW, SHADOW_SM] = SHADOWS[LOOK.shape.shadow] ?? SHADOWS.soft;
+export const [SHADOW, SHADOW_SM, SHADOW_GROUP] = SHADOWS[LOOK.shape.shadow] ?? SHADOWS.soft;

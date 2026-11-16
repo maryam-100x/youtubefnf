@@ -98,8 +98,8 @@ const Scene: React.FC<{kind: Kind; slice?: boolean}> = ({kind, slice}) => {
       </defs>
       <rect width="1920" height="1080" fill={`url(#${id})`} />
       {kind === 'dusk' && <>
-        <circle cx="1390" cy="610" r="260" fill={`url(#${id}_glow)`} />
-        <circle cx="1390" cy="610" r="74" fill="#FFD9A6" />
+        <circle cx="1580" cy="610" r="260" fill={`url(#${id}_glow)`} />
+        <circle cx="1580" cy="610" r="74" fill="#FFD9A6" />
         <path d={ridge(7, 760, 260, 0.06)} fill="#4A3A5C" />
         <City seed={11} fill="#181626" lit={0.28} maxH={420} />
       </>}
@@ -120,11 +120,11 @@ const Scene: React.FC<{kind: Kind; slice?: boolean}> = ({kind, slice}) => {
         <path d={ridge(13, 1080, 110, 0.02)} fill="#2C4529" />
       </>}
       {kind === 'sea' && <>
-        <circle cx="960" cy="650" r="300" fill={`url(#${id}_glow)`} />
-        <circle cx="960" cy="650" r="82" fill="#FFE0B0" />
-        <rect y="650" width="1920" height="430" fill={`url(#${id}_sea)`} />
+        <circle cx="960" cy="560" r="300" fill={`url(#${id}_glow)`} />
+        <circle cx="960" cy="560" r="82" fill="#FFE0B0" />
+        <rect y="560" width="1920" height="520" fill={`url(#${id}_sea)`} />
         {[0, 1, 2, 3, 4, 5, 6].map((k) => (
-          <rect key={k} x={960 - (120 - k * 12)} y={672 + k * 26} width={(120 - k * 12) * 2} height={5} fill="#FFE0B0" opacity={0.6 - k * 0.07} rx={2} />
+          <rect key={k} x={960 - (120 - k * 12)} y={582 + k * 26} width={(120 - k * 12) * 2} height={5} fill="#FFE0B0" opacity={0.6 - k * 0.07} rx={2} />
         ))}
       </>}
     </svg>

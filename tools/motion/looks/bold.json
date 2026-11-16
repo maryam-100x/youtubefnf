@@ -7,7 +7,7 @@
     "caption": {"family": "Bebas Neue", "weight": 400}
   },
   "type": {"display_weight": 400, "display_tracking": 0.01, "display_upper": true, "label_upper": true, "label_tracking": 0.06},
-  "colors": {"ink": "#FFFFFF", "paper": "#0A0A0A", "key": "#FF7A3D", "alert": "#FF2E4C", "surface": "#111111", "surface_alpha": 0.95},
+  "colors": {"ink": "#FFFFFF", "paper": "#0A0A0A", "key": "#FF7A3D", "alert": "#FF2E4C", "surface": "#111111", "surface_alpha": 1},
   "shape": {"radius": 3, "chip": 2, "border": 0, "shadow": "hard"},
   "motion": {"pop": 1.1},
   "stamp": {"tilt": -6, "style": "box"},

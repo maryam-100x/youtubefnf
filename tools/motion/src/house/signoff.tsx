@@ -13,8 +13,8 @@
 import React from 'react';
 import {AbsoluteFill, Img, staticFile} from 'remotion';
 import {easeInOut, easeOut, kf, useT} from '../lib';
-import {ACCENT, ACCENT_RGB, CHANNEL, INK, INK_RGB, ON_ACCENT, RADIUS, SURFACE} from '../brand';
-import {LOOK, SHADOW, TEXT, labelCase, labelTrack} from '../look';
+import {ACCENT, CHANNEL, INK, INK_RGB, ON_ACCENT, RADIUS, SURFACE} from '../brand';
+import {LOOK, SHADOW, SHADOW_GROUP, TEXT, labelCase, labelTrack} from '../look';
 
 const PATHS: Record<'like' | 'comment' | 'bell', string[]> = {
   like: ['M7 10v12', 'M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z'],
@@ -71,7 +71,8 @@ export const SignOff: React.FC<{likeAt: number; knowAt: number; commentsAt: numb
   const lit = t >= commentsAt + 0.07;
   const button = (icon: 'like' | 'comment', on: boolean, scale: number, labels: string[], shown: string) => (
     <div style={{...CARD, height: BUTTON_H, padding: `0 ${BUTTON_H * 0.36}px 0 ${BUTTON_H * 0.3}px`, display: 'flex', alignItems: 'center',
-      gap: BUTTON_H * 0.18, borderRadius: Math.min(RADIUS, BUTTON_H / 2), background: on ? ACCENT : SURFACE, transform: `scale(${scale})`}}>
+      gap: BUTTON_H * 0.18, borderRadius: Math.min(RADIUS, BUTTON_H / 2), background: on ? ACCENT : SURFACE, boxShadow: 'none',
+      transform: `scale(${scale})`}}>
       <Icon name={icon} size={BUTTON_H * 0.44} color={on ? ON_ACCENT : INK} filled={on} />
       <div style={{display: 'grid'}}>
         {labels.map((l) => (
@@ -88,7 +89,8 @@ export const SignOff: React.FC<{likeAt: number; knowAt: number; commentsAt: numb
         <div style={{...CARD, padding: '26px 38px 28px', maxWidth: 1100, opacity: qp, transform: `translateY(${(1 - qp) * 30}px)`}}>
           <div style={{fontFamily: TEXT, fontWeight: 600, fontSize: 46, color: INK, lineHeight: 1.15}}>{line}</div>
         </div>
-        <div style={{display: 'flex', gap: GAP, opacity: bp, transform: `translateY(${(1 - bp) * 36}px)`}}>
+        {/* the row casts one shadow under both buttons (SHADOW_GROUP): the comment button's never falls on the like button */}
+        <div style={{display: 'flex', gap: GAP, opacity: bp, transform: `translateY(${(1 - bp) * 36}px)`, filter: SHADOW_GROUP}}>
           {button('like', liked, pressScale(t, likeAt), [W.like, W.liked], liked ? W.liked : W.like)}
           {button('comment', lit, pressScale(t, commentsAt), [W.comment], W.comment)}
         </div>
@@ -130,7 +132,7 @@ export const SubscribeAsk: React.FC<{clickAt: number; bellAt: number; exitAt: nu
     <AbsoluteFill style={{justifyContent: 'flex-end', alignItems: 'center', paddingBottom: EDGE}}>
       <div style={{...CARD, display: 'flex', alignItems: 'center', gap: 26, padding: '18px 30px 18px 18px', opacity: e,
         transform: `translateY(${(1 - inn) * 40 + out * 24}px)`}}>
-        <Avatar size={96} style={{boxShadow: `0 0 0 3px rgba(${ACCENT_RGB},0.5)`}} />
+        <Avatar size={96} />
         <div style={{marginRight: 10}}>
           <div style={{fontFamily: TEXT, fontWeight: 700, fontSize: 42, color: INK, lineHeight: 1, whiteSpace: 'nowrap'}}>{CHANNEL.name}</div>
           {CHANNEL.tagline ? <div style={{fontFamily: TEXT, fontWeight: 500, fontSize: 24, color: `rgba(${INK_RGB},0.6)`, marginTop: 10,
