@@ -134,7 +134,8 @@ new, so it never feels squeezed in or tears the video apart; the midpoint is no 
 squeezed ask breaks the flow at the worst moment.
 
 **LF19 · Every long video ends on the creator's sign-off word, when they chose one.** The last word of every long video is the same
-one-word sign-off the creator chose (recorded in `creator/PROFILE.md`; none chosen, none used). The channel's videos end recognisably.
+one-word sign-off the creator chose (recorded in `creator/PROFILE.md`; none chosen, none used). This is the spoken word, the
+creator's own; the like-and-comment sign-off on screen (LF36) is the look's design. The channel's videos end recognisably.
 
 ## Voice
 
@@ -222,9 +223,9 @@ retelling with no page on screen sounds like rambling, and a slideshow of pages 
 ## Graphics
 
 **LF32 · One brand accent; the other colours from the video's own subject.** The one accent colour of every long video is the channel's
-brand colour (`tools/motion/src/brand.ts`, `BRAND`), where a Short uses yellow; the video's other colours are a few plain ones taken
-from its own subject and footage (a video about a company in that company's colours plus black and white), plain enough not to
-distract. A colour picked for one video is never carried into the following videos as a theme unless the creator makes it the brand. A
+brand colour (`tools/motion/src/brand.ts`, `BRAND`), where a Short uses its caption colours; the video's other colours are a few plain
+ones taken from its own subject and footage (a video about a company in that company's colours plus black and white), plain enough not
+to distract. A colour picked for one video is never carried into the following videos as a theme unless the creator makes it the brand. A
 one-off pick silently becomes the look of every video.
 
 **LF33 · The prototype is the finished look; premium means the real thing.** A prototype shows the final quality, never a sketch. Every
@@ -239,8 +240,9 @@ feels thought out, premium and current; 3D enters only shots where it clearly re
 it takes, and a fast delivery is a warning sign: bad 3D is worse than good 2D, and the template look is the fault that keeps coming
 back.
 
-**LF34 · Red crosses and maxed-out meters.** A cross is a normal red (#E3262B), never orange; a meter at 100% turns error red and
-blinks (three blinks, then red), with the error sound. Maxed out has to look maxed out.
+**LF34 · Crosses and maxed-out meters in the alert colour.** A cross is the look's alert colour (`tools/motion/src/look.json`), never
+a shade beside it; a meter at 100% turns the alert colour and blinks (three blinks, then it stays), with the error sound. Maxed out has
+to look maxed out.
 
 **LF35 · A mark on a small thing zooms into it, fast.** Every mark on a small thing (a dashboard warning light, a small chart in a corner, a
 button label, a settings row) zooms into it in about half a second from the freeze, the dark kept round it; a thing in a corner is
@@ -249,9 +251,9 @@ about a gauge or light is shown on the moment that proves it (the thing happenin
 blinking light keeps playing under its zoom (kit3 Foot's `zoom` and `live`). Gate B25 MARK_SMALL (a mark on a small thing whose picture
 never grows 1.6x within 0.7 s) and B4 UPSCALE (a zoom showing its file's pixels past 1.3x) hold it. A mark on a speck can't be seen.
 
-**LF36 · The outro elements on every long video.** The house sign-off (the like-and-comment elements) shows on every long video's last
-line; gate B26 OUTRO fails a last line that asks for a like and a comment with no sign-off on screen. After it, the video ends at once
-with a fade to black and a fade of the audio, with no held end screen. A held end screen loses viewers before the end.
+**LF36 · The outro elements on every long video.** The sign-off (the like-and-comment elements, in the look's design) shows on every
+long video's last line; gate B26 OUTRO fails a last line that asks for a like and a comment with no sign-off on screen. After it, the
+video ends at once with a fade to black and a fade of the audio, with no held end screen. A held end screen loses viewers before the end.
 
 ## Edit
 

@@ -1,0 +1,17 @@
+{
+  "name": "Clean",
+  "about": "Calm and modern: a rounded sans, soft solid cards, gentle motion.",
+  "fonts": {
+    "display": {"family": "Plus Jakarta Sans", "weights": [600, 700, 800]},
+    "text": {"family": "Figtree", "weights": [400, 500, 600, 700, 800]},
+    "caption": {"family": "Figtree", "weight": 800}
+  },
+  "type": {"display_weight": 800, "display_tracking": -0.025, "display_upper": false, "label_upper": false, "label_tracking": 0.01},
+  "colors": {"ink": "#F3F5F8", "paper": "#0F1217", "key": "#6EE7C8", "alert": "#FF5D52", "surface": "#141820", "surface_alpha": 0.92},
+  "shape": {"radius": 18, "chip": 9, "border": 0, "shadow": "soft"},
+  "motion": {"pop": 1.05},
+  "stamp": {"tilt": -3, "style": "fill"},
+  "signoff": {"design": "bar", "like": "Like", "liked": "Liked", "comment": "Comment"},
+  "subscribe": {"design": "bar", "button": "Subscribe", "done": "Subscribed"},
+  "captions": {"color": "#FFFFFF", "key": "#6EE7C8", "outline": "#0B0D10", "upper": false, "pop_from": 0.8, "pop_over": 1.05, "hero_scale": 1.9}
+}

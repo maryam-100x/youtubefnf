@@ -13,7 +13,8 @@
 // Every render tab has its own copy of these caches (remotion.dev/docs/flickering: tabs share no state): nothing depends on render order.
 import {useEffect, useRef, useState} from 'react';
 import {staticFile, useDelayRender} from 'remotion';
-import {DS, FONT, FONTS} from './tokens';
+import {DS, FONT, FONTS, UPPER} from './tokens';
+import {LOOK} from '../look';
 import {Box, inkSnap, isDark, isInk, paperOf} from './layout';
 
 const CACHE = new Map<string, unknown>();
@@ -68,15 +69,15 @@ export function useMeasured<T>(key: string, load: () => Promise<T>, label: strin
 const FAMILY = `"${FONT.replace(/["']/g, '')}"`;
 let FONTS_OK = false;
 const loadFonts = () => FONTS.waitUntilDone()
-  .then(() => Promise.all(['500', '600', '700', '800'].map((w) => document.fonts.load(`${w} 100px ${FAMILY}`, '0123456789AZaz'))))
+  .then(() => Promise.all(LOOK.fonts.display.weights.map((w) => document.fonts.load(`${w} 100px ${FAMILY}`, '0123456789AZaz'))))
   .then(() => {
     FONTS_OK = true;
     return true;
   });
-// true once Archivo's faces are in (a width measured before that is the fallback face's: odometer slots 13% narrow)
+// true once the look's faces are in (a width measured before that is the fallback face's: odometer slots 13% narrow)
 export const useFontsReady = () => !!useMeasured('fonts', loadFonts, 'fonts') || FONTS_OK;
 
-// a text's width at `px` (Archivo, `weight`, tracking in em), on a real span laid out like the text (a canvas measure was ~3% off);
+// a text's width at `px` (the look's display family, `weight`, tracking in em, the look's case), on a real span laid out like the text (a canvas measure was ~3% off);
 // only once useFontsReady() is true (a width taken before is never kept)
 const WIDTHS = new Map<string, number>();
 export const textW = (text: string, px: number, weight: number, tracking = 0) => {
@@ -85,7 +86,7 @@ export const textW = (text: string, px: number, weight: number, tracking = 0) =>
   if (hit !== undefined) return hit;
   const sp = document.createElement('span');
   Object.assign(sp.style, {position: 'absolute', left: '0px', top: '0px', visibility: 'hidden', whiteSpace: 'pre', fontFamily: FAMILY,
-    fontSize: `${px}px`, fontWeight: String(weight), letterSpacing: `${tracking}em`, fontVariantNumeric: 'tabular-nums', lineHeight: '1'});
+    fontSize: `${px}px`, fontWeight: String(weight), letterSpacing: `${tracking}em`, fontVariantNumeric: 'tabular-nums', lineHeight: '1', textTransform: UPPER ? 'uppercase' : 'none'});
   sp.textContent = text;
   document.body.appendChild(sp);
   const w = sp.getBoundingClientRect().width;

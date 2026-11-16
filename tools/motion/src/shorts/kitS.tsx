@@ -8,7 +8,8 @@ import {clamp, easeOut, KEY, KEY_RGB, kf, useT} from '../lib';
 import {Cover, img, vid} from './kitFlash';
 import {Credit, SHADE} from './kitCards';
 import {settle} from './look';
-import {INTER} from '../house/cards';
+import {DISPLAY, TEXT} from '../house/cards';
+import {LOOK} from '../look';
 
 export {img, vid, Credit};
 export type Media = ReturnType<typeof img>;
@@ -25,7 +26,7 @@ export const Grade: React.FC<{tint: string; amt?: number}> = ({tint, amt = 0.3})
 export const Credits: React.FC<{lines: string[]}> = ({lines}) => (
   <div data-gate="credit" style={{position: 'absolute', left: 36, top: 270, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6}}>
     {lines.map((l) => (
-      <div key={l} style={{padding: '5px 11px 6px', background: 'rgba(0,0,0,0.45)', borderRadius: 5, fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500,
+      <div key={l} style={{padding: '5px 11px 6px', background: 'rgba(0,0,0,0.45)', borderRadius: 5, fontFamily: TEXT, fontWeight: 500,
         fontSize: 21, color: 'rgba(255,255,255,0.92)', whiteSpace: 'nowrap'}}>{l}</div>
     ))}
   </div>
@@ -141,8 +142,8 @@ export const Tag9: React.FC<{name: string; sub?: string; at: number; color?: str
       <div style={plate ? {display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '18px 44px 22px', borderRadius: 22, background: 'rgba(6,8,12,0.82)',
         boxShadow: '0 20px 50px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(255,255,255,0.08)'} : {display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
         <div style={{width: 64 * p, height: 6, borderRadius: 3, background: color, marginBottom: 16, boxShadow: `0 0 18px ${color}`}} />
-        <div style={{font: `900 84px ${INTER}`, color: '#fff', letterSpacing: -2, textShadow: '0 6px 28px rgba(0,0,0,0.8)'}}>{name}</div>
-        {sub ? <div style={{font: `${plate ? 700 : 600} ${plate ? 42 : 34}px ${INTER}`, color: plate ? '#fff' : 'rgba(255,255,255,0.8)', marginTop: 6,
+        <div style={{font: `${LOOK.type.display_weight} 84px ${DISPLAY}`, color: '#fff', letterSpacing: `${LOOK.type.display_tracking}em`, textShadow: '0 6px 28px rgba(0,0,0,0.8)'}}>{name}</div>
+        {sub ? <div style={{font: `${plate ? 700 : 600} ${plate ? 42 : 34}px ${TEXT}`, color: plate ? '#fff' : 'rgba(255,255,255,0.8)', marginTop: 6,
           textShadow: '0 4px 18px rgba(0,0,0,0.8)'}}>{sub}</div> : null}
       </div>
     </div>
@@ -180,7 +181,7 @@ export const Receipt9: React.FC<{src: string; iw: number; ih: number; crop: [num
           {['#ff5f57', '#febc2e', '#28c840'].map((col) => <div key={col} style={{width: 16, height: 16, borderRadius: 8, background: col}} />)}
           <div style={{marginLeft: 14, flex: 1, height: 34, borderRadius: 17, background: '#1c1f26'}} />
           {tag ? <div style={{marginLeft: 10, padding: '4px 10px', borderRadius: 6, background: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.88)',
-            fontFamily: 'Inter, Arial, sans-serif', fontSize: 20, whiteSpace: 'nowrap'}}>{tag}</div> : null}
+            fontFamily: TEXT, fontSize: 20, whiteSpace: 'nowrap'}}>{tag}</div> : null}
         </div>
         <div style={{position: 'relative', width: W, height: H, overflow: 'hidden', background: dark ? '#121212' : '#ffffff'}}>
           <Img src={staticFile(src)} style={{position: 'absolute', left: -crop[0] * k, top: -crop[1] * k, width: iw * k, height: ih * k, maxWidth: 'none'}} />

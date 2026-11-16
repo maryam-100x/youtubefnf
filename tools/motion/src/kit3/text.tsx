@@ -64,7 +64,7 @@ export const Stamp: React.FC<{at: number; text: string; lead?: string; y?: numbe
   const u = interpolate(t, [at, at + DS.DUR.stamp], [0, 1], {...clamp, easing: EASE.enter});
   const op = interpolate(t, [at, at + 0.05], [0, 1], clamp);
   const W = DS.W - 2 * DS.MX - 80;
-  const fit = (s: string) => (W / textW(s, 100, 800, TYPE.display.letterSpacing)) * 100;
+  const fit = (s: string) => (W / textW(s, 100, TYPE.display.fontWeight, TYPE.display.letterSpacing)) * 100;
   const full = lead ? `${lead} ${text}` : text;
   const one = Math.min(max, fit(full));
   const two = !!lead && one < 112;
@@ -96,7 +96,7 @@ export const TypedLine: React.FC<{lines: string[]; keys: number[]; d: number; y?
   const n = keys.filter((k) => t >= k).length;
   if (n === 0 || !fonts) return null;
   // never past the content box: the size comes down to fit the longest line in 1600 px (with the cursor and the push)
-  size = Math.min(size, ...lines.map((ln) => (1600 / Math.max(1, textW(ln, 100, 800, TYPE.display.letterSpacing))) * 100));
+  size = Math.min(size, ...lines.map((ln) => (1600 / Math.max(1, textW(ln, 100, TYPE.display.fontWeight, TYPE.display.letterSpacing))) * 100));
   const end = keys[keys.length - 1];
   const blink = t < end + 0.15 || Math.floor((t - end) * 2.2) % 2 === 0;
   const st: React.CSSProperties = {...type('display'), fontSize: size, whiteSpace: 'pre', textShadow: '0 4px 28px rgba(0,0,0,0.45)'};

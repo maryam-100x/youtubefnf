@@ -135,19 +135,20 @@ hero_scale = 2.3              # hero pop size vs the caption size (shrinks only 
 hero_y = 0.50                 # hero pop centre = the caption line (one line for everything)
 safe_right = 900              # the like/comment/share column starts at this x from y ~1040 down
 hero_pop_from = 0.83          # hero pop-in: 83% -> 107% in 4 frames (hero_pop_ms) with motion blur, settled at 100% by hero_settle_ms
-hero_pop_over = 1.07
+hero_pop_over = 1.07          # (hero_scale and the pop come from the look: look.json "captions" goes over these)
 hero_pop_ms = 67
 hero_settle_ms = 200
 
 [brand]
-# Caption colours and fonts (the edit's colours live in tools/motion/src/brand.ts, which the setup fills).
-yellow = "#FFD21F"            # a real highlighter's colour
-caption_key = "#FFD21F"       # caption key words + hero drops
+# The captions' colours, case and font come from the creator's look (tools/motion/src/look.json "captions" and "fonts.caption"),
+# which goes over these at load (dj/core.py apply_look); these stand only without that file.
+yellow = "#6EE7C8"            # the key colour (kept under its old name for the tools that read it)
+caption_key = "#6EE7C8"       # caption key words + hero drops
 caption_color = "#FFFFFF"
-outline = "#000000"
-text_upper = true
-caption_upper = true
-fonts = { heavy = "Anton", caption = "Montserrat:wght@800", body = "Montserrat:wght@600", serif = "DM Serif Display" }
+outline = "#0B0D10"
+text_upper = false
+caption_upper = false
+fonts = { heavy = "Figtree:wght@800" }
 
 [script]
 # Long form only (Shorts have none): the spoken opener and sign-off `dj parse` checks every long-form script for. "" = no check.

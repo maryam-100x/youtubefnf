@@ -345,7 +345,7 @@ has learned it, script by script; the strict judge's number says how far there i
    and their sources, each version's change and why, the gate numbers); `## Voice` (which voice settings: long form or `[tts.short]`
    in `config/tts.toml`); `## Beats` in a fenced `text` block with `# ===== SECTION =====` labels, `[S01] VOICE:` lines,
    `[S05h] HOLD: 2.3` where a real person's clip speaks (0.3-10 s), `CONFIG:` lines; in Shorts one `*key phrase*` per beat (its key
-   word in the accent colour in the captions).
+   word in the look's caption key colour in the captions).
 5. **Draft the way the creator talks** (section 1, "How to write it" 1-4): read their newest `OPINIONS.md` answers first; a list
    becomes separate beats, one picture each; cut what a casual viewer doesn't need.
 6. **Every line against `standard/SCRIPT_TRAINING.md` section 3:** would someone who only casually follows the niche get it? Would a

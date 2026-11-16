@@ -168,11 +168,29 @@ good, fitting music for each chapter itself.
   (`tools/sound/analyze_tracks.py`) and picks per chapter by the mixing rules in `standard/SOUND_AND_VOICE.md`.
 Both can be mixed: the choice is written in `creator/PROFILE.md` and can change any time.
 
-### Step 11: the interview
+### Step 11: the interview and the look
 Run `creator/interview/PLAN.md` round 1 as a conversation (a few questions at a time). Their answers go verbatim into
-`creator/interview/round-01.md`, your reading into `creator/PROFILE.md`. Then set their accent colour in
-`tools/motion/src/brand.ts` and their sign-off (if they want one), and render one still of a title card and the sign-off to show
-them.
+`creator/interview/round-01.md`, your reading into `creator/PROFILE.md`.
+
+Then **the look**: how every graphic of theirs looks (the fonts, the colours, the corners and shadows, the stamp, the like and
+subscribe asks, the Shorts captions). It is made with them and is theirs alone: the studio's starting looks are where it starts,
+never a finished look.
+1. `PIPE tools/motion/look_board.py` renders the four starting looks (`tools/motion/looks/`), one picture each, made with the
+   studio's real pieces, into `MEDIA/looks/`. Send the four (`SendUserFile`), one line each (its `about`), and ask which comes
+   closest to what they want for their channel and what they would change. A channel whose look they like is a good answer too.
+2. Make theirs from the pick, their words and their niche: copy the pick to `MEDIA/looks/<their channel>.json` and change it.
+   Suggest what would make it their own (an accent from their logo or their niche, a display font that suits the niche); they
+   decide. What can change: `fonts` (any family on the shelf in `tools/motion/src/fonts.ts`; one that isn't there gets its
+   `@remotion/google-fonts` import and its shelf line first), `type`, `colors`, `shape` (the corners, the shadow soft, hard or
+   none), `motion.pop`, `stamp` (its tilt; fill, underline or box), the `signoff` and `subscribe` designs (corner or bar) and their
+   words in the creator's language, `captions`. `colors.key` is the look's one accent, and `captions.key` is the same colour. Render
+   it, `PIPE tools/motion/look_board.py --file <the file>` (it checks the file first), and send it; one round per change, until they
+   say it's theirs. Every look stays inside the bar's never-list (`standard/LONG_FORM.md`, the AI-template look: borders on cards,
+   glows, glass, pills, a second accent): a wish that crosses it gets one plain sentence on what it costs, and the choice is theirs.
+3. Write it in: the file into `tools/motion/src/look.json`, its accent into `tools/motion/src/brand.ts`'s `BRAND` line, the
+   channel's name (and their profile picture, as the `CHANNEL` line's comment says) into its `CHANNEL` line; then
+   `PIPE tools/motion/look_fonts.py` (the display font as a file, for the 3D pieces) and `PIPE tools/motion/look_board.py --current`
+   to see it as the videos will. Commit. The look changes whenever they ask, the same way.
 
 Then one question, on its own, in these plain words (adapt only the language): "How should I make each long video? **1. Prototype
 first:** I build the first minute exactly as the finished video will look, you watch it and give notes, and only then I build the

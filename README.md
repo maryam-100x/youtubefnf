@@ -2,7 +2,8 @@
 
 This repo turns a Claude chat into a full video partner: it researches, writes the script, voices it with your AI voice, edits the
 picture in code (Remotion), places the sound and music, checks every frame and every word before a render, and hands you the finished
-video. Long-form documentary-style videos and Shorts, for any niche.
+video. Long-form documentary-style videos and Shorts, for any niche, in a look of your own (the fonts, the colours, the cards,
+the like and subscribe animations, the captions) that the chat designs with you.
 
 ## Start
 1. Install the **Claude desktop app** (https://claude.ai/download) and sign in. You need a paid Claude plan (Max is recommended: a

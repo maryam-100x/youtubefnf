@@ -59,8 +59,8 @@ FORCE = False
 LICENCES = [
     # file, what, source URL, licence, credit line (empty = none needed)
     ('hdri/studio_small_09_2k.hdr', 'Studio Small 09 HDRI (2k)', 'https://polyhaven.com/a/studio_small_09', 'CC0 (polyhaven.com/license)', ''),
-    ('fonts/Archivo-ExtraBold.ttf', 'Archivo ExtraBold 800 (static)', 'https://fonts.google.com/specimen/Archivo', 'SIL Open Font License 1.1', ''),
-    ('fonts/Archivo-Bold.ttf', 'Archivo Bold 700 (static)', 'https://fonts.google.com/specimen/Archivo', 'SIL Open Font License 1.1', ''),
+    ('fonts/display.ttf', "the look's display family at its display weight (src/look.json)", 'https://fonts.google.com (fetched by look_fonts.py)',
+     'SIL Open Font License 1.1', ''),
     ('earth/blackmarble_8k.jpg', 'NASA Black Marble 2016 (3 km, 8192x4096)', 'https://earthobservatory.nasa.gov/features/NightLights',
      'NASA imagery, not copyrighted in the US (nasa.gov brand center); no NASA insignia, no implied endorsement', 'NASA Earth Observatory'),
     ('earth/bm500_patch.jpg', "NASA Black Marble 2016 tile B1 (500 m), globe.tsx's PATCH bounds at half size (~1 km)",
@@ -74,7 +74,7 @@ LICENCES = [
      'https://huggingface.co/depth-anything/Depth-Anything-V2-Small-hf', 'Apache-2.0 (Base/Large/Giant are CC-BY-NC: never used)', ''),
     ('(model) birefnet-general (rembg)', 'subject matte for Parallax25D', 'https://github.com/ZhengPeng7/BiRefNet', 'MIT', ''),
 ]
-BY_HAND = ['hdri/studio_small_09_2k.hdr', 'fonts/Archivo-ExtraBold.ttf', 'fonts/Archivo-Bold.ttf', 'earth/blackmarble_8k.jpg']
+BY_HAND = ['hdri/studio_small_09_2k.hdr', 'earth/blackmarble_8k.jpg']   # fonts/display.ttf: PIPE tools/motion/look_fonts.py
 
 DEMO_LOGO_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520">
   <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3A7BD5"/><stop offset="1" stop-color="#7A4FD6"/></linearGradient></defs>

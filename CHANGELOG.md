@@ -5,6 +5,21 @@ brings, what to set up (in order, each command with its environment, PIPE, EDIT,
 it) and what to read; a file renamed or removed is named with what replaced it. This file is the studio's: a creator's chat never
 writes in it (their own history goes to `log/`).*
 
+## v1.4 (2026-11-16)
+- **Brings:** a look of the creator's own. Every graphic (the cards, numbers, stamps, kit3 and kit3d, the sign-off, the subscribe
+  ask, the Shorts' flash and captions) now takes its fonts, colours, corners, shadows, pop and the asks' designs and words from one
+  file, `tools/motion/src/look.json`. Four starting looks (`tools/motion/looks/`: Clean, Bold, Documentary, Playful), a board that
+  shows a look on the studio's real pieces (`tools/motion/look_board.py`), and a setup step that makes the creator's own look with
+  them from a starting one (`SETUP.md` step 11). Fonts come from a shelf of 19 Google Fonts (`tools/motion/src/fonts.ts`), with
+  the extended Latin letters where a font has them; the Shorts captions use the look's caption font (before, a wrong font name
+  fell back to Arial). The studio's default look and accent changed: a video made before this version keeps its own render; its
+  next render takes the look.
+- **Set up:** `PIPE tools/motion/look_fonts.py` (the look's display font as a file, for the 3D numbers). Then a creator whose
+  setup is past step 11: run step 11's look part now (the four boards, their pick, their changes, then write it in), their accent
+  and channel name carried into it; a chat in the middle of step 11 starts its look part over from item 1. `tools/motion/src/brand.ts`
+  takes the studio's version, then their `BRAND` and `CHANNEL` lines go back in. `npx tsc --noEmit -p .` in `tools/motion` passes.
+- **Read:** `SETUP.md` step 11, `UPDATE.md` ("What is the creator's": `look.json`, and brand.ts's two lines), `standard/KIT3.md` 1.2.
+
 ## v1.3 (2026-11-16)
 - **Brings:** renders on any computer: the frames rendered at once are capped at the computer's CPU cores (before, a computer with
   fewer than 6 cores could not render at all), and a failed part's retries step lower from there. The chat's lines while it works are plain words, never the work's own (merge, commit,

@@ -14,7 +14,7 @@ only where kit3 has no form for the idea (a bar comparison, a ranking, a map wit
 cut), and then only:
 - **with real material inside it** (the covers, photos, frames, clips of what the words name; kit 2's dark cards built bare, with
   nothing real in them, are exactly what reads as AI slop);
-- **through the AI-template checklist** (`standard/LONG_FORM.md`): kit 2 predates the one-family house look, and its own defaults carry
+- **through the AI-template checklist** (`standard/LONG_FORM.md`): kit 2 predates kit3 and the creator's look, and its own defaults carry
   tells (card edge lines, a glow token, a monospace face, five type families: tells 2, 3, 5 and 6). Pick the variant and props that avoid
   them (no `mono`, one family where the component allows it), give it the house palette (below), and look at its frame: two tells or
   more = not used;

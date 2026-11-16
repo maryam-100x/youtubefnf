@@ -1,9 +1,9 @@
 // The pieces of the Shorts' house look: the picture fills the frame, captions dead centre, receipts in a browser window above them with
-// their own words marked on the voice's, numbers below the captions as big Anton type inside x 180-900 (the like column starts at x 900,
+// their own words marked on the voice's, numbers below the captions as big type in the look's display font inside x 180-900 (the like column starts at x 900,
 // tools/footage/phone_view.py). Zones: nothing above y 260; the upper asset y 290-880; the captions ~y 910-1010; the numbers y 1080-1410.
 import React from 'react';
 import {AbsoluteFill, Img, Internals, OffthreadVideo, staticFile, useCurrentFrame} from 'remotion';
-import {ACCENT, ANTON, easeInOut, fitClip, FPS, kf, useT} from '../lib';
+import {ACCENT, DISPLAY, easeInOut, fitClip, FPS, kf, LOOK, TEXT, useT} from '../lib';
 import {settle, SHADOW_LIFT} from './look';
 import {Box, FULL, M, place} from './kitFlash';
 
@@ -92,21 +92,21 @@ export const Browser: React.FC<{top: number; at?: number; tag?: string; children
           <div style={{width: 220, height: 13, borderRadius: 7, background: '#59606e', filter: 'blur(4px)'}} />
         </div>
         {tag ? <div style={{marginLeft: 10, padding: '4px 10px', borderRadius: 6, background: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.85)',
-          fontFamily: 'Inter, Arial, sans-serif', fontSize: 18, letterSpacing: 0.5, whiteSpace: 'nowrap'}}>{tag}</div> : null}
+          fontFamily: TEXT, fontSize: 18, letterSpacing: 0.5, whiteSpace: 'nowrap'}}>{tag}</div> : null}
       </div>
       {children}
     </div>
   );
 };
 
-// a number below the captions: Anton, a shadow, settling in at `at` (at < 0: already there); long ones at 145 px to stay inside x 180-900
+// a number below the captions: the look's display font, a shadow, settling in at `at` (at < 0: already there); long ones at 145 px to stay inside x 180-900
 export const Num: React.FC<{text: string; at: number; size?: number; color?: string}> = ({text, at, size = 210, color = '#FFFFFF'}) => {
   const t = useT();
   if (t < at - 0.01) return null;
   const p = settle(t, at, 0.36);
   return (
     <div style={{position: 'absolute', left: 0, width: 1080, top: 1080, height: 330, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-      <div style={{fontFamily: ANTON, fontSize: size, lineHeight: 1, color, transform: `scale(${0.6 + 0.4 * p})`, opacity: Math.min(1, p * 2),
+      <div style={{fontFamily: DISPLAY, fontWeight: LOOK.type.display_weight, fontSize: size, lineHeight: 1, color, transform: `scale(${0.6 + 0.4 * p})`, opacity: Math.min(1, p * 2),
         textShadow: '0 8px 30px rgba(0,0,0,0.65), 0 2px 4px rgba(0,0,0,0.5)'}}>{text}</div>
     </div>
   );
@@ -114,6 +114,6 @@ export const Num: React.FC<{text: string; at: number; size?: number; color?: str
 
 // a source credit for others' footage, small, top left under the icon row
 export const Credit: React.FC<{text: string}> = ({text}) => (
-  <div data-gate="credit" style={{position: 'absolute', left: 36, top: 270, padding: '5px 11px 6px', background: 'rgba(0,0,0,0.45)', borderRadius: 5, fontFamily: 'Inter, Arial, sans-serif',
+  <div data-gate="credit" style={{position: 'absolute', left: 36, top: 270, padding: '5px 11px 6px', background: 'rgba(0,0,0,0.45)', borderRadius: 5, fontFamily: TEXT,
     fontWeight: 500, fontSize: 21, color: 'rgba(255,255,255,0.92)', whiteSpace: 'nowrap'}}>{text}</div>
 );
