@@ -5,7 +5,8 @@ time**: say in one to three plain lines what happens now (and what they must do,
 as done in `STATUS.md` (Phase: "Setup: step N done"), then the next step. Never show the whole list; never ask what you can find out
 yourself. You run every command; the creator only does what needs a human (an installer window, an account, a payment, a login, a
 key, listening to a voice). When a step fails, find out why and fix it before going on. Adapt every step to what you find on their
-computer: Windows works best (with an NVIDIA graphics card renders are fastest); on a Mac use the macOS lines.*
+computer: Windows works best (with an NVIDIA graphics card renders are fastest); on a Mac use the macOS lines. No warnings or side
+notes along the way or at the end (how deletes work, disk space, what you checked): only what happens and what they do.*
 
 **One go covers every install.** The creator's first message holds their OK for everything the setup and the videos download and
 install (the README's message; when they only pasted the link, you asked for it once). Never ask again per program, package, model or file: say in a line what you are installing as you do it.
@@ -95,7 +96,8 @@ the effects palette from its manifest. Check (`--check`): the palette lists all 
 programs and caches for every command, the memory guard, no kills by name, permanent deletes, keep working). The app loads hooks and this repo's `CLAUDE.md` when a chat starts, so the setup
 continues in a fresh chat that runs in the studio folder itself. Write STATUS.md ("Setup: step 8 done, next step 9") and commit. If
 your app gives you a way to start a new session in another folder, start it yourself in the studio folder with the message below and
-tell the creator in one line where to find it. Otherwise tell them, as the final message (with the clone's full path written out):
+tell the creator in one line where to find it. Otherwise tell them, as the final message (with the clone's full path written out),
+one line that part one worked, then this, and nothing else:
 
 > Part one is done. Now open a **new chat in the studio folder** (Code tab, choose the folder `<the clone's full path>`) and say
 > **"Let's get started. You have my OK to download and install everything the setup and our videos need."** That chat is your main
