@@ -23,7 +23,7 @@ jobs:
       - name: Outside, before
         run: |
           mkdir -p "$LOGS"
-          for d in "$HOME/.cache" "$HOME/.local/bin" "$HOME/.npm" "$HOME/Library/Caches" "$HOME/.config" "$HOME/Library/Application Support"; do
+          for d in "$HOME/.cache" "$HOME/.local/bin" "$HOME/.npm" "$HOME/Library/Caches" "$HOME/.config" "$HOME/Library/Application Support" "$HOME/Documents"; do
             [ -e "$d" ] && find "$d" -maxdepth 2 2>/dev/null | sort > "$LOGS/before_$(echo "$d" | tr '/ ' '__').txt" || true
           done
           touch "$LOGS/t0"
@@ -106,18 +106,35 @@ jobs:
           $EDIT tools/voice/rebuild_sample.py "$HOME/Studio/tmp/sample.aiff"
           ls -la "$HOME/Studio/tmp/"
 
+      - name: Step 10 - the music (Surge XT out of the .dmg, SYNTH, its test as MUSIC.md section 8 lists it)
+        run: |
+          set -euxo pipefail
+          exec > >(tee "$LOGS/music.log") 2>&1
+          tools/.venv/bin/python tools/setup/surge.py
+          tools/.venv/bin/python tools/setup/envs.py synth
+          SYNTH="$HOME/Studio/envs/synth/bin/python"
+          $SYNTH tools/music/music.py selftest
+          $SYNTH tools/music/music.py patches Pads/ > "$LOGS/patches.txt"
+          head -5 "$LOGS/patches.txt"
+          $SYNTH tools/music/music.py judge --warm
+          $SYNTH tools/music/music.py render tools/music/example/film.py --judge | tee "$LOGS/beds.txt"
+          [ "$(grep -c 'AT THE BAR' "$LOGS/beds.txt")" -ge 4 ]
+          ls "$HOME/Studio/apps/surge-xt/Surge Synth Team/"
+          ls -la "$HOME/Documents/Surge XT" || true
+          [ ! -e "/Library/Application Support/Surge XT" ] && [ ! -e "/Library/Audio/Plug-Ins/VST3/Surge XT.vst3" ]
+
       - name: Outside, after (nothing of the studio's outside its folders)
         run: |
           set -uo pipefail
           exec > >(tee "$LOGS/outside.log") 2>&1
           bad=0
           : > "$LOGS/new.txt"
-          for d in "$HOME/.cache" "$HOME/.local/bin" "$HOME/.npm" "$HOME/Library/Caches" "$HOME/.config" "$HOME/Library/Application Support"; do
+          for d in "$HOME/.cache" "$HOME/.local/bin" "$HOME/.npm" "$HOME/Library/Caches" "$HOME/.config" "$HOME/Library/Application Support" "$HOME/Documents"; do
             f="$LOGS/before_$(echo "$d" | tr '/ ' '__').txt"
             [ -e "$d" ] || continue
             find "$d" -maxdepth 2 2>/dev/null | sort > "$f.after"
             [ -e "$f" ] || : > "$f"
-            new=$(comm -13 "$f" "$f.after")
+            new=$(comm -13 "$f" "$f.after" | grep -v "/Documents/Surge XT" || true)   # Surge's user folder on a Mac: known, MUSIC.md
             if [ -n "$new" ]; then echo "NEW under $d:"; echo "$new" | head -20; echo "$new" | head -20 >> "$LOGS/new.txt"; bad=1; fi
           done
           du -sh "$HOME/Studio" "$GITHUB_WORKSPACE" 2>/dev/null
