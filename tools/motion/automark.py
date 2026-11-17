@@ -456,7 +456,7 @@ def refine(img, box, others=(), debug=None):
 
 # ------------------------------------------------------------------------------------------------------------------------------ the proof
 def _font(size):
-    for f in ("arial.ttf", "segoeui.ttf", "DejaVuSans.ttf"):
+    for f in ("arial.ttf", "Arial.ttf", "segoeui.ttf", "DejaVuSans.ttf"):   # macOS names its Arial file "Arial.ttf"
         try:
             return ImageFont.truetype(f, size)
         except OSError:

@@ -244,10 +244,13 @@ def cmd_sheet(a):
     W, H = 300, 330
     sheet = Image.new("RGB", (cols * W, rows * H), (24, 24, 24))
     d = ImageDraw.Draw(sheet)
-    try:
-        font = ImageFont.truetype("arial.ttf", 14)
-    except OSError:
-        font = ImageFont.load_default()
+    font = ImageFont.load_default()
+    for name in ("arial.ttf", "Arial.ttf", "DejaVuSans.ttf"):   # Windows, macOS, Linux names (Pillow matches the file name exactly)
+        try:
+            font = ImageFont.truetype(name, 14)
+            break
+        except OSError:
+            continue
     mask = Image.new("L", (264, 264), 0)
     ImageDraw.Draw(mask).ellipse((0, 0, 263, 263), fill=255)
     for k, (icon, lab, m, art) in enumerate(cells):

@@ -80,10 +80,13 @@ def main():
         if st in ("fresh", "flat") and hit:
             st = f"own:{hit[0]}"
         status[f"{t:.0f}"] = st
-    try:
-        font = ImageFont.truetype("arial.ttf", 15)
-    except OSError:
-        font = ImageFont.load_default()
+    font = ImageFont.load_default()
+    for name in ("arial.ttf", "Arial.ttf", "DejaVuSans.ttf"):   # Windows, macOS, Linux names (Pillow matches the file name exactly)
+        try:
+            font = ImageFont.truetype(name, 15)
+            break
+        except OSError:
+            continue
     per = COLS * ROWS
     pages = (len(frames) + per - 1) // per
     for p in range(pages):
