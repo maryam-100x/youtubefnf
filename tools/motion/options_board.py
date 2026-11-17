@@ -73,10 +73,13 @@ def wrap(d, text, font, width):
 
 
 def board(slot, prefix, outdir):
-    try:
-        f1, f2 = ImageFont.truetype("arialbd.ttf", 22), ImageFont.truetype("arial.ttf", 17)
-    except OSError:
-        f1 = f2 = ImageFont.load_default()
+    f1 = f2 = ImageFont.load_default()
+    for bold, reg in (("arialbd.ttf", "arial.ttf"), ("Arial Bold.ttf", "Arial.ttf"), ("DejaVuSans-Bold.ttf", "DejaVuSans.ttf")):
+        try:                                                     # Windows, macOS, Linux names (Pillow matches the file name exactly)
+            f1, f2 = ImageFont.truetype(bold, 22), ImageFont.truetype(reg, 17)
+            break
+        except OSError:
+            continue
     cands = slot["cands"]
     out = []
     for page in range((len(cands) + PER - 1) // PER):

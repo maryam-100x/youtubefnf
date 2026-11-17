@@ -5,6 +5,12 @@ brings, what to set up (in order, each command with its environment, PIPE, EDIT,
 it) and what to read; a file renamed or removed is named with what replaced it. This file is the studio's: a creator's chat never
 writes in it (their own history goes to `log/`).*
 
+## v1.10 (2026-11-17)
+- **Brings:** on a Mac, the chat's own check sheets (`tools/motion/make_icon.py`, `source_sheet.py`, `options_board.py`,
+  `automark.py`) label in Arial like on Windows (they looked for Windows' file name only and fell back to a tiny built-in font).
+- **Set up:** nothing.
+- **Read:** nothing.
+
 ## v1.9 (2026-11-16)
 - **Brings:** a quiet chat while it works. Long stretches that need nothing from the creator (a study, downloads, checks, a
   render) show at most one label of a few words per stage, also when the app asks what the chat is doing: no counts, limits,
